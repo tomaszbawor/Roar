@@ -6,7 +6,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint": "eslint --ext .js,.ts --ignore-path .eslintignore ."
+    "lint": "eslint --ext .js,.ts --ignore-path .eslintignore .",
+    "lint:fix": "eslint --ext .js,.ts --ignore-path .eslintignore . --fix"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.46.1",
