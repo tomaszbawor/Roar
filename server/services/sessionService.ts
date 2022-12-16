@@ -14,12 +14,18 @@ export async function makeSession(user: IUser, event: H3Event): Promise<IUser> {
   const userId = session.userId;
   if (userId) {
     setCookie(event, "auth_token", authToken, { path: "/", httpOnly: true });
-    return getUserBySessionToken(authToken);
+    const user = await getUserBySessionToken(authToken);
+    if (!user) {
+      throw Error("Could not get user by session token");
+    }
+    return user;
   }
   throw Error("Error creating session");
 }
 
-export async function getUserBySessionToken(authToken: string): Promise<IUser> {
+export async function getUserBySessionToken(
+  authToken: string
+): Promise<IUser | undefined> {
   const session = await getSessionByAuthToken(authToken);
   return saninizeUserForFrontend(session.user);
 }

@@ -21,8 +21,6 @@ export async function registerWithEmail(
   password: string,
   confirmPassword: string
 ) {
-  console.log({ email, password, confirmPassword });
-
   try {
     const res = await $fetch<ISession>("/api/auth/register", {
       method: "POST",
@@ -39,6 +37,22 @@ export async function registerWithEmail(
     }
   } catch (e: any) {
     console.log("error: " + e.toString());
+  }
+}
+
+export async function loginWithEmail(email: string, password: string) {
+  const user = await $fetch<IUser>("/api/auth/login", {
+    method: "POST",
+    body: {
+      email,
+      password,
+    },
+  });
+
+  console.log("");
+  if (user) {
+    useState("user").value = user;
+    await useRouter().push("/dashboard");
   }
 }
 
