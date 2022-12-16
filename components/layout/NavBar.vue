@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { useColorMode } from "#imports";
+import { useColorMode, userLogout } from "#imports";
+import { useState } from "#app";
 
 const setColorScheme = (newColorTheme: string) => {
   useColorMode().preference = newColorTheme;
 };
+
+const logout = async () => {
+  await userLogout();
+};
+
+const user = useState("user").value;
 </script>
 <template>
   <header>
@@ -38,6 +45,7 @@ const setColorScheme = (newColorTheme: string) => {
             class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
             >Get started</a
           >
+          <button @click="logout">LOGOUT</button>
           <button
             data-collapse-toggle="mobile-menu-2"
             type="button"
@@ -80,12 +88,13 @@ const setColorScheme = (newColorTheme: string) => {
             class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0"
           >
             <li>
-              <a
-                href="#"
+              <nuxt-link
+                href="/dashboard"
                 class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
                 aria-current="page"
-                >Home</a
               >
+                Dashboard
+              </nuxt-link>
             </li>
             <li>
               <a
