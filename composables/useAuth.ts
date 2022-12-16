@@ -49,7 +49,6 @@ export async function loginWithEmail(email: string, password: string) {
     },
   });
 
-  console.log("");
   if (user) {
     useState("user").value = user;
     await useRouter().push("/dashboard");

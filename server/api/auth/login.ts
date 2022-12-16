@@ -8,8 +8,6 @@ export default defineEventHandler(async (event) => {
   const email = body.email;
   const password = body.password;
 
-  console.log(body);
-
   const userByEmail = await getUserByEmail(email);
 
   if (userByEmail === null) {
