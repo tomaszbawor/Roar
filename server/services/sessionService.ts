@@ -5,6 +5,7 @@ import {
   createSession,
   getSessionByAuthToken,
 } from "~/server/repositories/sessionRepository";
+import { saninizeUserForFrontend } from "~/server/services/userService";
 
 export async function makeSession(user: IUser, event: H3Event): Promise<IUser> {
   const authToken = uuidv4().replaceAll("-", "");
@@ -20,5 +21,5 @@ export async function makeSession(user: IUser, event: H3Event): Promise<IUser> {
 
 export async function getUserBySessionToken(authToken: string): Promise<IUser> {
   const session = await getSessionByAuthToken(authToken);
-  return session.user!;
+  return saninizeUserForFrontend(session.user);
 }
