@@ -37,7 +37,7 @@ export async function registerWithEmail(
       useState("user").value = res;
       await useRouter().push("/dashboard");
     }
-  } catch (e: Error) {
+  } catch (e: any) {
     console.log("error: " + e.toString());
   }
 }
@@ -48,10 +48,12 @@ export async function useUser(): Promise<IUser> {
 
   if (authCookie && !user.value) {
     const { data } = await useFetch("/api/auth/getByAuthToken", {
-      headers: useRequestHeaders(["cookie"]),
+      headers: useRequestHeaders(["cookie"]) as Record<"cookie", string>, // make types happy
     });
 
-    user.value = data.value;
+    if (data.value) {
+      user.value = data.value;
+    }
   }
   return user.value;
 }

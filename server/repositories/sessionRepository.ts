@@ -18,7 +18,7 @@ export async function getSessionByAuthToken(
   return { authToken, user, userId: user.id };
 }
 
-async function getUserByAuthToken(authToken: string): Promise<IUser> {
+async function getUserByAuthToken(authToken: string): Promise<IUser | null> {
   return prisma.session
     .findUnique({
       where: {

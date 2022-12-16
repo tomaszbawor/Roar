@@ -14,7 +14,7 @@ export async function getUserByEmail(email: string): Promise<IUser | null> {
   });
 }
 
-export async function createUser(data: IUser) {
+export async function createUser(data: Omit<IUser, "id">) {
   const user = prisma.user.create({
     data: {
       email: data.email,

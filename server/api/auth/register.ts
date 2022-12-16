@@ -32,7 +32,7 @@ export default eventHandler(async (event) => {
 
   const encryptedPassword: string = await bcrypt.hash(password, 10);
 
-  const userData: IUser = {
+  const userData: Omit<IUser, "id"> = {
     email: email,
     password: encryptedPassword,
   };

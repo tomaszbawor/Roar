@@ -7,12 +7,14 @@ export async function doesUserExist(email: string): Promise<boolean> {
   return !!user;
 }
 
-export function saninizeUserForFrontend(user: IUser | undefined): IUser {
+export function saninizeUserForFrontend(
+  user: IUser | undefined
+): IUser | undefined {
   if (!user) {
     return user;
   }
 
-  delete user.password;
+  user.password = "<hidden>";
 
   return user;
 }
