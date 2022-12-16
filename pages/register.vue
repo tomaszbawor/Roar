@@ -1,9 +1,18 @@
 <script lang="ts" setup>
-import { definePageMeta } from "#imports";
+import {definePageMeta, registerWithEmail} from "#imports";
 
 definePageMeta({
   layout: "centered-forms",
 });
+
+const email = ref<string>("elo");
+const password = ref<string>("elo");
+const passwordConfirm = ref<string>("elo");
+
+const register = async () => {
+  await registerWithEmail(email.value, password.value, passwordConfirm.value)
+  console.log("Register");
+};
 </script>
 <template>
   <section class="bg-gray-50 dark:bg-gray-900">
@@ -34,6 +43,7 @@ definePageMeta({
               >
               <input
                 id="email"
+                v-model="email"
                 type="email"
                 name="email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -49,6 +59,7 @@ definePageMeta({
               >
               <input
                 id="password"
+                v-model="password"
                 type="password"
                 name="password"
                 placeholder="••••••••"
@@ -64,7 +75,8 @@ definePageMeta({
               >
               <input
                 id="confirm-password"
-                type="confirm-password"
+                v-model="passwordConfirm"
+                type="password"
                 name="confirm-password"
                 placeholder="••••••••"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -95,10 +107,10 @@ definePageMeta({
               </div>
             </div>
             <button
-              type="submit"
               class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+              @click="register"
             >
-              Create an account
+              Register
             </button>
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               Already have an account?

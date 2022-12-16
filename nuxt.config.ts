@@ -2,6 +2,6 @@
 export default defineNuxtConfig({
   modules: ["@nuxtjs/tailwindcss", "@nuxtjs/color-mode"],
   tailwindcss: {
-    cssPath: "~assets"
-  }
+    cssPath: "~assets",
+  },
 });
