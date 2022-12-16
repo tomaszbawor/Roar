@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { IUser } from "~/types/IUser";
 import { doesUserExist } from "~/server/services/userService";
 import { createUser } from "~/server/repositories/userRepository";
+import { makeSession } from "~/server/services/sessionService";
 
 export default eventHandler(async (event) => {
   const body = await readBody(event);
@@ -38,6 +39,5 @@ export default eventHandler(async (event) => {
 
   const user = await createUser(userData);
 
-  // return await makeSession(user,event)
-  return user;
+  return await makeSession(user, event);
 });

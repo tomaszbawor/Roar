@@ -1,5 +1,5 @@
 import { IUser } from "~/types/IUser";
-import prisma from "~/server/database/prisma/client";
+import prisma from "~/server/database/client";
 
 export async function getUserByEmail(email: string): Promise<IUser | null> {
   return await prisma.user.findUnique({
@@ -18,7 +18,6 @@ export async function createUser(data: IUser) {
   const user = prisma.user.create({
     data: {
       email: data.email,
-      name: "DUPA",
       password: data.password,
     },
   });
