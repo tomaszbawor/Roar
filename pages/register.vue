@@ -9,9 +9,8 @@ const email = ref<string>("elo");
 const password = ref<string>("elo");
 const passwordConfirm = ref<string>("elo");
 
-const register = async () => {
+const postRegisterForm = async () => {
   await registerWithEmail(email.value, password.value, passwordConfirm.value)
-  console.log("Register");
 };
 </script>
 <template>
@@ -108,7 +107,7 @@ const register = async () => {
             </div>
             <button
               class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-              @click="register"
+              @click.prevent="postRegisterForm"
             >
               Register
             </button>
