@@ -1,3 +1,10 @@
+<script lang="ts" setup>
+import { definePageMeta } from "#imports";
+
+definePageMeta({
+  layout: "centered-forms",
+});
+</script>
 <template>
   <section class="bg-gray-50 dark:bg-gray-900">
     <div

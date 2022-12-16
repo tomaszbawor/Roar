@@ -1,6 +1,4 @@
 <template>
-  <NavBar />
+  <div>ELO</div>
 </template>
-<script setup lang="ts">
-import NavBar from "../components/layout/NavBar";
-</script>
+<script setup lang="ts"></script>
