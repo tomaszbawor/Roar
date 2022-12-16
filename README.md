@@ -40,3 +40,33 @@ npm run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Database
+
+To set up development database you need to chane `.env_example` to `.env` file and run
+
+```bash
+docker compose up -d 
+```
+
+This will run docker compose in the background creating database.
+
+For browsing database you may use build in prisma studio by executing
+
+```bash
+npx prisma studio
+```
+
+## Prisma
+
+Format prisma file
+
+```bash
+npx prisma format
+```
+
+Browse database
+
+```bash
+npx prisma studio
+```
