@@ -2,6 +2,8 @@
 
 Browser Based game written in  [Nuxt 3](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
+Join us at [Discord](https://discord.gg/Axbxy3um)
+
 ## Tech stack
 
 - Nuxt3
