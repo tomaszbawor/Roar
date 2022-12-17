@@ -29,6 +29,8 @@ Start up docker database
 docker compose up -d
 ```
 
+Change the name of your `.env_example` file to `.env` in order to provide credentials to your docker db. 
+
 After starting database perform database migration
 
 ```bash
