@@ -1,7 +1,10 @@
 import { IUser } from "~/types/IUser";
 import { H3Event, setCookie } from "h3";
 import { v4 as uuidv4 } from "uuid";
-import { createSession, getSessionByAuthToken } from "~/server/repositories/sessionRepository";
+import {
+  createSession,
+  getSessionByAuthToken,
+} from "~/server/repositories/sessionRepository";
 import { saninizeUserForFrontend } from "~/server/services/userService";
 import { Maybe } from "~/utils/Maybe";
 

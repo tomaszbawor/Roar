@@ -12,6 +12,12 @@ export interface ICharacter {
   endurance: number;
 }
 
+export interface CreateCharacterCommand {
+  userId: string;
+  name: string;
+  village: Village;
+}
+
 export type Village = "SAND" | "LEAF" | "STONE" | "CLOUD" | "MIST";
 
 export type CharacterRank = "STUDENT" | "GENIN" | "CHUNIN" | "JONIN";
