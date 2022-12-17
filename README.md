@@ -1,25 +1,41 @@
-# Nuxt 3 Minimal Starter
+# ROAR - Text Based MMORPG
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Browser Based game written in  [Nuxt 3](https://nuxt.com/docs/getting-started/introduction) to learn more.
+
+## Tech stack
+
+- Nuxt3
+- Tailwind CSS (UI)
+- Postgresql (DB)
+- Prisma (ORM)
 
 ## Setup
+
+### Prerequirements
+
+- Node (version specified in .nvmrc file)
+- Docker compose
 
 Make sure to install the dependencies:
 
 ```bash
 # yarn
-yarn install
-
-# npm
 npm install
-
-# pnpm
-pnpm install --shamefully-hoist
 ```
 
-## Development Server
+Start up docker database
 
-Start the development server on http://localhost:3000
+```bash
+docker compose up -d
+```
+
+After starting database perform database migration
+
+```bash
+npx prisma migrate dev
+```
+
+Afterwards you should be able to run application for development
 
 ```bash
 npm run dev
