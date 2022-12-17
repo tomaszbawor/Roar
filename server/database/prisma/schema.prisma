@@ -16,6 +16,7 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   name      String?   @unique
+  role      UserRole  @default(USER)
   password  String
   Session   Session[]
 }
@@ -28,4 +29,10 @@ model Session {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+}
+
+enum UserRole {
+  USER
+  MOD
+  ADMIN
 }
