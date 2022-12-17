@@ -10,7 +10,10 @@ import auth from "~/middleware/auth";
 const data = useState("user").value;
 </script>
 <template>
-  <h1>User Dashboard</h1>
+  <div class="flex justify-center">
+    <h1 class="text-2xl pb-8">User Dashboard</h1>
+  </div>
+
   <pre>
     {{ JSON.stringify(data, null, 2) }}
   </pre>

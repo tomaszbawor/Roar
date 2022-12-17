@@ -1,9 +1,7 @@
 <template>
   <div class="h-screen">
     <LayoutNavBar />
-    <div
-      class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl"
-    >
+    <div class="mx-auto max-w-screen-xl px-8 pt-16">
       <slot />
     </div>
   </div>
