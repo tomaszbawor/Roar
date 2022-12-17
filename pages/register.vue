@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {definePageMeta, registerWithEmail} from "#imports";
+import { definePageMeta, registerWithEmail } from "#imports";
 
 definePageMeta({
   layout: "centered-forms",
@@ -10,7 +10,7 @@ const password = ref<string>("elo");
 const passwordConfirm = ref<string>("elo");
 
 const postRegisterForm = async () => {
-  await registerWithEmail(email.value, password.value, passwordConfirm.value)
+  await registerWithEmail(email.value, password.value, passwordConfirm.value);
 };
 </script>
 <template>

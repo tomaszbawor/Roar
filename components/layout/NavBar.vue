@@ -2,6 +2,7 @@
 import { useColorMode, userLogout } from "#imports";
 import { useState } from "#app";
 import { IUser } from "~/types/IUser";
+import ProfileNavbarBadge from "~/components/layout/ProfileNavbarBadge.vue";
 
 const logout = async () => {
   await userLogout();
@@ -22,9 +23,7 @@ const user = useState<IUser>("user");
           >
         </a>
         <div class="flex items-center lg:order-2">
-          <div v-if="user" class="pr-6">
-            You are logged as: <b>{{ user.email }}</b>
-          </div>
+          <ProfileNavbarBadge v-if="user" class="mr-4" />
 
           <div v-if="!user">
             <nuxt-link

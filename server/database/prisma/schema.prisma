@@ -11,12 +11,13 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  name      String?   @unique
-  role      UserRole  @default(USER)
+  id        String     @id @default(uuid())
+  email     String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  name      String?    @unique
+  role      UserRole   @default(USER)
+  character Character?
   password  String
   Session   Session[]
 }
@@ -31,8 +32,39 @@ model Session {
   deletedAt DateTime?
 }
 
+model Character {
+  id           String  @id @default(uuid())
+  name String @unique
+  user         User    @relation(fields: [userId], references: [id])
+  userId       String  @unique
+  village      Village
+  rank         Rank    @default(STUDENT)
+  ninjutsu     Int     @default(1)
+  taijutsu     Int     @default(1)
+  genjutsu     Int     @default(1)
+  speed        Int     @default(1)
+  intelligence Int     @default(1)
+  strength     Int     @default(1)
+  endurance    Int     @default(1)
+}
+
 enum UserRole {
   USER
   MOD
   ADMIN
+}
+
+enum Village {
+  LEAF
+  STONE
+  SAND
+  CLOUD
+  MIST
+}
+
+enum Rank {
+  STUDENT
+  GENIN
+  CHUNIN
+  JONIN
 }

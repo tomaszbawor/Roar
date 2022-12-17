@@ -7,10 +7,11 @@ definePageMeta({
   layout: "centered-forms",
 });
 
-const email = ref<string | null>("");
-const password = ref<string | null>("");
+const email = ref<string | null>("elo");
+const password = ref<string | null>("elo");
 
 const postLoginForm = async () => {
+  console.log("Posting login form");
   if (email.value !== null && password.value !== null) {
     await loginWithEmail(email.value, password.value);
   }

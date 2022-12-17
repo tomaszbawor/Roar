@@ -1,6 +1,6 @@
 import { createError, eventHandler, readBody, sendError } from "h3";
 import bcrypt from "bcrypt";
-import { IUser } from "~/types/IUser";
+import { CreateUserRequest } from "~/types/IUser";
 import { doesUserExist } from "~/server/services/userService";
 import { createUser } from "~/server/repositories/userRepository";
 import { makeSession } from "~/server/services/sessionService";
@@ -32,7 +32,7 @@ export default eventHandler(async (event) => {
 
   const encryptedPassword: string = await bcrypt.hash(password, 10);
 
-  const userData: Omit<IUser, "id"> = {
+  const userData: CreateUserRequest = {
     email: email,
     password: encryptedPassword,
   };

@@ -1,5 +1,1 @@
-export enum IUserRole {
-  USER = "USER",
-  MOD = "MOD",
-  ADMIN = "ADMIN",
-}
+export type IUserRole = "USER" | "MOD" | "ADMIN";

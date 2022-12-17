@@ -6,3 +6,5 @@ export interface IUser {
   password: string;
   role: IUserRole;
 }
+
+export type CreateUserRequest = Pick<IUser, "email" | "password">;

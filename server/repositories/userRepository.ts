@@ -1,4 +1,4 @@
-import { IUser } from "~/types/IUser";
+import { CreateUserRequest, IUser } from "~/types/IUser";
 import prisma from "~/server/database/client";
 
 export async function getUserByEmail(email: string): Promise<IUser | null> {
@@ -10,11 +10,12 @@ export async function getUserByEmail(email: string): Promise<IUser | null> {
       id: true,
       email: true,
       password: true,
+      role: true,
     },
   });
 }
 
-export async function createUser(data: Omit<IUser, "id">) {
+export async function createUser(data: CreateUserRequest) {
   const user = prisma.user.create({
     data: {
       email: data.email,
