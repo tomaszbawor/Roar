@@ -1,4 +1,4 @@
 <script setup lang="ts"></script>
 <template>
-  <div>ELO</div>
+  <div>Welcom to main page</div>
 </template>

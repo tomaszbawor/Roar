@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useColorMode, userLogout } from "#imports";
 import { useState } from "#app";
+import { IUser } from "~/types/IUser";
 
 const setColorScheme = (newColorTheme: string) => {
   useColorMode().preference = newColorTheme;
@@ -10,7 +11,7 @@ const logout = async () => {
   await userLogout();
 };
 
-const user = useState("user").value;
+const user = useState<IUser>("user");
 </script>
 <template>
   <header>
@@ -25,25 +26,33 @@ const user = useState("user").value;
           >
         </a>
         <div class="flex items-center lg:order-2">
-          <button
-            class="hidden md:block"
-            @click="
-              setColorScheme(
-                $colorMode.preference === 'dark' ? 'light' : 'dark'
-              )
-            "
-          >
-            Change mode
-          </button>
+          <!--          <button-->
+          <!--            class="hidden md:block"-->
+          <!--            @click="-->
+          <!--              setColorScheme(-->
+          <!--                $colorMode.preference === 'dark' ? 'light' : 'dark'-->
+          <!--              )-->
+          <!--            "-->
+          <!--          >-->
+          <!--            Change mode-->
+          <!--          </button>-->
+
+          <div v-if="user" class="pr-6">
+            You are logged as: <b>{{ user.email }}</b>
+          </div>
           <nuxt-link
+            v-if="!user"
             href="/login"
             class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
             >Log in</nuxt-link
           >
-          <nuxt-link href="/register" class="btn-primary"
+          <nuxt-link v-if="!user" href="/register" class="btn-primary"
             >Get started</nuxt-link
           >
-          <button class="btn-primary" @click="logout">LOGOUT</button>
+          <button v-if="user" class="btn-primary" @click="logout">
+            LOGOUT
+          </button>
+
           <button
             data-collapse-toggle="mobile-menu-2"
             type="button"
