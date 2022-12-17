@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: "",
   },
+  typescript: {
+    strict: true,
+  },
   tailwindcss: {
     cssPath: "~/assets/css/tailwind.css",
     configPath: "tailwind.config.js",

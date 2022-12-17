@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useColorMode, userLogout } from "#imports";
+import { userLogout } from "#imports";
 import { useState } from "#app";
 import { IUser } from "~/types/IUser";
 import ProfileNavbarBadge from "~/components/layout/ProfileNavbarBadge.vue";
@@ -16,12 +16,12 @@ const user = useState<IUser>("user");
       <div
         class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl"
       >
-        <a href="https://google.com" class="flex items-center">
+        <nuxt-link href="/" class="flex items-center">
           <span
             class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
             >ROAR</span
           >
-        </a>
+        </nuxt-link>
         <div class="flex items-center lg:order-2">
           <ProfileNavbarBadge v-if="user" class="mr-4" />
 
@@ -83,46 +83,18 @@ const user = useState<IUser>("user");
           >
             <li>
               <nuxt-link
-                href="/dashboard"
+                href="/character"
                 class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white"
                 aria-current="page"
               >
-                Dashboard
+                Character
               </nuxt-link>
             </li>
             <li>
-              <a
-                href="#"
+              <nuxt-link
+                href="/admin"
                 class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Company</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Marketplace</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Features</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Team</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Contact</a
+                >Admin</nuxt-link
               >
             </li>
           </ul>

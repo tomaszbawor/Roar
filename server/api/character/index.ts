@@ -7,6 +7,5 @@ export default defineEventHandler<Maybe<ICharacter>>(async (event) => {
   const body = await readBody(event);
   const userId = body.userId;
 
-  const character = await getCharacterByUserId(userId);
-  return character;
+  return await getCharacterByUserId(userId);
 });
