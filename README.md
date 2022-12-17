@@ -31,7 +31,7 @@ Start up docker database
 docker compose up -d
 ```
 
-Change the name of your `.env_example` file to `.env` in order to provide credentials to your docker db. 
+Change the name of your `.env_example` file to `.env` in order to provide credentials to your docker db.
 
 After starting database perform database migration
 
@@ -89,4 +89,18 @@ Browse database
 
 ```bash
 npx prisma studio
+```
+
+## Before commit
+
+Run type checking in nuxt
+
+```bash
+npx nuxi typecheck
+```
+
+Run linter (some things may be fixed by it)
+
+```bash
+npm run lint:fix
 ```
