@@ -1,7 +1,6 @@
-import { Maybe } from "~/types/util";
 import { ICharacter } from "~/types/ICharacter";
 import { useUser } from "~/composables/useAuth";
-import { useState } from "#app";
+import { Maybe } from "~/utils/Maybe";
 
 export const useCharacter = async (): Promise<Maybe<ICharacter>> => {
   const user = await useUser();
@@ -10,8 +9,8 @@ export const useCharacter = async (): Promise<Maybe<ICharacter>> => {
     const character = await $fetch<Maybe<ICharacter>>("/api/character", {
       method: "POST",
       body: {
-        userId: user.id,
-      },
+        userId: user.id
+      }
     });
 
     return character;

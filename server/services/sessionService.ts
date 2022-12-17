@@ -1,12 +1,9 @@
 import { IUser } from "~/types/IUser";
 import { H3Event, setCookie } from "h3";
 import { v4 as uuidv4 } from "uuid";
-import {
-  createSession,
-  getSessionByAuthToken,
-} from "~/server/repositories/sessionRepository";
+import { createSession, getSessionByAuthToken } from "~/server/repositories/sessionRepository";
 import { saninizeUserForFrontend } from "~/server/services/userService";
-import { Maybe } from "~/types/util";
+import { Maybe } from "~/utils/Maybe";
 
 export async function makeSession(user: IUser, event: H3Event): Promise<IUser> {
   const authToken = uuidv4().replaceAll("-", "");

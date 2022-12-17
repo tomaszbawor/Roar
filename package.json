@@ -27,7 +27,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.8.0",
     "nuxt": "3.0.0",
-    "nuxt-headlessui": "^1.0.4",
     "prisma": "^4.7.1",
     "sass": "^1.56.1"
   },

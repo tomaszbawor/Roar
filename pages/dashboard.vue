@@ -1,11 +1,12 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import auth from "~/middleware/auth";
 import { definePageMeta } from "#imports";
+import { useState } from "#app";
+
 
 definePageMeta({
-  middleware: [auth], // prevent from getting to dashboard unlogged users
+  middleware: [auth] // prevent from getting to dashboard unlogged users
 });
-import { useState } from "#app";
-import auth from "~/middleware/auth";
 
 const data = useState("user").value;
 </script>

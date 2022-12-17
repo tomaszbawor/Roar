@@ -1,7 +1,7 @@
 import { eventHandler, getCookie } from "h3";
 import { IUser } from "~/types/IUser";
-import { Maybe } from "~/types/util";
 import { getUserBySessionToken } from "~/server/services/sessionService";
+import { Maybe } from "~/utils/Maybe";
 
 export default eventHandler<Maybe<IUser>>(async (event) => {
   const authToken = getCookie(event, "auth_token");
