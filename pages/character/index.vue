@@ -2,6 +2,7 @@
 import { definePageMeta, useCharacter } from "#imports";
 import auth from "~/middleware/auth";
 import { useRouter } from "#app";
+import CharacterStatsSheet from "~/components/character/CharacterStatsSheet.vue";
 
 definePageMeta({
   middleware: [auth]
@@ -14,31 +15,73 @@ if (!character) {
 }
 </script>
 <template>
-  <n-card>
-    
-    <slot name="header">
-      <div class="flex justify-center mb-4">
-        <TypographyHeader class="">Character Sheet</TypographyHeader>
-      </div>
-    </slot>
+  <div class="flex gap-4">
+    <div class="w-2/3">
+      <CharacterStatsSheet :character="character" />
+    </div>
+    <div class="w-1/3">
+      <n-card>
+        <slot name="header">
+          <div class="flex justify-center mb-4">
+            <TypographyHeader class="">Info</TypographyHeader>
+          </div>
 
-    <n-card class="mb-2" title="">
-      <div>Name: {{ character.name }}</div>
-      <div>Rank: {{ character.rank }}</div>
-      <div>Village: {{ character.village }}</div>
-    </n-card>
+          <n-card title="Pools">
+            <div class="mb-2">
+              <b>
+                Exp:
+              </b>
+              <span>0 / 1000</span>
+              <n-progress :height="16"
+                          :percentage="10"
+                          :show-indicator="false"
+                          border-radius="12px 0 12px 0"
+                          fill-border-radius="12px 0 12px 0"
+                          status="warning"
+                          type="line" />
+            </div>
 
-    <n-card class="mb-2" title="Stats">
-      <div>Strength: {{ character.strength }}</div>
-      <div>Speed: {{ character.speed }}</div>
-      <div>Endurance: {{ character.endurance }}</div>
-      <div>Intelligence: {{ character.intelligence }}</div>
-    </n-card>
+            <div class="mb-2">
+              <b>
+                Health:
+              </b>
+              <span>0 / 1000</span>
+              <n-progress :height="16"
+                          :percentage="10"
+                          :show-indicator="false" border-radius="12px 0 12px 0" fill-border-radius="12px 0 12px 0"
+                          status="error"
+                          type="line" />
+            </div>
 
-    <n-card title="Skills">
-      <div>Ninjutsu: {{ character.ninjutsu }}</div>
-      <div>Genjutsu: {{ character.genjutsu }}</div>
-      <div>Taijutsu: {{ character.taijutsu }}</div>
-    </n-card>
-  </n-card>
+            <div class="mb-2">
+              <b>
+                Chakra:
+              </b>
+              <span>0 / 1000</span>
+              <n-progress :height="16"
+                          :percentage="10"
+                          :show-indicator="false" border-radius="12px 0 12px 0" fill-border-radius="12px 0 12px 0"
+                          status="info"
+                          type="line" />
+            </div>
+
+            <div class="mb-2">
+              <b>
+                Stamina:
+              </b>
+              <span>0 / 1000</span>
+              <n-progress :height="16"
+                          :percentage="10"
+                          :show-indicator="false" border-radius="12px 0 12px 0" fill-border-radius="12px 0 12px 0"
+                          status="success"
+                          type="line" />
+            </div>
+          </n-card>
+        </slot>
+
+
+      </n-card>
+    </div>
+
+  </div>
 </template>
