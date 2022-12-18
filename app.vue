@@ -1,7 +1,8 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useNuxtApp } from "#app";
 import { useUser } from "~/composables/useAuth";
 import { IUser } from "~/types/IUser";
+import { darkTheme } from "naive-ui";
 
 const nuxtApp = useNuxtApp();
 
@@ -10,12 +11,15 @@ nuxtApp.hook("page:finish", () => {
   window.scrollTo(0, 0);
 });
 
+const dark = darkTheme;
 const user: IUser = await useUser();
 </script>
 <template>
   <div>
     <NuxtLayout>
-      <NuxtPage />
+      <n-config-provider :theme="$colorMode.preference === 'dark' ?  darkTheme : undefined">
+        <NuxtPage />
+      </n-config-provider>
     </NuxtLayout>
   </div>
 </template>
