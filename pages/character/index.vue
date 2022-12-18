@@ -1,26 +1,43 @@
 <script lang="ts" setup>
-import {definePageMeta, useCharacter} from "#imports";
+import { definePageMeta, useCharacter } from "#imports";
 import auth from "~/middleware/auth";
-import {useRouter} from "#app";
+import { useRouter } from "#app";
 
 definePageMeta({
-  middleware: [auth],
+  middleware: [auth]
 });
 
 const character = await useCharacter();
 
 if (!character) {
-  useRouter().push('/character/creation')
+  useRouter().push("/character/creation");
 }
 </script>
 <template>
-  <h1>Character sheets</h1>
-  <div v-if="character">
-    <h1>You have A character</h1>
 
-    <pre>
-      {{ character }}
-    </pre>
+  <div v-if="character">
+
+    <n-card title="Character sheet">
+
+      <n-card class="mb-2" title="">
+        <div>Name: {{ character.name }}</div>
+        <div>Rank: {{ character.rank }}</div>
+        <div>Village: {{ character.village }}</div>
+      </n-card>
+
+      <n-card class="mb-2" title="Stats">
+        <div>Strength: {{ character.strength }}</div>
+        <div>Speed: {{ character.speed }}</div>
+        <div>Endurance: {{ character.endurance }}</div>
+        <div>Intelligence: {{ character.intelligence }}</div>
+      </n-card>
+
+      <n-card title="Skills">
+        <div>Ninjutsu: {{ character.ninjutsu }}</div>
+        <div>Genjutsu: {{ character.genjutsu }}</div>
+        <div>Taijutsu: {{ character.taijutsu }}</div>
+      </n-card>
+    </n-card>
   </div>
   <div v-else>You do not have a character</div>
 </template>
