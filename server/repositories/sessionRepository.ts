@@ -4,10 +4,14 @@ import { IUser } from "~/types/IUser";
 import { Maybe } from "~/utils/Maybe";
 
 export async function createSession(data: ISession): Promise<ISession> {
+  if (!data.authToken) {
+    throw new Error("No auth token while creating session");
+  }
+
   return await prisma.session.create({
     data: {
       userId: data.userId,
-      authToken: data.authToken!,
+      authToken: data.authToken,
     },
   });
 }

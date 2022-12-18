@@ -35,8 +35,8 @@ export async function registerWithEmail(
       useState("user").value = res;
       await useRouter().push("/dashboard");
     }
-  } catch (e: any) {
-    console.log("error: " + e.toString());
+  } catch (e) {
+    console.log("error: ", e);
   }
 }
 
