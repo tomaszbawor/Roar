@@ -2,7 +2,7 @@
 import { useNuxtApp } from "#app";
 import { useUser } from "~/composables/useAuth";
 import { IUser } from "~/types/IUser";
-import { darkTheme } from "naive-ui";
+import { darkTheme, GlobalThemeOverrides } from "naive-ui";
 import { useColorMode } from "#imports";
 
 const nuxtApp = useNuxtApp();
@@ -12,19 +12,21 @@ nuxtApp.hook("page:finish", () => {
   window.scrollTo(0, 0);
 });
 
+const themeOverrides: GlobalThemeOverrides = {
+  common: {
+    cardColor: "rgb(31 41 55 / var(--tw-bg-opacity))"
+  }
+};
+
+
 const user: IUser = await useUser();
 useColorMode().preference = "dark";
-
-// hardcode it
-// const mode = computed(() => {
-//   return $colorMode.preference === 'dark' ?  darkTheme : undefined
-// })
 
 </script>
 <template>
   <div>
     <NuxtLayout>
-      <n-config-provider :theme="darkTheme">
+      <n-config-provider :theme="darkTheme" :theme-overrides="themeOverrides">
         <NuxtPage />
       </n-config-provider>
     </NuxtLayout>
