@@ -1,32 +1,30 @@
 <script lang="ts" setup>
 import { definePageMeta } from "#imports";
 import { loginWithEmail } from "~/composables/useAuth";
-import { ref } from "vue";
 
 definePageMeta({
   layout: "centered-forms"
 });
 
-const email = ref<string | null>("elo");
-const password = ref<string | null>("elo");
+const loginForm = reactive({
+  email: "",
+  password: ""
+});
 
 const postLoginForm = async () => {
-  console.log("Posting login form");
-  if (email.value !== null && password.value !== null) {
-    await loginWithEmail(email.value, password.value);
+  if (loginForm.email !== null && loginForm.password !== null) {
+    await loginWithEmail(loginForm.email, loginForm.password);
   }
 };
 
 const canClickLogin = (): boolean => {
-  return (!!email.value && !!password.value);
+  return (!!loginForm.email && !!loginForm.password);
 };
+
 </script>
 <template>
   <section class="bg-gray-50 dark:bg-gray-900">
-    <pre>
-      Email: {{ email }}
-      Password: {{ password }}
-    </pre>
+
     <div
       class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
@@ -55,7 +53,7 @@ const canClickLogin = (): boolean => {
 
               <n-input
                 id="email"
-                v-model:value="email"
+                v-model:value="loginForm.email"
                 name="email"
                 placeholder="name@company.com"
                 size="large"
@@ -72,7 +70,7 @@ const canClickLogin = (): boolean => {
 
               <n-input
                 id="password"
-                v-model:value="password"
+                v-model:value="loginForm.password"
                 name="password"
                 placeholder="password"
                 size="large"
@@ -84,7 +82,6 @@ const canClickLogin = (): boolean => {
                       @click.prevent="postLoginForm">
               Log In
             </n-button>
-
 
           </form>
         </div>

@@ -12,7 +12,6 @@ nuxtApp.hook("page:finish", () => {
   window.scrollTo(0, 0);
 });
 
-const dark = darkTheme;
 const user: IUser = await useUser();
 useColorMode().preference = "dark";
 

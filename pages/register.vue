@@ -1,22 +1,26 @@
 <script lang="ts" setup>
 import { definePageMeta, registerWithEmail } from "#imports";
+import { reactive } from "vue";
 
 definePageMeta({
   layout: "centered-forms"
 });
 
-const email = ref<string>("elo");
-const password = ref<string>("elo");
-const passwordConfirm = ref<string>("elo");
-const termsAccepted = ref<boolean>(false);
+const registerForm = reactive({
+  email: "",
+  password: "",
+  passwordConfirm: "",
+  termsAccepted: false
+});
+
 
 const canRegister = (): boolean => {
-  return termsAccepted.value;
+  return registerForm.termsAccepted;
 };
 
 
 const postRegisterForm = async () => {
-  await registerWithEmail(email.value, password.value, passwordConfirm.value);
+  await registerWithEmail(registerForm.email, registerForm.password, registerForm.passwordConfirm);
 };
 </script>
 <template>
@@ -49,7 +53,7 @@ const postRegisterForm = async () => {
 
               <n-input
                 id="email"
-                v-model:value="email"
+                v-model:value="registerForm.email"
                 name="email"
                 placeholder="name@company.com"
                 size="large"
@@ -65,7 +69,7 @@ const postRegisterForm = async () => {
 
               <n-input
                 id="password"
-                v-model:value="password"
+                v-model:value="registerForm.password"
                 name="password"
                 placeholder="password"
                 size="large"
@@ -81,7 +85,7 @@ const postRegisterForm = async () => {
               >
               <n-input
                 id="confirm-password"
-                v-model:value="passwordConfirm"
+                v-model:value="registerForm.passwordConfirm"
                 name="confirm-password"
                 placeholder="confirmPassword"
                 size="large"
@@ -93,7 +97,7 @@ const postRegisterForm = async () => {
 
                 <div class="ml-3 text-sm">
 
-                  <n-checkbox v-model:checked="termsAccepted">
+                  <n-checkbox v-model:checked="registerForm.termsAccepted">
                     <label
                       class="font-light text-gray-500 dark:text-gray-300"
                       for="terms"
