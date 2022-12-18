@@ -33,19 +33,33 @@ model Session {
 }
 
 model Character {
-  id           String  @id @default(uuid())
-  name         String  @unique
-  user         User    @relation(fields: [userId], references: [id])
-  userId       String  @unique
-  village      Village
-  rank         Rank    @default(STUDENT)
-  ninjutsu     Int     @default(1)
-  taijutsu     Int     @default(1)
-  genjutsu     Int     @default(1)
-  speed        Int     @default(1)
-  intelligence Int     @default(1)
-  strength     Int     @default(1)
-  endurance    Int     @default(1)
+  id            String         @id @default(uuid())
+  name          String         @unique
+  user          User           @relation(fields: [userId], references: [id])
+  userId        String         @unique
+  village       Village
+  rank          Rank           @default(STUDENT)
+  ninjutsu      Int            @default(1)
+  taijutsu      Int            @default(1)
+  genjutsu      Int            @default(1)
+  speed         Int            @default(1)
+  intelligence  Int            @default(1)
+  strength      Int            @default(1)
+  endurance     Int            @default(1)
+  characterPool CharacterPool?
+}
+
+model CharacterPool {
+  characterId String    @id @unique
+  character   Character @relation(fields: [characterId], references: [id])
+  level       Int       @default(1)
+  experience  Int       @default(0)
+  health      Int       @default(100)
+  maxHealth   Int       @default(100)
+  chakra      Int       @default(100)
+  maxChakra   Int       @default(100)
+  stamina     Int       @default(100)
+  maxStamina  Int       @default(100)
 }
 
 enum UserRole {

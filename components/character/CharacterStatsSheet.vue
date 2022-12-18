@@ -17,16 +17,16 @@ const character = props.character;
     </slot>
 
     <n-card class="mb-2" title="">
-      <div>Name: {{ character.name }}</div>
-      <div>Rank: {{ character.rank }}</div>
-      <div>Village: {{ character.village }}</div>
+      <div><b>Name:</b> {{ character.name }}</div>
+      <div><b>Rank:</b> {{ character.rank }}</div>
+      <div><b>Village:</b> {{ character.village }}</div>
     </n-card>
 
     <n-card class="mb-2" title="Stats">
-      <div>Strength: {{ character.strength }}</div>
-      <div>Speed: {{ character.speed }}</div>
-      <div>Endurance: {{ character.endurance }}</div>
-      <div>Intelligence: {{ character.intelligence }}</div>
+      <div><b>Strength:</b> {{ character.strength }}</div>
+      <div><b>Speed:</b> {{ character.speed }}</div>
+      <div><b>Endurance:</b> {{ character.endurance }}</div>
+      <div><b>Intelligence:</b> {{ character.intelligence }}</div>
     </n-card>
 
     <n-card title="Skills">
