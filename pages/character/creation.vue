@@ -6,6 +6,11 @@ import { Village } from "~/types/ICharacter";
 const name = ref("");
 const village = ref<Village>("SAND");
 
+const villageOptions: Array<{ label: string, value: string }> = ["SAND", "LEAF", "STONE", "CLOUD", "MIST"].map((element) => {
+    return { label: element, value: element };
+  })
+;
+
 const postCreateCharacter = async () => {
   await createCharacter({
     name: name.value,
@@ -45,17 +50,22 @@ const postCreateCharacter = async () => {
               for="name"
             >Village</label
             >
-            <select
+
+            <n-select
               id="name"
               v-model="village"
-              class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <option value="SAND">SAND</option>
-              <option value="LEAF">LEAF</option>
-              <option value="STONE">STONE</option>
-              <option value="CLOUD">CLOUD</option>
-              <option value="MIST">MIST</option>
-            </select>
+              :options="villageOptions" />
+            <!--            <select-->
+            <!--              id="name"-->
+            <!--              v-model="village"-->
+            <!--              class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"-->
+            <!--            >-->
+            <!--              <option value="SAND">SAND</option>-->
+            <!--              <option value="LEAF">LEAF</option>-->
+            <!--              <option value="STONE">STONE</option>-->
+            <!--              <option value="CLOUD">CLOUD</option>-->
+            <!--              <option value="MIST">MIST</option>-->
+            <!--            </select>-->
 
           </div>
 
