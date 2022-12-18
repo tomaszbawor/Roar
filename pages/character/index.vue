@@ -12,11 +12,6 @@ definePageMeta({
   middleware: [auth]
 });
 
-const getPercent = (val: number, max: number): number => {
-  return (100 * val) / max;
-};
-
-
 const character = (await useCharacter()) as ICharacter;
 const characterPool = character.characterPool as ICharacterPool;
 const maxExp = maxExpForLevel(characterPool.level);
@@ -37,6 +32,14 @@ if (!character) {
             <TypographyHeader class="">Info</TypographyHeader>
           </div>
         </slot>
+
+        <n-card class="mb-4">
+
+          <div>
+            <b>Level: </b> {{ characterPool.level }}
+          </div>
+        </n-card>
+
 
         <n-card title="Pools">
           <PoolProgressBar :current-val="characterPool.experience" :max-val="maxExp" color="warning" label="Exp" />
