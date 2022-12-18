@@ -7,8 +7,10 @@ export async function getCharacterByUserId(
 ): Promise<Maybe<ICharacter>> {
   return await prisma.character.findUnique({
     where: {
-      userId: userId,
-    },
+      userId: userId
+    }, include: {
+      characterPool: true
+    }
   });
 }
 
@@ -19,8 +21,16 @@ export async function createCharacter(
     data: {
       name: createCharacterCommand.name,
       userId: createCharacterCommand.userId,
-      village: createCharacterCommand.village,
-    },
+      village: createCharacterCommand.village
+    }
   });
-  return character;
+
+  const pool = await prisma.characterPool.create({
+    data: {
+      characterId: character.id
+    }
+  });
+
+  const savedChar = (await getCharacterByUserId(character.id)) as ICharacter;
+  return savedChar;
 }

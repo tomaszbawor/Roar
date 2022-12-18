@@ -3,12 +3,28 @@ import { definePageMeta, useCharacter } from "#imports";
 import auth from "~/middleware/auth";
 import { useRouter } from "#app";
 import CharacterStatsSheet from "~/components/character/CharacterStatsSheet.vue";
+import { ICharacter } from "~/types/ICharacter";
+import ICharacterPool from "~/types/ICharacterPool";
+import { maxExpForLevel } from "~/engine/maxExpForLevel";
 
 definePageMeta({
   middleware: [auth]
 });
 
-const character = await useCharacter();
+const getPercent = (val: number, max: number): number => {
+  return (100 * val) / max;
+};
+
+
+const character = (await useCharacter()) as ICharacter;
+const characterPool = character.characterPool as ICharacterPool;
+const maxExp = maxExpForLevel(characterPool.level);
+
+const healthPercent = getPercent(characterPool.health, characterPool.maxHealth);
+const expPercent = getPercent(characterPool.experience, maxExp);
+const chakraPercent = getPercent(characterPool.chakra, characterPool.maxChakra);
+const staminaPercent = getPercent(characterPool.stamina, characterPool.maxStamina);
+
 
 if (!character) {
   useRouter().push("/character/creation");
@@ -31,9 +47,9 @@ if (!character) {
               <b>
                 Exp:
               </b>
-              <span>0 / 1000</span>
+              <span>{{ characterPool.experience }} / {{ maxExp }}</span>
               <n-progress :height="16"
-                          :percentage="10"
+                          :percentage="expPercent"
                           :show-indicator="false"
                           border-radius="12px 0 12px 0"
                           fill-border-radius="12px 0 12px 0"
@@ -45,9 +61,9 @@ if (!character) {
               <b>
                 Health:
               </b>
-              <span>0 / 1000</span>
+              <span>{{ characterPool.health }} / {{ characterPool.maxHealth }}</span>
               <n-progress :height="16"
-                          :percentage="10"
+                          :percentage="healthPercent"
                           :show-indicator="false" border-radius="12px 0 12px 0" fill-border-radius="12px 0 12px 0"
                           status="error"
                           type="line" />
@@ -57,9 +73,9 @@ if (!character) {
               <b>
                 Chakra:
               </b>
-              <span>0 / 1000</span>
+              <span>{{ characterPool.chakra }} / {{ characterPool.maxChakra }}</span>
               <n-progress :height="16"
-                          :percentage="10"
+                          :percentage="chakraPercent"
                           :show-indicator="false" border-radius="12px 0 12px 0" fill-border-radius="12px 0 12px 0"
                           status="info"
                           type="line" />
@@ -69,9 +85,9 @@ if (!character) {
               <b>
                 Stamina:
               </b>
-              <span>0 / 1000</span>
+              <span>{{ characterPool.stamina }} / {{ characterPool.maxStamina }}</span>
               <n-progress :height="16"
-                          :percentage="10"
+                          :percentage="staminaPercent"
                           :show-indicator="false" border-radius="12px 0 12px 0" fill-border-radius="12px 0 12px 0"
                           status="success"
                           type="line" />
