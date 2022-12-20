@@ -2,7 +2,7 @@ import ICharacterPool from "~/types/ICharacterPool";
 import { Maybe } from "~/utils/Maybe";
 
 export interface ICharacter {
-  id: string,
+  id: string;
   userId: string;
   name: string;
   village: Village;

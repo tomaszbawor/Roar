@@ -1,35 +1,16 @@
 import { NitroApp } from "nitropack";
 import { schedule } from "node-cron";
+import { refreshPools } from "~/server/services/regenerationService";
 import prisma from "~/server/database/client";
-import { ICharacter } from "~/types/ICharacter";
 
 export default defineNitroPlugin((nitroApp: NitroApp) => {
   console.log("Registration of Nitro hooks");
 
   schedule("* * * * *", async () => {
+    console.log("Running regeneration task ", new Date());
 
-    console.log("Schduled Task at ", new Date());
-
-    const characters: Array<ICharacter> = await prisma.character.findMany({
-      include: {
-        characterPool: true
-      }
+    prisma.$transaction(async (tx) => {
+      await refreshPools();
     });
-
-    characters.map(
-      async (ch) => {
-        await prisma.characterPool.update({
-          where: {
-            characterId: ch.id
-          }, data: {
-            maxHealth: ch.characterPool!.maxHealth + 5
-          }
-        });
-      }
-    );
-
-    console.log("UPDATED");
   });
-
-
 });
