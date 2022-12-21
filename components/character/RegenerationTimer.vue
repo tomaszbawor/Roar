@@ -18,7 +18,7 @@ useIntervalFn(() => {
       wasRefreshedThisMinute.value = true;
     }
   }
-  if (secondsUntilReset() === 57) {
+  if (wasRefreshedThisMinute.value && secondsUntilReset() === 57) {
     wasRefreshedThisMinute.value = false;
   }
 }, 200);

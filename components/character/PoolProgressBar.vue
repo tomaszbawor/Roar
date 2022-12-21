@@ -15,6 +15,8 @@
 </template>
 <script lang="ts" setup>
 
+import { computed } from "@vue/reactivity";
+
 const props = defineProps<{
   label: string,
   color: "default" | "success" | "error" | "warning" | "info",
@@ -22,6 +24,7 @@ const props = defineProps<{
   maxVal: number
 }>();
 
-const percentage = (100 * props.currentVal) / props.maxVal;
+
+const percentage = computed(() => (100 * props.currentVal) / props.maxVal);
 
 </script>
