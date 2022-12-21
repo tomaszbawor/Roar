@@ -1,18 +1,25 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { createCharacter } from "~/server/repositories/characterRepository";
 
 (async () => {
   const prisma = new PrismaClient();
 
   async function seed() {
     // Create Admin User
-    await prisma.user.create({
+    const admin = await prisma.user.create({
       data: {
         email: "admin@admin.com",
         password: await hashPassword("admin"),
         role: "ADMIN",
         name: "RoarAdmin",
       },
+    });
+
+    await createCharacter({
+      name: "Kami",
+      userId: admin.id,
+      village: "MIST",
     });
   }
 
