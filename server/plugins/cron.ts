@@ -7,10 +7,11 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
   console.log("Registration of Nitro hooks");
 
   schedule("* * * * *", async () => {
-    console.log("Running regeneration task ", new Date());
-
     prisma.$transaction(async (tx) => {
+      const now = performance.now();
       await refreshPools();
+      const after = performance.now();
+      console.log(`Regenerate took ${after - now} ms`);
     });
   });
 });
