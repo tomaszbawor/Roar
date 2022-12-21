@@ -29,17 +29,19 @@
     "eslint-plugin-vue": "^9.8.0",
     "naive-ui": "^2.34.2",
     "nuxt": "3.0.0",
-    "prisma": "^4.7.1",
-    "sass": "^1.56.1"
+    "prisma": "^4.8.0",
+    "sass": "^1.56.1",
+    "ts-node": "^10.9.1"
   },
   "dependencies": {
-    "@prisma/client": "^4.7.1",
+    "@prisma/client": "^4.8.0",
     "@vueuse/core": "^9.7.0",
     "bcrypt": "^5.1.0",
     "node-cron": "^3.0.2",
     "uuid": "^9.0.0"
   },
   "prisma": {
-    "schema": "server/database/prisma/schema.prisma"
+    "schema": "server/database/prisma/schema.prisma",
+    "seed": "ts-node server/database/prisma/seed.ts"
   }
 }
