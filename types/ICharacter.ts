@@ -1,4 +1,5 @@
 import ICharacterPool from "~/types/ICharacterPool";
+import { Maybe } from "~/utils/Maybe";
 
 export interface ICharacter {
   id: string;
@@ -13,7 +14,7 @@ export interface ICharacter {
   intelligence: number;
   strength: number;
   endurance: number;
-  characterPool: ICharacterPool;
+  characterPool: Maybe<ICharacterPool>;
 }
 
 export interface CreateCharacterCommand {
