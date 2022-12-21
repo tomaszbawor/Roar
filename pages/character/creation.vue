@@ -56,7 +56,7 @@ const postCreateCharacter = async () => {
 
             <n-select
               id="name"
-              v-model="creationForm.village"
+              v-model:value="creationForm.village"
               :options="villageOptions" />
           </div>
 

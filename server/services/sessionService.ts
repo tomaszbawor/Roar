@@ -27,6 +27,11 @@ export async function makeSession(user: IUser, event: H3Event): Promise<IUser> {
 export async function getUserBySessionToken(
   authToken: string
 ): Promise<Maybe<IUser>> {
-  const session = await getSessionByAuthToken(authToken);
-  return saninizeUserForFrontend(session.user);
+  try {
+    const session = await getSessionByAuthToken(authToken);
+    return saninizeUserForFrontend(session.user);
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
 }
