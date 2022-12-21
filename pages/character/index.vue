@@ -3,7 +3,6 @@ import { definePageMeta, useCharacter } from "#imports";
 import auth from "~/middleware/auth";
 import { useRouter } from "#app";
 import CharacterStatsSheet from "~/components/character/CharacterStatsSheet.vue";
-import { ICharacter } from "~/types/ICharacter";
 import ICharacterPool from "~/types/ICharacterPool";
 import { maxExpForLevel } from "~/engine/maxExpForLevel";
 import PoolProgressBar from "~/components/character/PoolProgressBar.vue";
@@ -12,13 +11,16 @@ definePageMeta({
   middleware: [auth]
 });
 
-const character = (await useCharacter()) as ICharacter;
-const characterPool = character.characterPool as ICharacterPool;
-const maxExp = maxExpForLevel(characterPool.level);
+const character = await useCharacter();
 
 if (!character) {
   useRouter().push("/character/creation");
 }
+
+const characterPool = character!.characterPool as ICharacterPool;
+const maxExp = maxExpForLevel(characterPool.level);
+
+
 </script>
 <template>
   <div class="flex gap-4">

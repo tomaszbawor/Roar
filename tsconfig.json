@@ -3,7 +3,7 @@
   "extends": "./.nuxt/tsconfig.json",
   "ts-node": {
     "compilerOptions": {
-      "module": "CommonJS"
+      "module": "NodeNext"
     }
   }
 }
