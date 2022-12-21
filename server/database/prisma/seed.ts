@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
+
+// Imports of the services needs to be relative because of the ts-node configuration
+import { hashPassword } from "../../services/passwordHasher";
 
 (async () => {
   const prisma = new PrismaClient();
@@ -32,9 +34,6 @@ import bcrypt from "bcrypt";
         characterId: char.id,
       },
     });
-  };
-  const hashPassword = async (password: string): Promise<string> => {
-    return await bcrypt.hash(password, 10);
   };
 
   try {

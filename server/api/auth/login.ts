@@ -1,7 +1,7 @@
 import { createError, readBody, sendError } from "h3";
 import { getUserByEmail } from "~/server/repositories/userRepository";
-import bcrypt from "bcrypt";
 import { makeSession } from "~/server/services/sessionService";
+import { comparePasswords } from "~/server/services/passwordHasher";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -18,7 +18,8 @@ export default defineEventHandler(async (event) => {
     return;
   }
 
-  const isPasswordCorrect = bcrypt.compare(password, userByEmail.password);
+  const isPasswordCorrect = comparePasswords(userByEmail.password, password);
+  // const isPasswordCorrect = bcrypt.compare(password, userByEmail.password);
 
   if (!isPasswordCorrect) {
     sendError(
