@@ -51,7 +51,7 @@ export async function loginWithEmail(email: string, password: string) {
 
   if (user) {
     useState("user").value = user;
-    await useRouter().push("/dashboard");
+    await useRouter().push("/character");
   }
 }
 
