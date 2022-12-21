@@ -1,6 +1,16 @@
 <script lang="ts" setup>
 import PoolSidebar from "~/components/character/PoolSidebar.vue";
-import TrainingScreen from "~/components/training/TrainingScreen.vue";</script>
+import TrainingScreen from "~/components/training/TrainingScreen.vue";
+import { definePageMeta } from "#imports";
+import auth from "~/middleware/auth";
+
+definePageMeta({
+  middleware: [auth]
+});
+
+</script>
+
+
 <template>
   <div class="flex gap-4">
     <div class="w-2/3">

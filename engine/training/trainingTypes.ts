@@ -16,7 +16,14 @@ export interface TrainingCost {
   stamina: number;
 }
 
-export const trainingCostPerUnit: Record<SkillType | StatType, TrainingCost> = {
+export enum PoolExtendTraining {
+  CHAKRA_EXTEND = "CHAKRA_EXTEND",
+  STAMINA_EXTEND = "STAMINA_EXTEND",
+}
+
+export type TrainingType = SkillType | StatType | PoolExtendTraining;
+
+export const trainingCostPerUnit: Record<TrainingType, TrainingCost> = {
   NINJUTSU: { chakra: 10, stamina: 0 },
   GENJUTSU: { chakra: 10, stamina: 0 },
   TAIJUTSU: { chakra: 0, stamina: 10 },
@@ -24,4 +31,6 @@ export const trainingCostPerUnit: Record<SkillType | StatType, TrainingCost> = {
   INTELLIGENCE: { chakra: 50, stamina: 0 },
   SPEED: { chakra: 25, stamina: 25 },
   STRENGTH: { chakra: 0, stamina: 50 },
+  CHAKRA_EXTEND: { chakra: 100, stamina: 0 },
+  STAMINA_EXTEND: { chakra: 0, stamina: 100 },
 };
