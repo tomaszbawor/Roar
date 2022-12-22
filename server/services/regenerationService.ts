@@ -1,33 +1,26 @@
 import prisma from "~/server/database/client";
 import { ICharacter } from "~/types/ICharacter";
-import ICharacterPool from "~/types/ICharacterPool";
+import { getRegenerationRateForCharacter } from "~/engine/character/characterRegen";
 
 export const refreshPools = async () => {
   const characterWithNotFullPool = await getCharactersToRegenerate();
 
-  const regenRate = 5; // TODO: Implement Regeneration system based on stats
-
   for (const character of characterWithNotFullPool) {
+    const regenRate = getRegenerationRateForCharacter(character);
+    const pool = character.characterPool;
+
+    if (!pool) {
+      throw Error("Character does not have a resource pool");
+    }
+
     await prisma.characterPool.update({
       where: {
         characterId: character.id,
       },
       data: {
-        health: updateOrMax(
-          character.characterPool!.health,
-          character.characterPool!.maxHealth,
-          regenRate
-        ),
-        stamina: updateOrMax(
-          character.characterPool!.stamina,
-          character.characterPool!.maxStamina,
-          regenRate
-        ),
-        chakra: updateOrMax(
-          character.characterPool!.chakra,
-          character.characterPool!.maxChakra,
-          regenRate
-        ),
+        health: updateOrMax(pool.health, pool.maxHealth, regenRate),
+        stamina: updateOrMax(pool.stamina, pool.maxStamina, regenRate),
+        chakra: updateOrMax(pool.chakra, pool.maxChakra, regenRate),
       },
     });
   }
@@ -42,7 +35,10 @@ const getCharactersToRegenerate = async (): Promise<Array<ICharacter>> => {
   });
 
   return allCharacters.filter((character) => {
-    const pool: ICharacterPool = character.characterPool!;
+    const pool = character.characterPool;
+    if (!pool) {
+      return false;
+    }
     return (
       pool.health < pool.maxHealth ||
       pool.stamina < pool.maxStamina ||
