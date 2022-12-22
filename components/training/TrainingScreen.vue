@@ -12,6 +12,7 @@ import { computed } from "@vue/reactivity";
 import { definePageMeta } from "#imports";
 import hasCharacter from "~/middleware/hasCharacter";
 import ICharacterPool from "~/types/ICharacterPool";
+import { TrainCommand } from "~/types/form/TrainCommand";
 
 definePageMeta({
   middleware: [hasCharacter]
@@ -31,7 +32,7 @@ const labels: Record<TrainingType, string> = {
   STAMINA_EXTEND: "Increase Stamina"
 };
 
-const trainingForm = reactive<{ trainType: TrainingType, value: number }>({
+const trainingForm = reactive<TrainCommand>({
   trainType: SkillType.GENJUTSU,
   value: 0
 });
@@ -48,12 +49,15 @@ const trainingCost = computed<TrainingCost>(() => {
 });
 
 const maxTrainingValue = computed<number>(() => {
-  // TODO: Calculate how many times I can train
   return Math.min(
     characterPool.chakra / trainingCost.value.chakra,
     characterPool.stamina / trainingCost.value.stamina
   );
 });
+
+const onTrainingTypeChange = () => {
+  trainingForm.value = 0;
+};
 
 const totalTrainingCost = computed<TrainingCost>(() => {
   return {
@@ -63,15 +67,15 @@ const totalTrainingCost = computed<TrainingCost>(() => {
 });
 
 const submitTraining = () => {
-  console.log("Submit training ");
+
+
 };
 
 </script>
 <template>
-  <pre>{{ trainingForm }}</pre>
   <n-card title="Training">
 
-    <n-select v-model:value="trainingForm.trainType" :options="trainingOptions" />
+    <n-select v-model:value="trainingForm.trainType" :options="trainingOptions" @change="onTrainingTypeChange" />
 
     <div class="mt-4 ml-1">
       Cost of one training is : {{ trainingCost.stamina }} stamina and {{ trainingCost.chakra }} chakra
