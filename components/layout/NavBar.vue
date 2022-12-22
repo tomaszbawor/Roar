@@ -9,7 +9,8 @@ const logout = async () => {
 
 const user = useState<IUser>("user");
 
-const isAdmin = user.value.role === 'ADMIN'
+const isAdmin: boolean = user && user.value && user.value.role === "ADMIN";
+
 </script>
 <template>
   <header>
