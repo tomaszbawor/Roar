@@ -65,7 +65,10 @@ const getStatChangeAfterTraining = (tc: TrainCommand): TrainingIncrements => {
   return ti;
 };
 
-export const trainSkills = async (tc: TrainCommand, character: ICharacter) => {
+export const trainSkills = async (
+  tc: TrainCommand,
+  character: ICharacter
+): Promise<ICharacter> => {
   const unitTrainCost = trainingCostPerUnit[tc.trainType];
 
   const trainCost: TrainingCost = {
@@ -75,7 +78,7 @@ export const trainSkills = async (tc: TrainCommand, character: ICharacter) => {
 
   const skillIncrement = getStatChangeAfterTraining(tc);
 
-  await prisma.character.update({
+  return await prisma.character.update({
     where: {
       id: character.id,
     },
@@ -117,6 +120,9 @@ export const trainSkills = async (tc: TrainCommand, character: ICharacter) => {
       endurance: {
         increment: skillIncrement.endurance,
       },
+    },
+    include: {
+      characterPool: true,
     },
   });
 };

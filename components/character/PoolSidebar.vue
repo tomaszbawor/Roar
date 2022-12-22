@@ -8,15 +8,13 @@ const properties = defineProps<{
   pool: ICharacterPool
 }>();
 
-const characterPool = properties.pool;
-
 const emit = defineEmits(["refresh"]);
 
 const refreshData = async () => {
   emit("refresh");
 };
 
-const maxExp = maxExpForLevel(characterPool.level);
+const maxExp = maxExpForLevel(properties.pool.level);
 </script>
 <template>
   <n-card>
@@ -29,17 +27,17 @@ const maxExp = maxExpForLevel(characterPool.level);
     <n-card class="mb-4">
 
       <div>
-        <b>Level: </b> {{ characterPool.level }}
+        <b>Level: </b> {{ properties.pool.level }}
       </div>
     </n-card>
 
     <n-card title="Pools">
-      <PoolProgressBar :current-val="characterPool.experience" :max-val="maxExp" color="warning" label="Exp" />
-      <PoolProgressBar :current-val="characterPool.health" :max-val="characterPool.maxHealth" color="error"
+      <PoolProgressBar :current-val="properties.pool.experience" :max-val="maxExp" color="warning" label="Exp" />
+      <PoolProgressBar :current-val="properties.pool.health" :max-val="properties.pool.maxHealth" color="error"
                        label="Health" />
-      <PoolProgressBar :current-val="characterPool.chakra" :max-val="characterPool.maxChakra" color="info"
+      <PoolProgressBar :current-val="properties.pool.chakra" :max-val="properties.pool.maxChakra" color="info"
                        label="Chakra" />
-      <PoolProgressBar :current-val="characterPool.stamina" :max-val="characterPool.maxStamina" color="success"
+      <PoolProgressBar :current-val="properties.pool.stamina" :max-val="properties.pool.maxStamina" color="success"
                        label="Stamina" />
 
       <RegenerationTimer class="mt-6" @refresh="refreshData" />

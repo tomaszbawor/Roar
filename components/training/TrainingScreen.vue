@@ -13,9 +13,13 @@ import { useTraining } from "#imports";
 import ICharacterPool from "~/types/ICharacterPool";
 import { TrainCommand } from "~/types/form/TrainCommand";
 
+const props = defineProps<{
+  pool: ICharacterPool
+}>();
+
 const emit = defineEmits(["refresh"]);
 
-const characterPool: ICharacterPool = ((await useCharacter())?.characterPool) as ICharacterPool;
+const isPending = ref<boolean>(false);
 
 const labels: Record<TrainingType, string> = {
   GENJUTSU: "Genjutsu",
@@ -47,12 +51,12 @@ const trainingCost = computed<TrainingCost>(() => {
 
 const maxTrainingValue = computed<number>(() => {
   return Math.min(
-    characterPool.chakra / trainingCost.value.chakra,
-    characterPool.stamina / trainingCost.value.stamina
+    props.pool.chakra / trainingCost.value.chakra,
+    props.pool.stamina / trainingCost.value.stamina
   );
 });
 
-const onTrainingTypeChange = () => {
+const resetButtons = () => {
   trainingForm.value = 0;
 };
 
@@ -64,15 +68,24 @@ const totalTrainingCost = computed<TrainingCost>(() => {
 });
 
 const submitTraining = async () => {
-  await useTraining(trainingForm);
-  emit("refresh");
+  isPending.value = true;
+  try {
+    const character = await useTraining(trainingForm);
+    // TODO: Add some kind of toast about successful training
+  } catch (e) {
+    console.log(e);
+  } finally {
+    isPending.value = false;
+    emit("refresh");
+    resetButtons();
+  }
 };
 
 </script>
 <template>
   <n-card title="Training">
 
-    <n-select v-model:value="trainingForm.trainType" :options="trainingOptions" @change="onTrainingTypeChange" />
+    <n-select v-model:value="trainingForm.trainType" :options="trainingOptions" @update-value="resetButtons" />
 
     <div class="mt-4 ml-1">
       Cost of one training is : {{ trainingCost.stamina }} stamina and {{ trainingCost.chakra }} chakra
@@ -86,7 +99,7 @@ const submitTraining = async () => {
     </div>
 
     <div class="mt-4 flex">
-      <n-button class="mx-auto" @click="submitTraining">
+      <n-button :disabled="isPending" class="mx-auto" @click="submitTraining">
         Train
       </n-button>
     </div>

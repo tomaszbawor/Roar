@@ -19,7 +19,6 @@ if (!character) {
 const characterPool = ref<ICharacterPool>(await getCharPool());
 
 const refresh = async () => {
-  // console.log("Refreshing Data");
   characterPool.value = await getCharPool();
 };
 

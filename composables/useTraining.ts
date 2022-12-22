@@ -1,7 +1,8 @@
 import { TrainCommand } from "~/types/form/TrainCommand";
+import { ICharacter } from "~/types/ICharacter";
 
 export async function useTraining(command: TrainCommand) {
-  await $fetch<any>("/api/training", {
+  return $fetch<ICharacter>("/api/training", {
     method: "POST",
     body: command,
   });

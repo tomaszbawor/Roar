@@ -5,15 +5,15 @@ import auth from "~/middleware/auth";
 import ICharacterPool from "~/types/ICharacterPool";
 import hasCharacter from "~/middleware/hasCharacter";
 import PoolSidebar from "~/components/character/PoolSidebar.vue";
+import { Ref } from "vue";
 
 definePageMeta({
   middleware: [auth, hasCharacter]
 });
 
-const characterPool = ref<ICharacterPool>(await getCharPool());
+const characterPool: Ref<ICharacterPool> = ref<ICharacterPool>(await getCharPool());
 
 const refresh = async () => {
-  console.log("Refreshing Data");
   characterPool.value = await getCharPool();
 };
 
@@ -32,7 +32,7 @@ async function getCharPool(): Promise<ICharacterPool> {
 <template>
   <div v-if="characterPool" class="flex gap-4">
     <div class="w-2/3">
-      <TrainingScreen @refresh="refresh" />
+      <TrainingScreen :pool="characterPool" @refresh="refresh" />
     </div>
     <div class="w-1/3">
       <PoolSidebar :pool="characterPool" @refresh="refresh" />

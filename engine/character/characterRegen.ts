@@ -1,16 +1,14 @@
-import { ICharacter } from "~/types/ICharacter";
+import { CharacterRank, ICharacter } from "~/types/ICharacter";
 
 export const getRegenerationRateForCharacter = (
   character: ICharacter
 ): number => {
-  switch (character.rank) {
-    case "STUDENT":
-      return 5;
-    case "GENIN":
-      return 20;
-    case "CHUNIN":
-      return 50;
-    case "JONIN":
-      return 100;
-  }
+  return characterBaseRegenRates[character.rank];
+};
+
+export const characterBaseRegenRates: Record<CharacterRank, number> = {
+  STUDENT: 5,
+  GENIN: 20,
+  CHUNIN: 50,
+  JONIN: 100,
 };
