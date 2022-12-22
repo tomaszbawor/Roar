@@ -1,13 +1,13 @@
 import prisma from "~/server/database/client";
 import { ICharacter } from "~/types/ICharacter";
 import ICharacterPool from "~/types/ICharacterPool";
+import { getRegenerationRateForCharacter } from "~/engine/character/characterRegen";
 
 export const refreshPools = async () => {
   const characterWithNotFullPool = await getCharactersToRegenerate();
 
-  const regenRate = 5; // TODO: Implement Regeneration system based on stats
-
   for (const character of characterWithNotFullPool) {
+    const regenRate = getRegenerationRateForCharacter(character);
     await prisma.characterPool.update({
       where: {
         characterId: character.id,

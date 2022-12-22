@@ -34,3 +34,16 @@ export const trainingCostPerUnit: Record<TrainingType, TrainingCost> = {
   CHAKRA_EXTEND: { chakra: 100, stamina: 0 },
   STAMINA_EXTEND: { chakra: 0, stamina: 100 },
 };
+
+export interface TrainingIncrements {
+  maxChakra: number;
+  maxStamina: number;
+  maxHealth: number;
+  strength: number;
+  speed: number;
+  endurance: number;
+  intelligence: number;
+  ninjutsu: number;
+  genjutsu: number;
+  taijustu: number;
+}

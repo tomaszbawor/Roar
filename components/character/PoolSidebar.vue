@@ -1,30 +1,22 @@
 <script lang="ts" setup>
-import { useCharacter } from "~/composables/useCharacter";
-import { useRouter } from "#app";
 import ICharacterPool from "~/types/ICharacterPool";
 import PoolProgressBar from "~/components/character/PoolProgressBar.vue";
 import RegenerationTimer from "~/components/character/RegenerationTimer.vue";
+import { maxExpForLevel } from "~/engine/maxExpForLevel";
 
-const character = await useCharacter();
+const properties = defineProps<{
+  pool: ICharacterPool
+}>();
 
-if (!character) {
-  useRouter().push("/character/creation");
-}
+const characterPool = properties.pool;
 
-const characterPool = ref(await getCharPool());
+const emit = defineEmits(["refresh"]);
 
 const refreshData = async () => {
-  console.log("Refreshing Data");
-  characterPool.value = await getCharPool();
+  emit("refresh");
 };
 
-async function getCharPool(): Promise<ICharacterPool> {
-  const char = await useCharacter();
-  if (!char || !char.characterPool) {
-    throw new Error("User should have character on that page");
-  }
-  return char!.characterPool!;
-}
+const maxExp = maxExpForLevel(characterPool.level);
 </script>
 <template>
   <n-card>
@@ -40,7 +32,6 @@ async function getCharPool(): Promise<ICharacterPool> {
         <b>Level: </b> {{ characterPool.level }}
       </div>
     </n-card>
-
 
     <n-card title="Pools">
       <PoolProgressBar :current-val="characterPool.experience" :max-val="maxExp" color="warning" label="Exp" />

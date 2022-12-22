@@ -4,6 +4,7 @@ import auth from "~/middleware/auth";
 import { useRouter } from "#app";
 import CharacterStatsSheet from "~/components/character/CharacterStatsSheet.vue";
 import PoolSidebar from "~/components/character/PoolSidebar.vue";
+import ICharacterPool from "~/types/ICharacterPool";
 
 definePageMeta({
   middleware: [auth]
@@ -15,6 +16,21 @@ if (!character) {
   useRouter().push("/character/creation");
 }
 
+const characterPool = ref<ICharacterPool>(await getCharPool());
+
+const refresh = async () => {
+  // console.log("Refreshing Data");
+  characterPool.value = await getCharPool();
+};
+
+async function getCharPool(): Promise<ICharacterPool> {
+  const char = await useCharacter();
+  if (!char || !char.characterPool) {
+    throw new Error("User should have character on that page");
+  }
+  return char!.characterPool!;
+}
+
 </script>
 <template>
   <div class="flex gap-4">
@@ -22,7 +38,7 @@ if (!character) {
       <CharacterStatsSheet :character="character" />
     </div>
     <div class="w-1/3">
-      <PoolSidebar />
+      <PoolSidebar :pool="characterPool" @refresh="refresh" />
     </div>
   </div>
 </template>

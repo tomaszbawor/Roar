@@ -9,14 +9,11 @@ import {
   TrainingType
 } from "~/engine/training/trainingTypes";
 import { computed } from "@vue/reactivity";
-import { definePageMeta } from "#imports";
-import hasCharacter from "~/middleware/hasCharacter";
+import { useTraining } from "#imports";
 import ICharacterPool from "~/types/ICharacterPool";
 import { TrainCommand } from "~/types/form/TrainCommand";
 
-definePageMeta({
-  middleware: [hasCharacter]
-});
+const emit = defineEmits(["refresh"]);
 
 const characterPool: ICharacterPool = ((await useCharacter())?.characterPool) as ICharacterPool;
 
@@ -66,9 +63,9 @@ const totalTrainingCost = computed<TrainingCost>(() => {
   };
 });
 
-const submitTraining = () => {
-
-
+const submitTraining = async () => {
+  await useTraining(trainingForm);
+  emit("refresh");
 };
 
 </script>
