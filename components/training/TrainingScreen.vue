@@ -4,11 +4,20 @@ import {
   PoolExtendTraining,
   SkillType,
   StatType,
+  TrainingCost,
   trainingCostPerUnit,
   TrainingType
 } from "~/engine/training/trainingTypes";
 import { computed } from "@vue/reactivity";
+import { definePageMeta } from "#imports";
+import hasCharacter from "~/middleware/hasCharacter";
+import ICharacterPool from "~/types/ICharacterPool";
 
+definePageMeta({
+  middleware: [hasCharacter]
+});
+
+const characterPool: ICharacterPool = ((await useCharacter())?.characterPool) as ICharacterPool;
 
 const labels: Record<TrainingType, string> = {
   GENJUTSU: "Genjutsu",
@@ -34,16 +43,23 @@ const trainingOptions: Array<{ label: string, value: TrainingType }> = [...Objec
   };
 });
 
-const trainingCost = computed(() => {
+const trainingCost = computed<TrainingCost>(() => {
   return trainingCostPerUnit[trainingForm.trainType];
 });
 
-const maxTrainingValue = computed(() => {
+const maxTrainingValue = computed<number>(() => {
   // TODO: Calculate how many times I can train
+  return Math.min(
+    characterPool.chakra / trainingCost.value.chakra,
+    characterPool.stamina / trainingCost.value.stamina
+  );
 });
 
-const totalTrainingCost = computed(() => {
-  //TODO:  Calculate total training cost
+const totalTrainingCost = computed<TrainingCost>(() => {
+  return {
+    chakra: trainingCost.value.chakra * trainingForm.value,
+    stamina: trainingCost.value.stamina * trainingForm.value
+  };
 });
 
 const submitTraining = () => {
@@ -61,7 +77,12 @@ const submitTraining = () => {
       Cost of one training is : {{ trainingCost.stamina }} stamina and {{ trainingCost.chakra }} chakra
     </div>
 
-    <n-slider v-model:value="trainingForm.value" />
+    <n-slider v-model:value="trainingForm.value" :max="maxTrainingValue" />
+
+    <div>
+      Training {{ trainingForm.value }} times. Spend {{ totalTrainingCost.stamina }} stamina, and
+      {{ totalTrainingCost.chakra }} chakra.
+    </div>
 
     <div class="mt-4 flex">
       <n-button class="mx-auto" @click="submitTraining">
