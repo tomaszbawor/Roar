@@ -51,8 +51,8 @@ const trainingCost = computed<TrainingCost>(() => {
 
 const maxTrainingValue = computed<number>(() => {
   return Math.min(
-    props.pool.chakra / trainingCost.value.chakra,
-    props.pool.stamina / trainingCost.value.stamina
+    Math.floor(props.pool.chakra / trainingCost.value.chakra),
+    Math.floor(props.pool.stamina / trainingCost.value.stamina)
   );
 });
 
@@ -67,11 +67,20 @@ const totalTrainingCost = computed<TrainingCost>(() => {
   };
 });
 
+const canTrainAtLeastOnce = computed<boolean>(() => {
+  return props.pool.chakra >= trainingCost.value.chakra && props.pool.stamina >= trainingCost.value.stamina;
+});
+
 const submitTraining = async () => {
   isPending.value = true;
   try {
-    const character = await useTraining(trainingForm);
-    // TODO: Add some kind of toast about successful training
+    if (trainingForm.value > 0) {
+      const character = await useTraining(trainingForm);
+      // TODO: Add some kind of toast about successful training
+    } else {
+    }
+
+
   } catch (e) {
     console.log(e);
   } finally {
@@ -91,15 +100,17 @@ const submitTraining = async () => {
       Cost of one training is : {{ trainingCost.stamina }} stamina and {{ trainingCost.chakra }} chakra
     </div>
 
-    <n-slider v-model:value="trainingForm.value" :max="maxTrainingValue" />
-
-    <div>
-      Training {{ trainingForm.value }} times. Spend {{ totalTrainingCost.stamina }} stamina, and
-      {{ totalTrainingCost.chakra }} chakra.
+    <div v-if="canTrainAtLeastOnce">
+      <n-slider v-model:value="trainingForm.value" :max="maxTrainingValue" />
+      <div>
+        Training {{ trainingForm.value }} times. Spend {{ totalTrainingCost.stamina }} stamina, and
+        {{ totalTrainingCost.chakra }} chakra.
+      </div>
     </div>
+    <div v-else class="mt-2 ml-1">You do not have resources to train {{ trainingForm.trainType }}</div>
 
     <div class="mt-4 flex">
-      <n-button :disabled="isPending" class="mx-auto" @click="submitTraining">
+      <n-button :disabled="isPending || !canTrainAtLeastOnce" class="mx-auto" @click="submitTraining">
         Train
       </n-button>
     </div>
