@@ -1,0 +1,3 @@
+<template>
+  Support page
+</template>

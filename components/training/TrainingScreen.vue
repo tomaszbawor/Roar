@@ -107,7 +107,7 @@ const submitTraining = async () => {
         {{ totalTrainingCost.chakra }} chakra.
       </div>
     </div>
-    <div v-else class="mt-2 ml-1">You do not have resources to train {{ trainingForm.trainType }}</div>
+    <div v-else class="mt-2 ml-1">You do not have resources to train {{ labels[trainingForm.trainType] }}</div>
 
     <div class="mt-4 flex">
       <n-button :disabled="isPending || !canTrainAtLeastOnce" class="mx-auto" @click="submitTraining">

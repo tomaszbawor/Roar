@@ -1,0 +1,3 @@
+<template>
+  News about game... Will have news loaded from database...
+</template>

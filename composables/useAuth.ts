@@ -33,7 +33,7 @@ export async function registerWithEmail(
 
     if (res) {
       useState("user").value = res;
-      await useRouter().push("/dashboard");
+      await useRouter().push("/character");
     }
   } catch (e) {
     console.log("error: ", e);
