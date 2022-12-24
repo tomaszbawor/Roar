@@ -30,7 +30,10 @@ const arenaCharacters = await useFetch<Array<AICharacter>>("/api/arena", {
   method: "GET"
 });
 
-arenaCharacters.data.value
+const attack = async (opponentName: string) => {
+  // TODO: Create Battle with AI
+  console.log("Attacking:", opponentName);
+};
 
 </script>
 <template>
@@ -40,10 +43,11 @@ arenaCharacters.data.value
         <n-page-header>Arena Page</n-page-header>
 
         <div v-for="oponent in arenaCharacters.data.value">
-          <div>{{ oponent }}</div>
+          <div>
+            <span class="pr-4">{{ oponent.name }}</span>
+            <n-button @click="attack(oponent.name)">Attack</n-button>
+          </div>
         </div>
-
-
       </n-card>
     </div>
     <div class="w-1/3">
