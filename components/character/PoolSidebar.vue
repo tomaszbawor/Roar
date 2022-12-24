@@ -3,6 +3,8 @@ import ICharacterPool from "~/types/ICharacterPool";
 import PoolProgressBar from "~/components/character/PoolProgressBar.vue";
 import RegenerationTimer from "~/components/character/RegenerationTimer.vue";
 import { maxExpForLevel } from "~/engine/maxExpForLevel";
+import { useCharacter } from "~/composables/useCharacter";
+import { getRegenerationRateForCharacter } from "~/engine/character/characterRegen";
 
 const properties = defineProps<{
   pool: ICharacterPool
@@ -13,6 +15,10 @@ const emit = defineEmits(["refresh"]);
 const refreshData = async () => {
   emit("refresh");
 };
+
+const character = await useCharacter();
+
+const regenRate = getRegenerationRateForCharacter(character!);
 
 const maxExp = maxExpForLevel(properties.pool.level);
 </script>
@@ -39,6 +45,10 @@ const maxExp = maxExpForLevel(properties.pool.level);
                        label="Chakra" />
       <PoolProgressBar :current-val="properties.pool.stamina" :max-val="properties.pool.maxStamina" color="success"
                        label="Stamina" />
+
+      <div>
+        Regeneration Rate: <b>{{ regenRate }}</b>
+      </div>
 
       <RegenerationTimer class="mt-6" @refresh="refreshData" />
     </n-card>

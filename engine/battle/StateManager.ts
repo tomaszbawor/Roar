@@ -1,4 +1,5 @@
 import { ICharacter } from "~/types/ICharacter";
+import { AICharacter } from "~/types/battle/AiCharacter";
 
 enum BattleState {
   /**
@@ -34,12 +35,13 @@ export interface Battle {
   attacker: ICharacter;
   defender: ICharacter | AICharacter;
   state: BattleState;
+  battleType: Battle;
 }
 
-export type AICharacter = Omit<
-  ICharacter,
-  "id" | "userId" | "characterPool" | "village" | "rank"
->;
+export enum BattleType {
+  AI_BATTLE = "AI_BATTLE",
+  PVP = "PVP",
+}
 
 export enum BattleParticipant {
   ATTACKER = "ATTACKER",

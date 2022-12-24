@@ -11,6 +11,7 @@ import { hashPassword } from "../../services/passwordHasher";
     await createAdmin();
     await createMod();
     await createUser();
+    await createAi();
   }
 
   const createAdmin = async () => {
@@ -61,7 +62,6 @@ import { hashPassword } from "../../services/passwordHasher";
       },
     });
   };
-
   const createUser = async () => {
     const user = await prisma.user.create({
       data: {
@@ -83,6 +83,28 @@ import { hashPassword } from "../../services/passwordHasher";
     await prisma.characterPool.create({
       data: {
         characterId: char.id,
+      },
+    });
+  };
+
+  const createAi = async () => {
+    await prisma.aICharacter.create({
+      data: {
+        name: "Training Dummy",
+      },
+    });
+
+    await prisma.aICharacter.create({
+      data: {
+        name: "Strong character",
+        health: 100000,
+        strength: 100,
+        endurance: 100,
+        intelligence: 100,
+        speed: 100,
+        ninjutsu: 10000,
+        genjutsu: 10000,
+        taijutsu: 10000,
       },
     });
   };

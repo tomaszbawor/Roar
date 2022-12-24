@@ -33,20 +33,23 @@ model Session {
 }
 
 model Character {
-  id            String         @id @default(uuid())
-  name          String         @unique
-  user          User           @relation(fields: [userId], references: [id])
-  userId        String         @unique
-  village       Village
-  rank          Rank           @default(STUDENT)
-  ninjutsu      Int            @default(1)
-  taijutsu      Int            @default(1)
-  genjutsu      Int            @default(1)
-  speed         Int            @default(1)
-  intelligence  Int            @default(1)
-  strength      Int            @default(1)
-  endurance     Int            @default(1)
-  characterPool CharacterPool?
+  id               String         @id @default(uuid())
+  name             String         @unique
+  user             User           @relation(fields: [userId], references: [id])
+  userId           String         @unique
+  village          Village
+  rank             Rank           @default(STUDENT)
+  ninjutsu         Int            @default(1)
+  taijutsu         Int            @default(1)
+  genjutsu         Int            @default(1)
+  speed            Int            @default(1)
+  intelligence     Int            @default(1)
+  strength         Int            @default(1)
+  endurance        Int            @default(1)
+  characterPool    CharacterPool?
+  battlesInitiated Battle[]       @relation("attacker_relation")
+  battlesDefender  Battle[]       @relation("defender_relation")
+  isInBattle       Boolean        @default(false)
 }
 
 model CharacterPool {
@@ -81,4 +84,46 @@ enum Rank {
   GENIN
   CHUNIN
   JONIN
+}
+
+model AICharacter {
+  id           String   @id @default(uuid())
+  name         String
+  health       Int      @default(100)
+  ninjutsu     Int      @default(1)
+  taijutsu     Int      @default(1)
+  genjutsu     Int      @default(1)
+  speed        Int      @default(1)
+  intelligence Int      @default(1)
+  strength     Int      @default(1)
+  endurance    Int      @default(1)
+  active       Boolean  @default(true)
+  battle       Battle[]
+}
+
+model Battle {
+  id             String       @id @default(uuid())
+  createdAt      DateTime     @default(now())
+  state          BattleState  @default(INITIALIZED)
+  type           BattleType
+  attackerId     String
+  attacker       Character    @relation("attacker_relation", fields: [attackerId], references: [id])
+  defenderId     String?
+  userDefender   Character?   @relation("defender_relation", fields: [defenderId], references: [id])
+  defenderAiName String?
+  aiDefender     AICharacter? @relation(fields: [defenderAiName], references: [id])
+}
+
+enum BattleState {
+  INITIALIZED
+  WAITING_FOR_BOTH
+  WAITING_FOR_ATTACKER
+  WAITING_FOR_DEFENDER
+  ACTIONS_DONE
+  FINISHED
+}
+
+enum BattleType {
+  AI
+  PVP
 }
