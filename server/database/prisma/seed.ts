@@ -7,8 +7,10 @@ import { hashPassword } from "../../services/passwordHasher";
   const prisma = new PrismaClient();
 
   async function seed() {
-    // Create Admin User
+    // Create Test users
     await createAdmin();
+    await createMod();
+    await createUser();
   }
 
   const createAdmin = async () => {
@@ -25,6 +27,55 @@ import { hashPassword } from "../../services/passwordHasher";
       data: {
         name: "Kami",
         userId: admin.id,
+        village: "MIST",
+      },
+    });
+
+    await prisma.characterPool.create({
+      data: {
+        characterId: char.id,
+      },
+    });
+  };
+  const createMod = async () => {
+    const moderator = await prisma.user.create({
+      data: {
+        email: "mod@mod.com",
+        password: await hashPassword("mod"),
+        role: "MOD",
+        name: "RoarModerator",
+      },
+    });
+
+    const char = await prisma.character.create({
+      data: {
+        name: "Moderator",
+        userId: moderator.id,
+        village: "MIST",
+      },
+    });
+
+    await prisma.characterPool.create({
+      data: {
+        characterId: char.id,
+      },
+    });
+  };
+
+  const createUser = async () => {
+    const user = await prisma.user.create({
+      data: {
+        email: "user@user.com",
+        password: await hashPassword("user"),
+        role: "MOD",
+        name: "RoarUser",
+      },
+    });
+
+    const char = await prisma.character.create({
+      data: {
+        name: "User",
+        userId: user.id,
         village: "MIST",
       },
     });
