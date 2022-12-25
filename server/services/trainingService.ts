@@ -9,6 +9,8 @@ import {
   TrainingIncrements,
 } from "~/engine/training/trainingTypes";
 import prisma from "~/server/database/client";
+import { Maybe } from "~/utils/Maybe";
+import { maxExpForLevel } from "~/engine/maxExpForLevel";
 
 const getStatChangeAfterTraining = (tc: TrainCommand): TrainingIncrements => {
   const ti: TrainingIncrements = {
@@ -90,6 +92,11 @@ const getStatChangeAfterTraining = (tc: TrainCommand): TrainingIncrements => {
   return ti;
 };
 
+function calculateGainedExperience(trainCost: TrainingCost) {
+  const totalResourcesSpend = trainCost.chakra + trainCost.stamina;
+  return Math.round(totalResourcesSpend / 10);
+}
+
 export const trainSkills = async (
   tc: TrainCommand,
   character: ICharacter
@@ -103,13 +110,18 @@ export const trainSkills = async (
 
   const skillIncrement = getStatChangeAfterTraining(tc);
 
-  return await prisma.character.update({
+  const experienceGained: number = calculateGainedExperience(trainCost);
+
+  const trainedCharacter = await prisma.character.update({
     where: {
       id: character.id,
     },
     data: {
       characterPool: {
         update: {
+          experience: {
+            increment: experienceGained,
+          },
           chakra: {
             decrement: trainCost.chakra,
           },
@@ -165,4 +177,55 @@ export const trainSkills = async (
       characterPool: true,
     },
   });
+  return checkForLevelUp(trainedCharacter);
+};
+
+//
+export const checkForLevelUp = async (
+  character: ICharacter
+): Promise<ICharacter> => {
+  const foundCharacter: Maybe<ICharacter> = await prisma.character.findUnique({
+    where: {
+      id: character.id,
+    },
+    include: {
+      characterPool: true,
+    },
+  });
+
+  if (!foundCharacter) {
+    throw new Error("Character not found");
+  }
+  if (!foundCharacter.characterPool) {
+    throw new Error("Character pool not found");
+  }
+
+  if (
+    foundCharacter.characterPool.experience <
+    maxExpForLevel(foundCharacter.characterPool.level)
+  ) {
+    return foundCharacter;
+  } else {
+    //TODO: Add level up logic here
+    return await prisma.character.update({
+      where: {
+        id: character.id,
+      },
+      data: {
+        characterPool: {
+          update: {
+            experience: {
+              decrement: maxExpForLevel(foundCharacter.characterPool.level),
+            },
+            level: {
+              increment: 1,
+            },
+          },
+        },
+      },
+      include: {
+        characterPool: true,
+      },
+    });
+  }
 };

@@ -14,18 +14,18 @@ describe("DamageCalculator", () => {
         NINJUTSU: 0.7,
         TAIJUTSU: 0,
         GENJUTSU: 0.3,
-        BUKIJUTSU: 0
+        BUKIJUTSU: 0,
       },
 
       attackGenerals: {
         SPEED: 0.7,
         INTELLIGENCE: 0,
         STRENGTH: 0.3,
-        ENDURANCE: 0
+        ENDURANCE: 0,
       },
       element: null,
       skillLevel: 1,
-      skillPower: 5.2
+      skillBasePower: 5.2,
     };
 
     // when
@@ -59,7 +59,7 @@ describe("DamageCalculator", () => {
       intelligence: stat,
       strength: stat,
       endurance: stat,
-      characterPool: null
+      characterPool: null,
     };
   }
 });

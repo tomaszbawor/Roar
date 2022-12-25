@@ -9,13 +9,13 @@ function calculateOffence(
   skill: AttackSkill
 ) {
   const ninjutsu =
-    attacker.offensiveNinjutsu * skill.attackCoeficients.NINJUTSU;
+    attacker.offensiveNinjutsu * skill.attackCoefficients.NINJUTSU;
   const taijutsu =
-    attacker.offensiveTaijutsu * skill.attackCoeficients.TAIJUTSU;
+    attacker.offensiveTaijutsu * skill.attackCoefficients.TAIJUTSU;
   const genjutsu =
-    attacker.offensiveGenjutsu * skill.attackCoeficients.GENJUTSU;
+    attacker.offensiveGenjutsu * skill.attackCoefficients.GENJUTSU;
   const bukijutsu =
-    attacker.offensiveBukijutsu * skill.attackCoeficients.BUKIJUTSU;
+    attacker.offensiveBukijutsu * skill.attackCoefficients.BUKIJUTSU;
 
   const totalOffence = ninjutsu + taijutsu + genjutsu + bukijutsu;
   return totalOffence;
@@ -26,13 +26,13 @@ function calculateDefence(
   skill: AttackSkill
 ) {
   const ninjutsu =
-    defender.defensiveNinjutsu * skill.attackCoeficients.NINJUTSU;
+    defender.defensiveNinjutsu * skill.attackCoefficients.NINJUTSU;
   const taijutsu =
-    defender.defensiveTaijutsu * skill.attackCoeficients.TAIJUTSU;
+    defender.defensiveTaijutsu * skill.attackCoefficients.TAIJUTSU;
   const genjutsu =
-    defender.defensiveGenjutsu * skill.attackCoeficients.GENJUTSU;
+    defender.defensiveGenjutsu * skill.attackCoefficients.GENJUTSU;
   const bukijutsu =
-    defender.defensiveBukijutsu * skill.attackCoeficients.BUKIJUTSU;
+    defender.defensiveBukijutsu * skill.attackCoefficients.BUKIJUTSU;
 
   return ninjutsu + taijutsu + genjutsu + bukijutsu;
 }
@@ -55,8 +55,7 @@ export const calculate = (
   defender: ICharacter | AICharacter,
   skill: AttackSkill
 ): Damage => {
-
-  const attackPower = Math.sqrt(skill.skillLevel * skill.skillPower);
+  const attackPower = Math.sqrt(skill.skillLevel * skill.skillBasePower);
 
   const userOffence = calculateOffence(attacker, skill);
   console.log("userOffence", userOffence);
@@ -101,7 +100,7 @@ export const calculate = (
   return {
     damage: damage,
     element: skill.element,
-    attackEffect: null
+    attackEffect: null,
   };
 };
 
@@ -120,5 +119,5 @@ export interface AttackSkill {
   attackGenerals: Record<GeneralStats, number>; // Needs to sum to 1;
   element: Maybe<Element>;
   skillLevel: number;
-  skillPower: number;
+  skillBasePower: number;
 }

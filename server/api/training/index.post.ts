@@ -13,7 +13,7 @@ import { Maybe } from "~/utils/Maybe";
 
 export default defineEventHandler<ICharacter | null>(
   async (event): Promise<ICharacter | null> => {
-    const body = await readBody<TrainCommand>(event);
+    const trainCommand = await readBody<TrainCommand>(event);
     const authToken = getCookie(event, "auth_token");
     if (!authToken) {
       return null;
@@ -41,14 +41,14 @@ export default defineEventHandler<ICharacter | null>(
       return null;
     }
 
-    if (!validateTrainRequest(character.characterPool, body)) {
+    if (!validateTrainRequest(character.characterPool, trainCommand)) {
       sendError(
         event,
         createError({ statusCode: 400, statusMessage: "Invalid train request" })
       );
     }
 
-    return await trainSkills(body, character);
+    return await trainSkills(trainCommand, character);
   }
 );
 
