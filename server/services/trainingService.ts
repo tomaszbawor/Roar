@@ -9,8 +9,7 @@ import {
   TrainingIncrements,
 } from "~/engine/training/trainingTypes";
 import prisma from "~/server/database/client";
-import { Maybe } from "~/utils/Maybe";
-import { maxExpForLevel } from "~/engine/maxExpForLevel";
+import { checkForLevelUp } from "~/server/services/levelUpService";
 
 const getStatChangeAfterTraining = (tc: TrainCommand): TrainingIncrements => {
   const ti: TrainingIncrements = {
@@ -178,54 +177,4 @@ export const trainSkills = async (
     },
   });
   return checkForLevelUp(trainedCharacter);
-};
-
-//
-export const checkForLevelUp = async (
-  character: ICharacter
-): Promise<ICharacter> => {
-  const foundCharacter: Maybe<ICharacter> = await prisma.character.findUnique({
-    where: {
-      id: character.id,
-    },
-    include: {
-      characterPool: true,
-    },
-  });
-
-  if (!foundCharacter) {
-    throw new Error("Character not found");
-  }
-  if (!foundCharacter.characterPool) {
-    throw new Error("Character pool not found");
-  }
-
-  if (
-    foundCharacter.characterPool.experience <
-    maxExpForLevel(foundCharacter.characterPool.level)
-  ) {
-    return foundCharacter;
-  } else {
-    //TODO: Add level up logic here
-    return await prisma.character.update({
-      where: {
-        id: character.id,
-      },
-      data: {
-        characterPool: {
-          update: {
-            experience: {
-              decrement: maxExpForLevel(foundCharacter.characterPool.level),
-            },
-            level: {
-              increment: 1,
-            },
-          },
-        },
-      },
-      include: {
-        characterPool: true,
-      },
-    });
-  }
 };
