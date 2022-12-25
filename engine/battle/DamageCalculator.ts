@@ -2,6 +2,7 @@ import { ICharacter } from "~/types/ICharacter";
 import { AICharacter } from "~/types/battle/AiCharacter";
 import { Maybe } from "~/utils/Maybe";
 import { GeneralStats, JutsuType } from "~/engine/training/trainingTypes";
+import { Element } from "~/engine/battle/Element";
 
 export module DamageCalculator {
 
@@ -79,11 +80,9 @@ export module DamageCalculator {
 
     return {
       damage: damage,
-      element: null,
+      element: skill.element,
       attackEffect: null
     };
-
-
   };
 
 }
@@ -98,14 +97,10 @@ export interface AttackEffect {
   effect: Maybe<AttackEffect>;
 }
 
-const enum Element {
-  //TODO: Implement
-  NONE,
-}
 
 export interface AttackSkill {
-  attackCoeficients: Record<JutsuType, number>;
-  attackGenerals: Record<GeneralStats, number>;
+  attackCoeficients: Record<JutsuType, number>; // Needs to sum to 1;
+  attackGenerals: Record<GeneralStats, number>; // Needs to sum to 1;
   element: Maybe<Element>;
   //TODO: Implement
 }
