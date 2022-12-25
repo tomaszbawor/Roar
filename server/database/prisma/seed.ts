@@ -102,9 +102,14 @@ import { hashPassword } from "../../services/passwordHasher";
         endurance: 100,
         intelligence: 100,
         speed: 100,
-        ninjutsu: 10000,
-        genjutsu: 10000,
-        taijutsu: 10000,
+        offensiveNinjutsu: 10000,
+        defensiveNinjutsu: 10000,
+        offensiveTaijutsu: 10000,
+        defensiveTaijutsu: 10000,
+        offensiveGenjutsu: 10000,
+        defensiveGenjutsu: 10000,
+        offensiveBukijutsu: 10000,
+        defensiveBukijutsu: 10000,
       },
     });
   };
