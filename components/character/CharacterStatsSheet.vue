@@ -29,10 +29,19 @@ const character = props.character;
       <div><b>Intelligence:</b> {{ character.intelligence }}</div>
     </n-card>
 
-    <n-card title="Skills">
-      <div>Ninjutsu: {{ character.ninjutsu }}</div>
-      <div>Genjutsu: {{ character.genjutsu }}</div>
-      <div>Taijutsu: {{ character.taijutsu }}</div>
+    <n-card class="mb-2" title="Offence">
+      <div>Ninjutsu: <b>{{ character.offensiveNinjutsu }}</b></div>
+      <div>Genjutsu: <b>{{ character.offensiveGenjutsu }}</b></div>
+      <div>Taijutsu: <b>{{ character.offensiveTaijutsu }}</b></div>
+      <div>Bukijutsu: <b>{{ character.offensiveBukijutsu }}</b></div>
     </n-card>
+
+    <n-card title="Defence">
+      <div>Ninjutsu: <b>{{ character.defensiveNinjutsu }}</b></div>
+      <div>Genjutsu: <b>{{ character.defensiveGenjutsu }}</b></div>
+      <div>Taijutsu: <b>{{ character.defensiveTaijutsu }}</b></div>
+      <div>Bukijutsu: <b>{{ character.defensiveBukijutsu }}</b></div>
+    </n-card>
+
   </n-card>
 </template>

@@ -1,13 +1,19 @@
 export enum SkillType {
-  GENJUTSU = "GENJUTSU",
-  NINJUTSTU = "NINJUTSU",
-  TAIJUTSU = "TAIJUTSU",
+  OFFENSIVE_GENJUTSU = "OFFENSIVE_GENJUTSU",
+  OFFENSIVE_NINJUTSTU = "OFFENSIVE_NINJUTSU",
+  OFFENSIVE_TAIJUTSU = "OFFENSIVE_TAIJUTSU",
+  OFFENSIVE_BUKIJUTSU = "OFFENSIVE_BUKIJUTSU",
+
+  DEFENSIVE_GENJUTSU = "DEFENSIVE_GENJUTSU",
+  DEFENSIVE_NINJUTSTU = "DEFENSIVE_NINJUTSU",
+  DEFENSIVE_TAIJUTSU = "DEFENSIVE_TAIJUTSU",
+  DEFENSIVE_BUKIJUTSU = "DEFENSIVE_BUKIJUTSU",
 }
 
-export enum StatType {
+export enum GeneralStats {
   STRENGTH = "STRENGTH",
-  "SPEED" = "SPEED",
-  "ENDURANCE" = "ENDURANCE",
+  SPEED = "SPEED",
+  ENDURANCE = "ENDURANCE",
   INTELLIGENCE = "INTELLIGENCE",
 }
 
@@ -21,12 +27,17 @@ export enum PoolExtendTraining {
   STAMINA_EXTEND = "STAMINA_EXTEND",
 }
 
-export type TrainingType = SkillType | StatType | PoolExtendTraining;
+export type TrainingType = SkillType | GeneralStats | PoolExtendTraining;
 
 export const trainingCostPerUnit: Record<TrainingType, TrainingCost> = {
-  NINJUTSU: { chakra: 10, stamina: 0 },
-  GENJUTSU: { chakra: 10, stamina: 0 },
-  TAIJUTSU: { chakra: 0, stamina: 10 },
+  OFFENSIVE_NINJUTSU: { chakra: 10, stamina: 0 },
+  DEFENSIVE_NINJUTSU: { chakra: 10, stamina: 0 },
+  OFFENSIVE_GENJUTSU: { chakra: 10, stamina: 0 },
+  DEFENSIVE_GENJUTSU: { chakra: 10, stamina: 0 },
+  OFFENSIVE_TAIJUTSU: { chakra: 0, stamina: 10 },
+  DEFENSIVE_TAIJUTSU: { chakra: 0, stamina: 10 },
+  OFFENSIVE_BUKIJUTSU: { chakra: 0, stamina: 10 },
+  DEFENSIVE_BUKIJUTSU: { chakra: 0, stamina: 10 },
   ENDURANCE: { chakra: 25, stamina: 25 },
   INTELLIGENCE: { chakra: 50, stamina: 0 },
   SPEED: { chakra: 25, stamina: 25 },
@@ -43,7 +54,12 @@ export interface TrainingIncrements {
   speed: number;
   endurance: number;
   intelligence: number;
-  ninjutsu: number;
-  genjutsu: number;
-  taijustu: number;
+  offensiveNinjutsu: number;
+  offensiveTaijutsu: number;
+  offensiveGenjutsu: number;
+  offensiveBukijutsu: number;
+  defensiveNinjutsu: number;
+  defensiveTaijutsu: number;
+  defensiveGenjutsu: number;
+  defensiveBukijutsu: number;
 }

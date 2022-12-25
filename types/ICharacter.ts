@@ -7,9 +7,14 @@ export interface ICharacter {
   name: string;
   village: Village;
   rank: CharacterRank;
-  ninjutsu: number;
-  taijutsu: number;
-  genjutsu: number;
+  offensiveNinjutsu: number;
+  offensiveTaijutsu: number;
+  offensiveGenjutsu: number;
+  offensiveBukijutsu: number;
+  defensiveNinjutsu: number;
+  defensiveTaijutsu: number;
+  defensiveGenjutsu: number;
+  defensiveBukijutsu: number;
   speed: number;
   intelligence: number;
   strength: number;
