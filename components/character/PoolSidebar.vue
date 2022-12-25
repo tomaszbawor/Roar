@@ -20,7 +20,9 @@ const character = await useCharacter();
 
 const regenRate = getRegenerationRateForCharacter(character!);
 
-const maxExp = maxExpForLevel(properties.pool.level);
+const maxExp = computed<number>(() => {
+  return maxExpForLevel(properties.pool.level);
+});
 </script>
 <template>
   <n-card>
