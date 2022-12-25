@@ -14,7 +14,7 @@ export enum JutsuType {
   GENJUTSU = "GENJUTSU",
   NINJUTSU = "NINJUTSU",
   TAIJUTSU = "TAIJUTSU",
-  BUKIJUTSU = "BUKIJUTSU"
+  BUKIJUTSU = "BUKIJUTSU",
 }
 
 export enum GeneralStats {
@@ -50,7 +50,7 @@ export const trainingCostPerUnit: Record<TrainingType, TrainingCost> = {
   SPEED: { chakra: 25, stamina: 25 },
   STRENGTH: { chakra: 0, stamina: 50 },
   CHAKRA_EXTEND: { chakra: 100, stamina: 0 },
-  STAMINA_EXTEND: { chakra: 0, stamina: 100 }
+  STAMINA_EXTEND: { chakra: 0, stamina: 100 },
 };
 
 export interface TrainingIncrements {

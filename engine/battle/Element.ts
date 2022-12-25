@@ -21,6 +21,54 @@ export enum CompositeElement {
 
 export type Element = BasicElement | CompositeElement;
 
-export const compositeElementFromBasicElements = (first: BasicElement, second: BasicElement): CompositeElement => {
-  return CompositeElement.LAVA;
+export const compositeElementFromBasicElements = (
+  first: BasicElement,
+  second: BasicElement
+): CompositeElement => {
+  const result = elementPairs[first][second];
+  if (result === null) {
+    throw new Error(`No composite element for ${first} and ${second}`);
+  }
+  return result;
+};
+
+const elementPairs: Record<
+  BasicElement,
+  Record<BasicElement, CompositeElement | null>
+> = {
+  EARTH: {
+    EARTH: null,
+    FIRE: CompositeElement.LAVA,
+    LIGHTNING: CompositeElement.MAGNETISM,
+    WATER: CompositeElement.WOOD,
+    WIND: CompositeElement.DUST,
+  },
+  FIRE: {
+    EARTH: CompositeElement.LAVA,
+    FIRE: null,
+    LIGHTNING: CompositeElement.LIGHT,
+    WATER: CompositeElement.STEAM,
+    WIND: CompositeElement.SCORCHING,
+  },
+  LIGHTNING: {
+    EARTH: CompositeElement.MAGNETISM,
+    FIRE: CompositeElement.LIGHT,
+    LIGHTNING: null,
+    WATER: CompositeElement.STORM,
+    WIND: CompositeElement.TEMPEST,
+  },
+  WATER: {
+    EARTH: CompositeElement.WOOD,
+    FIRE: CompositeElement.STEAM,
+    LIGHTNING: CompositeElement.STORM,
+    WATER: null,
+    WIND: CompositeElement.ICE,
+  },
+  WIND: {
+    EARTH: CompositeElement.DUST,
+    FIRE: CompositeElement.SCORCHING,
+    LIGHTNING: CompositeElement.TEMPEST,
+    WATER: CompositeElement.ICE,
+    WIND: null,
+  },
 };

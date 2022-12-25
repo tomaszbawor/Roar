@@ -1,51 +1,16 @@
-import { AttackSkill, DamageCalculator } from "../../engine/battle/DamageCalculator";
+import * as DamageCalculator from "../../engine/battle/DamageCalculator";
+import { AttackSkill } from "../../engine/battle/DamageCalculator";
 import { ICharacter } from "../../types/ICharacter";
-import { AICharacter } from "../../types/battle/AiCharacter";
 import { describe, test } from "vitest";
-
+import Assert from "assert";
 
 describe("DamageCalculator", () => {
-
-  test("should calculate damage", async () => {
+  test("damage test for one opponent stronger then other", async () => {
     // given
-    const attacker: ICharacter = {
-      id: "fake",
-      name: "fake",
-      userId: "fake",
-      village: "SAND",
-      rank: "STUDENT",
-      offensiveNinjutsu: 100,
-      offensiveTaijutsu: 100,
-      offensiveGenjutsu: 100,
-      offensiveBukijutsu: 100,
-      defensiveNinjutsu: 100,
-      defensiveTaijutsu: 100,
-      defensiveGenjutsu: 100,
-      defensiveBukijutsu: 100,
-      speed: 100,
-      intelligence: 100,
-      strength: 100,
-      endurance: 100,
-      characterPool: null
-    };
-    const defender: AICharacter = {
-      name: "Dummy",
-      health: 100,
-      offensiveNinjutsu: 20,
-      offensiveTaijutsu: 14,
-      offensiveGenjutsu: 16,
-      offensiveBukijutsu: 12,
-      defensiveNinjutsu: 15,
-      defensiveTaijutsu: 11,
-      defensiveGenjutsu: 16,
-      defensiveBukijutsu: 13,
-      speed: 12,
-      intelligence: 15,
-      strength: 13,
-      endurance: 15
-    };
+    const attacker: ICharacter = createCharWithSameStats(10000);
+    const defender: ICharacter = createCharWithSameStats(9000);
     const skill: AttackSkill = {
-      attackCoeficients: {
+      attackCoefficients: {
         NINJUTSU: 0.7,
         TAIJUTSU: 0,
         GENJUTSU: 0.3,
@@ -58,12 +23,43 @@ describe("DamageCalculator", () => {
         STRENGTH: 0.3,
         ENDURANCE: 0
       },
-      element: null
-
+      element: null,
+      skillLevel: 1,
+      skillPower: 5.2
     };
 
     // when
-    DamageCalculator.calculate(attacker, defender, skill);
+    const strongerAttack = DamageCalculator.calculate(
+      attacker,
+      defender,
+      skill
+    );
+    const weakerAttack = DamageCalculator.calculate(defender, attacker, skill);
 
+    Assert.equal(strongerAttack.damage, 10798);
+    Assert.equal(weakerAttack.damage, 8714);
   });
+
+  function createCharWithSameStats(stat: number): ICharacter {
+    return {
+      id: "fake",
+      name: "fake",
+      userId: "fake",
+      village: "SAND",
+      rank: "STUDENT",
+      offensiveNinjutsu: stat,
+      offensiveTaijutsu: stat,
+      offensiveGenjutsu: stat,
+      offensiveBukijutsu: stat,
+      defensiveNinjutsu: stat,
+      defensiveTaijutsu: stat,
+      defensiveGenjutsu: stat,
+      defensiveBukijutsu: stat,
+      speed: stat,
+      intelligence: stat,
+      strength: stat,
+      endurance: stat,
+      characterPool: null
+    };
+  }
 });

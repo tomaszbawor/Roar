@@ -1,12 +1,22 @@
 import { describe, test } from "vitest";
-import { BasicElement, CompositeElement, compositeElementFromBasicElements } from "./Element";
+import {
+  BasicElement,
+  CompositeElement,
+  compositeElementFromBasicElements,
+} from "./Element";
 import * as Assert from "assert";
 
 describe("Composite Element", async () => {
   test("should return STEAM element from basic elements", async () => {
     // when
-    const result = compositeElementFromBasicElements(BasicElement.FIRE, BasicElement.WATER);
-    const resultSwapped = compositeElementFromBasicElements(BasicElement.WATER, BasicElement.FIRE);
+    const result = compositeElementFromBasicElements(
+      BasicElement.FIRE,
+      BasicElement.WATER
+    );
+    const resultSwapped = compositeElementFromBasicElements(
+      BasicElement.WATER,
+      BasicElement.FIRE
+    );
 
     // then
     Assert.equal(result, CompositeElement.STEAM);
@@ -15,8 +25,14 @@ describe("Composite Element", async () => {
 
   test("should return LAVA element from basic elements", async () => {
     // when
-    const result = compositeElementFromBasicElements(BasicElement.FIRE, BasicElement.EARTH);
-    const resultSwapped = compositeElementFromBasicElements(BasicElement.EARTH, BasicElement.FIRE);
+    const result = compositeElementFromBasicElements(
+      BasicElement.FIRE,
+      BasicElement.EARTH
+    );
+    const resultSwapped = compositeElementFromBasicElements(
+      BasicElement.EARTH,
+      BasicElement.FIRE
+    );
 
     // then
     Assert.equal(result, CompositeElement.LAVA);
@@ -25,8 +41,14 @@ describe("Composite Element", async () => {
 
   test("should return SCORCHING element from basic elements", async () => {
     // when
-    const result = compositeElementFromBasicElements(BasicElement.FIRE, BasicElement.WIND);
-    const resultSwapped = compositeElementFromBasicElements(BasicElement.WIND, BasicElement.FIRE);
+    const result = compositeElementFromBasicElements(
+      BasicElement.FIRE,
+      BasicElement.WIND
+    );
+    const resultSwapped = compositeElementFromBasicElements(
+      BasicElement.WIND,
+      BasicElement.FIRE
+    );
 
     // then
     Assert.equal(result, CompositeElement.SCORCHING);
@@ -35,8 +57,14 @@ describe("Composite Element", async () => {
 
   test("should return LIGHT element from basic elements", async () => {
     // when
-    const result = compositeElementFromBasicElements(BasicElement.FIRE, BasicElement.LIGHTNING);
-    const resultSwapped = compositeElementFromBasicElements(BasicElement.LIGHTNING, BasicElement.FIRE);
+    const result = compositeElementFromBasicElements(
+      BasicElement.FIRE,
+      BasicElement.LIGHTNING
+    );
+    const resultSwapped = compositeElementFromBasicElements(
+      BasicElement.LIGHTNING,
+      BasicElement.FIRE
+    );
 
     // then
     Assert.equal(result, CompositeElement.LIGHT);
@@ -45,8 +73,14 @@ describe("Composite Element", async () => {
 
   test("should return ICE element from basic elements", async () => {
     // when
-    const result = compositeElementFromBasicElements(BasicElement.WIND, BasicElement.WATER);
-    const resultSwapped = compositeElementFromBasicElements(BasicElement.WATER, BasicElement.WIND);
+    const result = compositeElementFromBasicElements(
+      BasicElement.WIND,
+      BasicElement.WATER
+    );
+    const resultSwapped = compositeElementFromBasicElements(
+      BasicElement.WATER,
+      BasicElement.WIND
+    );
 
     // then
     Assert.equal(result, CompositeElement.ICE);
@@ -55,8 +89,14 @@ describe("Composite Element", async () => {
 
   test("should return STORM element from basic elements", async () => {
     // when
-    const result = compositeElementFromBasicElements(BasicElement.LIGHTNING, BasicElement.WATER);
-    const resultSwapped = compositeElementFromBasicElements(BasicElement.WATER, BasicElement.LIGHTNING);
+    const result = compositeElementFromBasicElements(
+      BasicElement.LIGHTNING,
+      BasicElement.WATER
+    );
+    const resultSwapped = compositeElementFromBasicElements(
+      BasicElement.WATER,
+      BasicElement.LIGHTNING
+    );
 
     // then
     Assert.equal(result, CompositeElement.STORM);
@@ -65,8 +105,14 @@ describe("Composite Element", async () => {
 
   test("should return WOOD element from basic elements", async () => {
     // when
-    const result = compositeElementFromBasicElements(BasicElement.EARTH, BasicElement.WATER);
-    const resultSwapped = compositeElementFromBasicElements(BasicElement.WATER, BasicElement.EARTH);
+    const result = compositeElementFromBasicElements(
+      BasicElement.EARTH,
+      BasicElement.WATER
+    );
+    const resultSwapped = compositeElementFromBasicElements(
+      BasicElement.WATER,
+      BasicElement.EARTH
+    );
 
     // then
     Assert.equal(result, CompositeElement.WOOD);
@@ -75,8 +121,14 @@ describe("Composite Element", async () => {
 
   test("should return DUST element from basic elements", async () => {
     // when
-    const result = compositeElementFromBasicElements(BasicElement.EARTH, BasicElement.WIND);
-    const resultSwapped = compositeElementFromBasicElements(BasicElement.WIND, BasicElement.EARTH);
+    const result = compositeElementFromBasicElements(
+      BasicElement.EARTH,
+      BasicElement.WIND
+    );
+    const resultSwapped = compositeElementFromBasicElements(
+      BasicElement.WIND,
+      BasicElement.EARTH
+    );
 
     // then
     Assert.equal(result, CompositeElement.DUST);
@@ -85,8 +137,14 @@ describe("Composite Element", async () => {
 
   test("should return MAGNETISM element from basic elements", async () => {
     // when
-    const result = compositeElementFromBasicElements(BasicElement.EARTH, BasicElement.LIGHTNING);
-    const resultSwapped = compositeElementFromBasicElements(BasicElement.LIGHTNING, BasicElement.EARTH);
+    const result = compositeElementFromBasicElements(
+      BasicElement.EARTH,
+      BasicElement.LIGHTNING
+    );
+    const resultSwapped = compositeElementFromBasicElements(
+      BasicElement.LIGHTNING,
+      BasicElement.EARTH
+    );
 
     // then
     Assert.equal(result, CompositeElement.MAGNETISM);
@@ -95,8 +153,14 @@ describe("Composite Element", async () => {
 
   test("should return TEMPEST element from basic elements", async () => {
     // when
-    const result = compositeElementFromBasicElements(BasicElement.LIGHTNING, BasicElement.WIND);
-    const resultSwapped = compositeElementFromBasicElements(BasicElement.WIND, BasicElement.LIGHTNING);
+    const result = compositeElementFromBasicElements(
+      BasicElement.LIGHTNING,
+      BasicElement.WIND
+    );
+    const resultSwapped = compositeElementFromBasicElements(
+      BasicElement.WIND,
+      BasicElement.LIGHTNING
+    );
 
     // then
     Assert.equal(result, CompositeElement.TEMPEST);
