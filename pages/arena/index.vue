@@ -6,7 +6,7 @@ import hasCharacter from "~/middleware/hasCharacter";
 import ICharacterPool from "~/types/ICharacterPool";
 import PoolSidebar from "~/components/character/PoolSidebar.vue";
 import { useFetch } from "#app";
-import { AICharacter } from "~/types/battle/AiCharacter";
+import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
 
 definePageMeta({
   middleware: [auth, hasCharacter]
@@ -26,7 +26,7 @@ async function getCharPool(): Promise<ICharacterPool> {
   return char!.characterPool!;
 }
 
-const arenaCharacters = await useFetch<Array<AICharacter>>("/api/arena", {
+const arenaCharacters = await useFetch<Array<ArenaCharacter>>("/api/arena", {
   method: "GET"
 });
 

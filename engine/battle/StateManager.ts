@@ -1,5 +1,5 @@
 import { ICharacter } from "~/types/ICharacter";
-import { AICharacter } from "~/types/battle/AiCharacter";
+import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
 
 enum BattleState {
   /**
@@ -33,7 +33,7 @@ enum BattleState {
 
 export interface Battle {
   attacker: ICharacter;
-  defender: ICharacter | AICharacter;
+  defender: ICharacter | ArenaCharacter;
   state: BattleState;
   battleType: Battle;
 }

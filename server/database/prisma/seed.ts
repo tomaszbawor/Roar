@@ -88,13 +88,13 @@ import { hashPassword } from "../../services/passwordHasher";
   };
 
   const createAi = async () => {
-    await prisma.aICharacter.create({
+    await prisma.arenaCharacter.create({
       data: {
         name: "Training Dummy",
       },
     });
 
-    await prisma.aICharacter.create({
+    await prisma.arenaCharacter.create({
       data: {
         name: "Strong character",
         health: 100000,

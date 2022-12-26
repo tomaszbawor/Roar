@@ -108,7 +108,6 @@ export const trainSkills = async (
   };
 
   const skillIncrement = getStatChangeAfterTraining(tc);
-
   const experienceGained: number = calculateGainedExperience(trainCost);
 
   const trainedCharacter = await prisma.character.update({

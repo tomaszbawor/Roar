@@ -1,7 +1,7 @@
 import { ICharacter } from "~/types/ICharacter";
-import { AICharacter } from "~/types/battle/AiCharacter";
+import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
 
-export type AIBattle = IBattle & { defender: AICharacter };
+export type AIBattle = IBattle & { defender: ArenaCharacter };
 
 export type BattleType = "AI" | "PVP";
 
@@ -9,7 +9,7 @@ export interface IBattle {
   attackerId: string;
   attacker: ICharacter;
   defenderId: string;
-  defender: ICharacter;
+  defender: ICharacter | AIBattle;
   battleType: BattleType;
 }
 

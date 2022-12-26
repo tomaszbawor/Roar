@@ -1,8 +1,8 @@
-import { AICharacter } from "~/types/battle/AiCharacter";
+import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
 import prisma from "~/server/database/client";
 
-export default defineEventHandler<Array<AICharacter>>(
-  async (): Promise<Array<AICharacter>> => {
-    return await prisma.aICharacter.findMany();
+export default defineEventHandler<Array<ArenaCharacter>>(
+  async (): Promise<Array<ArenaCharacter>> => {
+    return await prisma.arenaCharacter.findMany();
   }
 );

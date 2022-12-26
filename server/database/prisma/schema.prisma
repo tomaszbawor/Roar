@@ -91,37 +91,37 @@ enum Rank {
   JONIN
 }
 
-model AICharacter {
-  id           String   @id @default(uuid())
-  name         String
-  health       Int      @default(100)
-  offensiveNinjutsu  Int            @default(1)
-   offensiveTaijutsu  Int            @default(1)
-   offensiveGenjutsu  Int            @default(1)
-   offensiveBukijutsu Int            @default(1)
-   defensiveNinjutsu  Int            @default(1)
-   defensiveTaijutsu  Int            @default(1)
-   defensiveGenjutsu  Int            @default(1)
-   defensiveBukijutsu Int            @default(1)
-  speed        Int      @default(1)
-  intelligence Int      @default(1)
-  strength     Int      @default(1)
-  endurance    Int      @default(1)
-  active       Boolean  @default(true)
-  battle       Battle[]
+model ArenaCharacter {
+  id                 String   @id @default(uuid())
+  name               String
+  health             Int      @default(100)
+  offensiveNinjutsu  Int      @default(1)
+  offensiveTaijutsu  Int      @default(1)
+  offensiveGenjutsu  Int      @default(1)
+  offensiveBukijutsu Int      @default(1)
+  defensiveNinjutsu  Int      @default(1)
+  defensiveTaijutsu  Int      @default(1)
+  defensiveGenjutsu  Int      @default(1)
+  defensiveBukijutsu Int      @default(1)
+  speed              Int      @default(1)
+  intelligence       Int      @default(1)
+  strength           Int      @default(1)
+  endurance          Int      @default(1)
+  active             Boolean  @default(true)
+  battle             Battle[]
 }
 
 model Battle {
-  id             String       @id @default(uuid())
-  createdAt      DateTime     @default(now())
-  state          BattleState  @default(INITIALIZED)
-  type           BattleType
-  attackerId     String
-  attacker       Character    @relation("attacker_relation", fields: [attackerId], references: [id])
-  defenderId     String?
-  userDefender   Character?   @relation("defender_relation", fields: [defenderId], references: [id])
-  defenderAiName String?
-  aiDefender     AICharacter? @relation(fields: [defenderAiName], references: [id])
+  id                       String          @id @default(uuid())
+  createdAt                DateTime        @default(now())
+  state                    BattleState     @default(INITIALIZED)
+  type                     BattleType
+  attackerId               String
+  attacker                 Character       @relation("attacker_relation", fields: [attackerId], references: [id])
+  defenderId               String?
+  userDefender             Character?      @relation("defender_relation", fields: [defenderId], references: [id])
+  defenderArenaCharacterId String?
+  aiDefender               ArenaCharacter? @relation(fields: [defenderArenaCharacterId], references: [id])
 }
 
 enum BattleState {

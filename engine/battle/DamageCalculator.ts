@@ -1,11 +1,11 @@
 import { ICharacter } from "~/types/ICharacter";
-import { AICharacter } from "~/types/battle/AiCharacter";
+import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
 import { Maybe } from "~/utils/Maybe";
 import { GeneralStats, JutsuType } from "~/engine/training/trainingTypes";
 import { Element } from "~/engine/battle/Element";
 
 function calculateOffence(
-  attacker: ICharacter | AICharacter,
+  attacker: ICharacter | ArenaCharacter,
   skill: AttackSkill
 ) {
   const ninjutsu =
@@ -22,7 +22,7 @@ function calculateOffence(
 }
 
 function calculateDefence(
-  defender: ICharacter | AICharacter,
+  defender: ICharacter | ArenaCharacter,
   skill: AttackSkill
 ) {
   const ninjutsu =
@@ -38,7 +38,7 @@ function calculateDefence(
 }
 
 function calculateGeneralStats(
-  attacker: ICharacter | AICharacter,
+  attacker: ICharacter | ArenaCharacter,
   skill: AttackSkill
 ): number {
   const speed = attacker.speed * skill.attackGenerals.SPEED;
@@ -51,8 +51,8 @@ function calculateGeneralStats(
 }
 
 export const calculate = (
-  attacker: ICharacter | AICharacter,
-  defender: ICharacter | AICharacter,
+  attacker: ICharacter | ArenaCharacter,
+  defender: ICharacter | ArenaCharacter,
   skill: AttackSkill
 ): Damage => {
   const attackPower = Math.sqrt(skill.skillLevel * skill.skillBasePower);

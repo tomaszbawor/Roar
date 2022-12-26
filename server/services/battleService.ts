@@ -1,18 +1,28 @@
-import prisma from "~/server/database/client";
-import { AICharacter } from "~/types/battle/AiCharacter";
+import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
 import { Maybe } from "~/utils/Maybe";
+import { getArenaCharacterById } from "~/server/repositories/arenaCharacterRepository";
+import { ICharacter } from "~/types/ICharacter";
 
 export const startArenaBattle = async (
   startBattleCommand: StartBattleCommand
 ): Promise<void> => {
-  const aiCharacter: Maybe<AICharacter> = await prisma.aICharacter.findUnique({
-    where: {
-      id: startBattleCommand.arenaOpponentId,
-    },
-  });
-  // TODO: Create battle
+  // Get Ai Character
+  const aiCharacter: Maybe<ArenaCharacter> = await getArenaCharacterById(
+    startBattleCommand.arenaCharacterId
+  );
+
+  if (!aiCharacter) {
+    throw new Error(
+      `Arena character with id: ${startBattleCommand.arenaCharacterId} not found`
+    );
+  }
+
+  // Get User Character
+
+  // Check if user is not in the battle
 };
 
 export interface StartBattleCommand {
-  arenaOpponentId: string;
+  arenaCharacterId: string;
+  character: ICharacter;
 }
