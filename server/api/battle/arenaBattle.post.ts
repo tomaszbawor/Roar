@@ -7,60 +7,41 @@ import {
 import { getCharacterById } from "~/server/repositories/characterRepository";
 import { getArenaCharacterById } from "~/server/repositories/arenaCharacterRepository";
 import { IBattle } from "~/types/battle/IBattle";
+import {
+  sendApiError,
+  sendApiErrorOnFalseCondition,
+  sendApiErrorOnNull,
+} from "~/server/api/apiErrorsUtil";
 
 export default eventHandler<Maybe<IBattle>>(async (event) => {
   const body = await readBody<StartArenaBattleCommand>(event);
   const char = await getCharacterById(body.characterId);
 
-  if (!char) {
-    sendError(
-      event,
-      createError({
-        statusCode: 400,
-        data: {
-          message: `Character with id ${body.characterId} not found`,
-        },
-      })
-    );
-    return;
-  }
+  sendApiErrorOnNull(
+    char,
+    event,
+    404,
+    `Character with id ${body.characterId} not found`
+  );
+  sendApiErrorOnFalseCondition(
+    !char.isInBattle,
+    event,
+    400,
+    `Character with id ${body.characterId} is already in battle`
+  );
 
-  if (char.isInBattle) {
-    sendError(
-      event,
-      createError({
-        statusCode: 400,
-        data: {
-          message: "Character is already in battle",
-        },
-      })
-    );
-  }
   const ai = await getArenaCharacterById(body.arenaCharacterId);
-  if (!ai) {
-    sendError(
-      event,
-      createError({
-        statusCode: 400,
-        data: {
-          message: `Can not get arena character with id: ${body.arenaCharacterId}`,
-        },
-      })
-    );
-    return;
-  }
+
+  sendApiErrorOnNull(
+    ai,
+    event,
+    404,
+    `Arena character with id ${body.arenaCharacterId} not found`
+  );
 
   try {
     return await createArenaBattle(ai, char);
   } catch (e) {
-    sendError(
-      event,
-      createError({
-        statusCode: 400,
-        data: {
-          message: `Can not create battle`,
-        },
-      })
-    );
+    sendApiError(event, 400, "Can not create battle");
   }
 });

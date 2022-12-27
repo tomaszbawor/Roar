@@ -1,7 +1,11 @@
-import { createError, readBody, sendError } from "h3";
+import { readBody } from "h3";
 import { getUserByEmail } from "~/server/repositories/userRepository";
 import { makeSession } from "~/server/services/sessionService";
 import { comparePasswords } from "~/server/services/passwordHasher";
+import {
+  sendApiErrorOnFalseCondition,
+  sendApiErrorOnNull,
+} from "~/server/api/apiErrorsUtil";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -10,23 +14,17 @@ export default defineEventHandler(async (event) => {
 
   const userByEmail = await getUserByEmail(email);
 
-  if (userByEmail === null) {
-    sendError(
-      event,
-      createError({ statusCode: 401, statusMessage: "Unauthenticated" })
-    );
-    return;
-  }
+  sendApiErrorOnNull(userByEmail, event, 401, "Unauthenticated");
+  const isPasswordCorrect = await comparePasswords(
+    userByEmail.password,
+    password
+  );
 
-  const isPasswordCorrect = comparePasswords(userByEmail.password, password);
-  // const isPasswordCorrect = bcrypt.compare(password, userByEmail.password);
-
-  if (!isPasswordCorrect) {
-    sendError(
-      event,
-      createError({ statusCode: 401, statusMessage: "Invalid password" })
-    );
-  }
-
+  sendApiErrorOnFalseCondition(
+    isPasswordCorrect,
+    event,
+    401,
+    "Invalid password"
+  );
   return await makeSession(userByEmail, event);
 });

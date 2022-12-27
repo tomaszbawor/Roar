@@ -1,8 +1,9 @@
 import { Maybe } from "~/utils/Maybe";
 import { CreateCharacterCommand, ICharacter } from "~/types/ICharacter";
-import { getCookie, readBody, sendError } from "h3";
+import { getCookie, readBody } from "h3";
 import { getUserBySessionToken } from "~/server/services/sessionService";
 import { createCharacter } from "~/server/repositories/characterRepository";
+import { sendApiErrorOnNull } from "~/server/api/apiErrorsUtil";
 
 export default defineEventHandler<Maybe<ICharacter>>(async (event) => {
   const body = await readBody(event);
@@ -13,16 +14,12 @@ export default defineEventHandler<Maybe<ICharacter>>(async (event) => {
   }
 
   const user = await getUserBySessionToken(authToken);
-  if (!user) {
-    sendError(
-      event,
-      createError({
-        statusCode: 400,
-        message: "No auth token while creating character",
-      })
-    );
-    return;
-  }
+  sendApiErrorOnNull(
+    user,
+    event,
+    400,
+    "No auth token while creating character"
+  );
 
   const createCharacterCommand: CreateCharacterCommand = {
     userId: user.id,
