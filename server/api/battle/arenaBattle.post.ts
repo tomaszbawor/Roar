@@ -1,7 +1,9 @@
 import { eventHandler } from "h3";
 import { Maybe } from "~/utils/Maybe";
-import { StartArenaBattleCommand } from "~/server/services/battleService";
-import { createArenaBattle } from "~/server/repositories/battleRepository";
+import {
+  createArenaBattle,
+  StartArenaBattleCommand,
+} from "~/server/services/battleService";
 import { getCharacterById } from "~/server/repositories/characterRepository";
 import { getArenaCharacterById } from "~/server/repositories/arenaCharacterRepository";
 import { IBattle } from "~/types/battle/IBattle";
