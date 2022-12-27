@@ -7,9 +7,10 @@ export const getBattleById = async (
 ): Promise<Maybe<IBattle>> => {
   return await prisma.battle.findUnique({
     where: {
-      id: battleId
-    }, include: {
-      aiDefender: true
-    }
+      id: battleId,
+    },
+    include: {
+      aiDefender: true,
+    },
   });
 };

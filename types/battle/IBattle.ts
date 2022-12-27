@@ -1,5 +1,8 @@
 import { CharacterId, ICharacter } from "~/types/ICharacter";
-import { ArenaCharacter, ArenaCharacterId } from "~/types/battle/ArenaCharacter";
+import {
+  ArenaCharacter,
+  ArenaCharacterId,
+} from "~/types/battle/ArenaCharacter";
 import { Maybe } from "~/utils/Maybe";
 
 export type BattleId = string;
@@ -57,7 +60,7 @@ export const BattleStateValues: {
   /**
    * Battle finished, provide logs.
    */
-  FINISHED: "FINISHED"
+  FINISHED: "FINISHED",
 };
 
 export type BattleState =

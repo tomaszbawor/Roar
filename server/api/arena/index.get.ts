@@ -8,8 +8,8 @@ export default defineEventHandler<Array<ArenaCharacter>>(
     if (monsterId) {
       return await prisma.arenaCharacter.findMany({
         where: {
-          id: monsterId
-        }
+          id: monsterId,
+        },
       });
     } else {
       return await prisma.arenaCharacter.findMany();
