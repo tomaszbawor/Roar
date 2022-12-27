@@ -23,7 +23,7 @@ export interface ICharacter {
   strength: number;
   endurance: number;
   isInBattle: boolean;
-  currentBattleId?: BattleId;
+  currentBattleId: Maybe<BattleId>;
   characterPool: Maybe<ICharacterPool>;
 }
 

@@ -55,6 +55,7 @@ model Character {
   battlesInitiated   Battle[]       @relation("attacker_relation")
   battlesDefender    Battle[]       @relation("defender_relation")
   isInBattle         Boolean        @default(false)
+  currentBattleId    String?
 }
 
 model CharacterPool {
@@ -122,6 +123,10 @@ model Battle {
   userDefender             Character?      @relation("defender_relation", fields: [defenderId], references: [id])
   defenderArenaCharacterId String?
   aiDefender               ArenaCharacter? @relation(fields: [defenderArenaCharacterId], references: [id])
+  attackerHealth           Int
+  defenderHealth           Int
+  attackerMaxHealth        Int
+  defenderMaxHealth        Int
 }
 
 enum BattleState {

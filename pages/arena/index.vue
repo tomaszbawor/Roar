@@ -50,7 +50,8 @@ const attack = async (opponentId: string) => {
     body: command
   });
 
-  battle.value = res;
+  //redirect to battle
+  await useRouter().push(`/battle/${res.id}`);
 };
 
 </script>

@@ -24,6 +24,10 @@ const regenRate = getRegenerationRateForCharacter(character!);
 const maxExp = computed<number>(() => {
   return maxExpForLevel(properties.pool.level);
 });
+
+const battleLink = computed<string>(() => {
+  return `/battle/${character.currentBattleId}`;
+});
 </script>
 <template>
   <n-card>
@@ -34,7 +38,9 @@ const maxExp = computed<number>(() => {
     </slot>
 
     <n-card v-if="character.isInBattle" class="mb-4">
-      <div class=" flex justify-center text-red-400">You are in battle</div>
+      <div class=" flex justify-center text-red-400">
+        <nuxt-link :to="battleLink" class="text-red-400 underline"> You are in a battle</nuxt-link>
+      </div>
     </n-card>
 
     <n-card class="mb-4">

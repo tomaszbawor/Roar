@@ -61,6 +61,7 @@ describe("DamageCalculator", () => {
       endurance: stat,
       characterPool: null,
       isInBattle: false,
+      currentBattleId: null,
     };
   }
 });
