@@ -5,6 +5,7 @@ import RegenerationTimer from "~/components/character/RegenerationTimer.vue";
 import { maxExpForLevel } from "~/engine/maxExpForLevel";
 import { useCharacter } from "~/composables/useCharacter";
 import { getRegenerationRateForCharacter } from "~/engine/character/characterRegen";
+import { ICharacter } from "~/types/ICharacter";
 
 const properties = defineProps<{
   pool: ICharacterPool
@@ -16,7 +17,7 @@ const refreshData = async () => {
   emit("refresh");
 };
 
-const character = await useCharacter();
+const character = await useCharacter() as ICharacter;
 
 const regenRate = getRegenerationRateForCharacter(character!);
 
@@ -32,8 +33,11 @@ const maxExp = computed<number>(() => {
       </div>
     </slot>
 
-    <n-card class="mb-4">
+    <n-card v-if="character.isInBattle" class="mb-4">
+      <div class=" flex justify-center text-red-400">You are in battle</div>
+    </n-card>
 
+    <n-card class="mb-4">
       <div>
         <b>Level: </b> {{ properties.pool.level }}
       </div>

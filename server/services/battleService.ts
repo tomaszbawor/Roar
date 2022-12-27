@@ -1,10 +1,12 @@
 import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
 import { Maybe } from "~/utils/Maybe";
 import { getArenaCharacterById } from "~/server/repositories/arenaCharacterRepository";
-import { ICharacter } from "~/types/ICharacter";
+import { getCharacterById } from "~/server/repositories/characterRepository";
+import { createArenaBattle } from "~/server/repositories/battleRepository";
+import { CharacterId } from "~/types/ICharacter";
 
 export const startArenaBattle = async (
-  startBattleCommand: StartBattleCommand
+  startBattleCommand: StartArenaBattleCommand
 ): Promise<void> => {
   // Get Ai Character
   const aiCharacter: Maybe<ArenaCharacter> = await getArenaCharacterById(
@@ -18,11 +20,24 @@ export const startArenaBattle = async (
   }
 
   // Get User Character
+  const character = await getCharacterById(startBattleCommand.characterId);
+
+  if (!character) {
+    throw new Error(
+      `Character with id: ${startBattleCommand.characterId} not found`
+    );
+  }
 
   // Check if user is not in the battle
+  if (character.isInBattle) {
+    throw new Error("Character is already in the battle");
+  }
+
+  // Create Battle
+  const battle = await createArenaBattle(aiCharacter, character);
 };
 
-export interface StartBattleCommand {
+export interface StartArenaBattleCommand {
   arenaCharacterId: string;
-  character: ICharacter;
+  characterId: CharacterId;
 }

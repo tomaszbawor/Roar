@@ -29,6 +29,9 @@ export const refreshPools = async () => {
 const getCharactersToRegenerate = async (): Promise<Array<ICharacter>> => {
   //TODO: Use native query to select characters with pools that are not max
   const allCharacters: Array<ICharacter> = await prisma.character.findMany({
+    where: {
+      isInBattle: false,
+    },
     include: {
       characterPool: true,
     },

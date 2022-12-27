@@ -1,4 +1,8 @@
-import { CreateCharacterCommand, ICharacter } from "~/types/ICharacter";
+import {
+  CharacterId,
+  CreateCharacterCommand,
+  ICharacter,
+} from "~/types/ICharacter";
 import prisma from "~/server/database/client";
 import { Maybe } from "~/utils/Maybe";
 
@@ -8,6 +12,19 @@ export async function getCharacterByUserId(
   return await prisma.character.findUnique({
     where: {
       userId: userId,
+    },
+    include: {
+      characterPool: true,
+    },
+  });
+}
+
+export async function getCharacterById(
+  characterId: CharacterId
+): Promise<Maybe<ICharacter>> {
+  return await prisma.character.findUnique({
+    where: {
+      id: characterId,
     },
     include: {
       characterPool: true,

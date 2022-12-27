@@ -60,6 +60,7 @@ describe("DamageCalculator", () => {
       strength: stat,
       endurance: stat,
       characterPool: null,
+      isInBattle: false,
     };
   }
 });

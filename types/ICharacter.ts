@@ -1,8 +1,11 @@
 import ICharacterPool from "~/types/ICharacterPool";
 import { Maybe } from "~/utils/Maybe";
+import { BattleId } from "~/types/battle/IBattle";
+
+export type CharacterId = string;
 
 export interface ICharacter {
-  id: string;
+  id: CharacterId;
   userId: string;
   name: string;
   village: Village;
@@ -19,6 +22,8 @@ export interface ICharacter {
   intelligence: number;
   strength: number;
   endurance: number;
+  isInBattle: boolean;
+  currentBattleId?: BattleId;
   characterPool: Maybe<ICharacterPool>;
 }
 

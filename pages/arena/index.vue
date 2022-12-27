@@ -7,6 +7,8 @@ import ICharacterPool from "~/types/ICharacterPool";
 import PoolSidebar from "~/components/character/PoolSidebar.vue";
 import { useFetch } from "#app";
 import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
+import { StartArenaBattleCommand } from "~/server/services/battleService";
+import { IBattle } from "~/types/battle/IBattle";
 
 definePageMeta({
   middleware: [auth, hasCharacter]
@@ -30,9 +32,25 @@ const arenaCharacters = await useFetch<Array<ArenaCharacter>>("/api/arena", {
   method: "GET"
 });
 
-const attack = async (opponentName: string) => {
-  // TODO: Create Battle with AI
-  console.log("Attacking:", opponentName);
+const battle = ref({});
+
+const attack = async (opponentId: string) => {
+  //TODO: Fix this mess
+  console.log("Attacking:", opponentId);
+  const myChar = await useCharacter();
+  if (!myChar) {
+    throw new Error("User should have character on that page");
+  }
+  const command: StartArenaBattleCommand = {
+    characterId: myChar.id,
+    arenaCharacterId: opponentId
+  };
+  const res = await $fetch<IBattle>("/api/battle/arenaBattle", {
+    method: "POST",
+    body: command
+  });
+
+  battle.value = res;
 };
 
 </script>
@@ -45,8 +63,12 @@ const attack = async (opponentName: string) => {
         <div v-for="oponent in arenaCharacters.data.value">
           <div>
             <span class="pr-4">{{ oponent.name }}</span>
-            <n-button @click="attack(oponent.name)">Attack</n-button>
+            <n-button @click="attack(oponent.id)">Attack</n-button>
           </div>
+        </div>
+        <div>
+          <h1>BATTLE</h1>
+          <pre>{{ battle }}</pre>
         </div>
       </n-card>
     </div>

@@ -32,6 +32,17 @@ export const compositeElementFromBasicElements = (
   return result;
 };
 
+export const getWeakness = (element: BasicElement): BasicElement => {
+  const weaknessMap: Record<BasicElement, BasicElement> = {
+    [BasicElement.FIRE]: BasicElement.WATER,
+    [BasicElement.WATER]: BasicElement.WIND,
+    [BasicElement.WIND]: BasicElement.EARTH,
+    [BasicElement.EARTH]: BasicElement.LIGHTNING,
+    [BasicElement.LIGHTNING]: BasicElement.FIRE,
+  };
+  return weaknessMap[element];
+};
+
 const elementPairs: Record<
   BasicElement,
   Record<BasicElement, CompositeElement | null>
