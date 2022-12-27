@@ -12,7 +12,7 @@ export interface IBattle {
   attackerId: CharacterId;
   defenderId: Maybe<CharacterId>;
   userDefender?: ICharacter;
-  aiDefender: Maybe<ArenaCharacter>;
+  aiDefender?: Maybe<ArenaCharacter>;
   defenderArenaCharacterId: Maybe<ArenaCharacterId>;
   state: BattleState;
   type: BattleType;
