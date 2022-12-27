@@ -1,15 +1,22 @@
 import { CharacterId, ICharacter } from "~/types/ICharacter";
 import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
+import { Maybe } from "~/utils/Maybe";
 
 export type BattleId = string;
 
 export interface IBattle {
   id: BattleId;
   attackerId: CharacterId;
+  defenderId: Maybe<CharacterId>;
   userDefender?: ICharacter;
   aiDefender?: ArenaCharacter;
   state: BattleState;
   type: BattleType;
+  attackerHealth: number;
+  defenderHealth: number;
+
+  attackerMaxHealth: number;
+  defenderMaxHealth: number;
 }
 
 export type BattleType = "AI" | "PVP";
