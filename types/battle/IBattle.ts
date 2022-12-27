@@ -1,5 +1,5 @@
 import { CharacterId, ICharacter } from "~/types/ICharacter";
-import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
+import { ArenaCharacter, ArenaCharacterId } from "~/types/battle/ArenaCharacter";
 import { Maybe } from "~/utils/Maybe";
 
 export type BattleId = string;
@@ -9,7 +9,8 @@ export interface IBattle {
   attackerId: CharacterId;
   defenderId: Maybe<CharacterId>;
   userDefender?: ICharacter;
-  aiDefender?: ArenaCharacter;
+  aiDefender: Maybe<ArenaCharacter>;
+  defenderArenaCharacterId: Maybe<ArenaCharacterId>;
   state: BattleState;
   type: BattleType;
   attackerHealth: number;
@@ -56,7 +57,7 @@ export const BattleStateValues: {
   /**
    * Battle finished, provide logs.
    */
-  FINISHED: "FINISHED",
+  FINISHED: "FINISHED"
 };
 
 export type BattleState =

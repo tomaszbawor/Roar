@@ -20,7 +20,15 @@ const attackerName = computed<string>(() => {
 });
 
 const defenderName = computed<string>(() => {
-  return isAttacker ? "TODO MONSTER NAME" : character.name;
+  if (isAttacker) {
+    if (battle.defenderId) {
+      return "Player Defender";
+    } else {
+      return battle.aiDefender!.name;
+    }
+  } else {
+    return character.name;
+  }
 });
 
 </script>
@@ -85,6 +93,12 @@ const defenderName = computed<string>(() => {
   <div class="mt-4">
     <n-card>
       ACTIONS
+    </n-card>
+  </div>
+
+  <div class="mt-4">
+    <n-card>
+      Battle Logs
     </n-card>
   </div>
 

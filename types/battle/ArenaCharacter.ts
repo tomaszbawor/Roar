@@ -9,3 +9,5 @@ export type ArenaCharacter = Omit<
   | "isInBattle"
   | "currentBattleId"
 > & { health: number };
+
+export type ArenaCharacterId = string;
