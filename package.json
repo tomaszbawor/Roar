@@ -43,7 +43,8 @@
     "@vueuse/core": "^9.7.0",
     "bcrypt": "^5.1.0",
     "node-cron": "^3.0.2",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "vue-toastification": "^2.0.0-rc.5"
   },
   "prisma": {
     "schema": "server/database/prisma/schema.prisma",
