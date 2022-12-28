@@ -10,7 +10,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "typecheck": "npx nuxi typecheck",
+    "typecheck": "nuxi typecheck",
+    "test": "nuxi test",
     "lint": "eslint --ext .js,.ts --ignore-path .eslintignore .",
     "lint:fix": "eslint --ext .js,.ts --ignore-path .eslintignore . --fix"
   },

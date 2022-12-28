@@ -14,18 +14,18 @@ describe("DamageCalculator", () => {
         NINJUTSU: 0.7,
         TAIJUTSU: 0,
         GENJUTSU: 0.3,
-        BUKIJUTSU: 0,
+        BUKIJUTSU: 0
       },
 
       attackGenerals: {
         SPEED: 0.7,
         INTELLIGENCE: 0,
         STRENGTH: 0.3,
-        ENDURANCE: 0,
+        ENDURANCE: 0
       },
       element: null,
       skillLevel: 1,
-      skillBasePower: 5.2,
+      skillBasePower: 5.2
     };
 
     // when
@@ -36,8 +36,8 @@ describe("DamageCalculator", () => {
     );
     const weakerAttack = DamageCalculator.calculate(defender, attacker, skill);
 
-    Assert.equal(strongerAttack.damage, 10798);
-    Assert.equal(weakerAttack.damage, 8714);
+    Assert.equal(strongerAttack.damage, 10811);
+    Assert.equal(weakerAttack.damage, 8725);
   });
 
   function createCharWithSameStats(stat: number): ICharacter {
@@ -61,7 +61,7 @@ describe("DamageCalculator", () => {
       endurance: stat,
       characterPool: null,
       isInBattle: false,
-      currentBattleId: null,
+      currentBattleId: null
     };
   }
 });
