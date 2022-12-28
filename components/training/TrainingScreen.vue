@@ -3,9 +3,9 @@
 import {
   GeneralStats,
   PoolExtendTraining,
-  SkillType,
   TrainingCost,
   trainingCostPerUnit,
+  TrainingSkillOptions,
   TrainingType
 } from "~/engine/training/trainingTypes";
 import { computed } from "@vue/reactivity";
@@ -39,11 +39,11 @@ const labels: Record<TrainingType, string> = {
 };
 
 const trainingForm = reactive<TrainCommand>({
-  trainType: SkillType.OFFENSIVE_BUKIJUTSU,
+  trainType: TrainingSkillOptions.OFFENSIVE_BUKIJUTSU,
   value: 0
 });
 
-const trainingOptions: Array<{ label: string, value: TrainingType }> = [...Object.values(SkillType), ...Object.values(GeneralStats), ...Object.values(PoolExtendTraining)].map((trainingType) => {
+const trainingOptions: Array<{ label: string, value: TrainingType }> = [...Object.values(TrainingSkillOptions), ...Object.values(GeneralStats), ...Object.values(PoolExtendTraining)].map((trainingType) => {
   return {
     label: labels[trainingType],
     value: trainingType

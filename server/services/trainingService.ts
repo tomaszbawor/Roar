@@ -3,10 +3,10 @@ import { ICharacter } from "~/types/ICharacter";
 import {
   GeneralStats,
   PoolExtendTraining,
-  SkillType,
   TrainingCost,
   trainingCostPerUnit,
   TrainingIncrements,
+  TrainingSkillOptions,
 } from "~/engine/training/trainingTypes";
 import prisma from "~/server/database/client";
 import { checkForLevelUp } from "~/server/services/levelUpService";
@@ -39,35 +39,35 @@ const getStatChangeAfterTraining = (tc: TrainCommand): TrainingIncrements => {
       ti.maxStamina = tc.value;
       break;
     }
-    case SkillType.OFFENSIVE_GENJUTSU: {
+    case TrainingSkillOptions.OFFENSIVE_GENJUTSU: {
       ti.offensiveGenjutsu = tc.value;
       break;
     }
-    case SkillType.DEFENSIVE_GENJUTSU: {
+    case TrainingSkillOptions.DEFENSIVE_GENJUTSU: {
       ti.defensiveGenjutsu = tc.value;
       break;
     }
-    case SkillType.OFFENSIVE_NINJUTSTU: {
+    case TrainingSkillOptions.OFFENSIVE_NINJUTSTU: {
       ti.offensiveNinjutsu = tc.value;
       break;
     }
-    case SkillType.DEFENSIVE_NINJUTSTU: {
+    case TrainingSkillOptions.DEFENSIVE_NINJUTSTU: {
       ti.defensiveNinjutsu = tc.value;
       break;
     }
-    case SkillType.OFFENSIVE_TAIJUTSU: {
+    case TrainingSkillOptions.OFFENSIVE_TAIJUTSU: {
       ti.offensiveTaijutsu = tc.value;
       break;
     }
-    case SkillType.DEFENSIVE_TAIJUTSU: {
+    case TrainingSkillOptions.DEFENSIVE_TAIJUTSU: {
       ti.defensiveTaijutsu = tc.value;
       break;
     }
-    case SkillType.OFFENSIVE_BUKIJUTSU: {
+    case TrainingSkillOptions.OFFENSIVE_BUKIJUTSU: {
       ti.offensiveBukijutsu = tc.value;
       break;
     }
-    case SkillType.DEFENSIVE_BUKIJUTSU: {
+    case TrainingSkillOptions.DEFENSIVE_BUKIJUTSU: {
       ti.defensiveBukijutsu = tc.value;
       break;
     }

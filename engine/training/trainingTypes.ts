@@ -1,4 +1,4 @@
-export enum SkillType {
+export enum TrainingSkillOptions {
   OFFENSIVE_GENJUTSU = "OFFENSIVE_GENJUTSU",
   OFFENSIVE_NINJUTSTU = "OFFENSIVE_NINJUTSU",
   OFFENSIVE_TAIJUTSU = "OFFENSIVE_TAIJUTSU",
@@ -34,7 +34,10 @@ export enum PoolExtendTraining {
   STAMINA_EXTEND = "STAMINA_EXTEND",
 }
 
-export type TrainingType = SkillType | GeneralStats | PoolExtendTraining;
+export type TrainingType =
+  | TrainingSkillOptions
+  | GeneralStats
+  | PoolExtendTraining;
 
 export const trainingCostPerUnit: Record<TrainingType, TrainingCost> = {
   OFFENSIVE_NINJUTSU: { chakra: 10, stamina: 0 },

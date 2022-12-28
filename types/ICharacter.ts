@@ -1,6 +1,7 @@
 import ICharacterPool from "~/types/ICharacterPool";
 import { Maybe } from "~/utils/Maybe";
 import { BattleId } from "~/types/battle/IBattle";
+import { Village } from "~/types/enums/Village";
 
 export type CharacterId = string;
 
@@ -32,7 +33,5 @@ export interface CreateCharacterCommand {
   name: string;
   village: Village;
 }
-
-export type Village = "SAND" | "LEAF" | "STONE" | "CLOUD" | "MIST";
 
 export type CharacterRank = "STUDENT" | "GENIN" | "CHUNIN" | "JONIN";
