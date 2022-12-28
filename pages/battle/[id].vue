@@ -4,6 +4,7 @@ import PoolProgressBar from "~/components/character/PoolProgressBar.vue";
 import Header from "~/components/typography/Header.vue";
 import { ICharacter } from "~/types/ICharacter";
 import ICharacterPool from "~/types/ICharacterPool";
+import DebugInfo from "~/components/util/DebugInfo.vue";
 
 const battleId = useRoute().params.id;
 const battle = await $fetch<IBattle>(`/api/battle?battleId=${battleId}`, {
@@ -99,6 +100,7 @@ const defenderName = computed<string>(() => {
   <div class="mt-4">
     <n-card>
       Battle Logs
+      <DebugInfo :value="battle.battleLog" />
     </n-card>
   </div>
 

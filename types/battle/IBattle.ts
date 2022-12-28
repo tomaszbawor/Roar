@@ -21,9 +21,21 @@ export interface IBattle {
 
   attackerMaxHealth: number;
   defenderMaxHealth: number;
+  turn: number;
+
+  battleLog: Array<IBattleLog>;
 }
 
 export type BattleType = "AI" | "PVP";
+
+export interface IBattleLog {
+  battleId: BattleId;
+  turn: number;
+  attackerLog: string;
+  defenderLog: string;
+  attackerSkillId: Maybe<string>;
+  defenderSkillId: Maybe<string>;
+}
 
 export const BattleStateValues: {
   [x: string]:

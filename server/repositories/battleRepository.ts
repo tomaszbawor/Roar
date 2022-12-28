@@ -11,6 +11,7 @@ export const getBattleById = async (
     },
     include: {
       aiDefender: true,
+      battleLog: true,
     },
   });
 };

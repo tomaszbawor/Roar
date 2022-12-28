@@ -48,6 +48,9 @@ async function createBattle(
       defenderHealth: aiCharacter.health,
       defenderMaxHealth: aiCharacter.health,
     },
+    include: {
+      battleLog: true,
+    },
   });
 }
 
