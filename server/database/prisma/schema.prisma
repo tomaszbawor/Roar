@@ -129,6 +129,23 @@ model Battle {
   defenderHealth           Int
   attackerMaxHealth        Int
   defenderMaxHealth        Int
+  turn                     Int             @default(1)
+  battleLog                BattleLog[]
+}
+
+model BattleLog {
+  battle            Battle         @relation(fields: [battleId], references: [id])
+  battleId          String
+  createdAt         DateTime       @default(now())
+  turn              Int
+  attackerLog       String
+  defenderLog       String
+  attackerSkillId   String?
+  attackerSkillUsed SkillSkeleton? @relation("attackerSkillReference", fields: [attackerSkillId], references: [id])
+  defenderSkillId   String?
+  defenderSkillUsed SkillSkeleton? @relation("deffenderSkillReference", fields: [defenderSkillId], references: [id])
+
+  @@id([battleId, turn])
 }
 
 enum BattleState {
@@ -146,29 +163,33 @@ enum BattleType {
 }
 
 model SkillSkeleton {
-  id                       String    @id @default(uuid())
-  name                     String    @unique
+  id                       String                @id @default(uuid())
+  name                     String                @unique
   type                     SkillType
   skillRank                Rank
-  avalibleForAll           Boolean   @default(true)
-  learnableSkill           Boolean   @default(true)
-  basePower                Int
+  avalibleForAll           Boolean               @default(true) // If false, this will be skill for ai and bosses
+  learnableSkill           Boolean               @default(true) // If this skill can be bought in the shop
+  villageSkill             Boolean               @default(false) // If this skill can be bought learn only in the village
+  villageBasis             Village?
+  basePower                Float                 @default(1)
   staminaCost              Int
   chakraCost               Int
   description              String
   battleLogAction          String
-  genjutsuPercentRatio     Int       @default(0)
-  taijutsuPercentRatio     Int       @default(0)
-  ninjutsuPercentRatio     Int       @default(0)
-  bukijutsuPercentRatio    Int       @default(0)
-  speedPercentRatio        Int       @default(0)
-  intelligencePercentRatio Int       @default(0)
-  strengthPercentRatio     Int       @default(0)
-  endurancePercentRatio    Int       @default(0)
+  genjutsuPercentRatio     Int                   @default(0)
+  taijutsuPercentRatio     Int                   @default(0)
+  ninjutsuPercentRatio     Int                   @default(0)
+  bukijutsuPercentRatio    Int                   @default(0)
+  speedPercentRatio        Int                   @default(0)
+  intelligencePercentRatio Int                   @default(0)
+  strengthPercentRatio     Int                   @default(0)
+  endurancePercentRatio    Int                   @default(0)
   element                  Element?
-
-  OwnedSkill          OwnedSkill[]
-  ArenaCharacterSkill ArenaCharacterSkill[]
+  cooldown                 Int
+  OwnedSkill               OwnedSkill[]
+  ArenaCharacterSkill      ArenaCharacterSkill[]
+  attackerSkillReference   BattleLog[]           @relation("attackerSkillReference")
+  deffenderSkillReference  BattleLog[]           @relation("deffenderSkillReference")
 }
 
 enum SkillType {
