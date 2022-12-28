@@ -56,6 +56,7 @@ model Character {
   battlesDefender    Battle[]       @relation("defender_relation")
   isInBattle         Boolean        @default(false)
   currentBattleId    String?
+  ownedSkills        OwnedSkill[]
 }
 
 model CharacterPool {
@@ -93,23 +94,24 @@ enum Rank {
 }
 
 model ArenaCharacter {
-  id                 String   @id @default(uuid())
-  name               String
-  health             Int      @default(100)
-  offensiveNinjutsu  Int      @default(1)
-  offensiveTaijutsu  Int      @default(1)
-  offensiveGenjutsu  Int      @default(1)
-  offensiveBukijutsu Int      @default(1)
-  defensiveNinjutsu  Int      @default(1)
-  defensiveTaijutsu  Int      @default(1)
-  defensiveGenjutsu  Int      @default(1)
-  defensiveBukijutsu Int      @default(1)
-  speed              Int      @default(1)
-  intelligence       Int      @default(1)
-  strength           Int      @default(1)
-  endurance          Int      @default(1)
-  active             Boolean  @default(true)
-  battle             Battle[]
+  id                  String                @id @default(uuid())
+  name                String
+  health              Int                   @default(100)
+  offensiveNinjutsu   Int                   @default(1)
+  offensiveTaijutsu   Int                   @default(1)
+  offensiveGenjutsu   Int                   @default(1)
+  offensiveBukijutsu  Int                   @default(1)
+  defensiveNinjutsu   Int                   @default(1)
+  defensiveTaijutsu   Int                   @default(1)
+  defensiveGenjutsu   Int                   @default(1)
+  defensiveBukijutsu  Int                   @default(1)
+  speed               Int                   @default(1)
+  intelligence        Int                   @default(1)
+  strength            Int                   @default(1)
+  endurance           Int                   @default(1)
+  active              Boolean               @default(true)
+  battle              Battle[]
+  ArenaCharacterSkill ArenaCharacterSkill[]
 }
 
 model Battle {
@@ -141,4 +143,75 @@ enum BattleState {
 enum BattleType {
   AI
   PVP
+}
+
+model SkillSkeleton {
+  id                       String    @id @default(uuid())
+  name                     String    @unique
+  type                     SkillType
+  skillRank                Rank
+  avalibleForAll           Boolean   @default(true)
+  learnableSkill           Boolean   @default(true)
+  basePower                Int
+  staminaCost              Int
+  chakraCost               Int
+  description              String
+  battleLogAction          String
+  genjutsuPercentRatio     Int       @default(0)
+  taijutsuPercentRatio     Int       @default(0)
+  ninjutsuPercentRatio     Int       @default(0)
+  bukijutsuPercentRatio    Int       @default(0)
+  speedPercentRatio        Int       @default(0)
+  intelligencePercentRatio Int       @default(0)
+  strengthPercentRatio     Int       @default(0)
+  endurancePercentRatio    Int       @default(0)
+  element                  Element?
+
+  OwnedSkill          OwnedSkill[]
+  ArenaCharacterSkill ArenaCharacterSkill[]
+}
+
+enum SkillType {
+  NINJUTSU
+  TAIJUTSU
+  GENJUTSU
+  BUKIJUTSU
+}
+
+enum Element {
+  FIRE
+  WATER
+  WIND
+  EARTH
+  LIGHTNING
+  ICE
+  SCORCHING
+  LIGHT
+  TEMPEST
+  DUST
+  MAGNETISM
+  STORM
+  WOOD
+  LAVA
+  STEAM
+}
+
+model OwnedSkill {
+  skillSkeleton   SkillSkeleton @relation(fields: [skillSkeletonId], references: [id])
+  skillSkeletonId String
+  character       Character     @relation(fields: [characterId], references: [id])
+  characterId     String
+  level           Int           @default(1)
+  uses            Int           @default(0)
+
+  @@id([skillSkeletonId, characterId])
+}
+
+model ArenaCharacterSkill {
+  arenaCharacterId String
+  arenaCharacter   ArenaCharacter @relation(fields: [arenaCharacterId], references: [id])
+  skillSkeletonId  String
+  skillSkeleton    SkillSkeleton  @relation(fields: [skillSkeletonId], references: [id])
+
+  @@id([arenaCharacterId, skillSkeletonId])
 }

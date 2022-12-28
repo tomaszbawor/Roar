@@ -9,6 +9,7 @@ import { useFetch } from "#app";
 import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
 import { StartArenaBattleCommand } from "~/server/services/battleService";
 import { IBattle } from "~/types/battle/IBattle";
+import { useToast } from "vue-toastification";
 
 definePageMeta({
   middleware: [auth, hasCharacter]
@@ -45,13 +46,16 @@ const attack = async (opponentId: string) => {
     characterId: myChar.id,
     arenaCharacterId: opponentId
   };
-  const res = await $fetch<IBattle>("/api/battle/arenaBattle", {
+
+  await $fetch<IBattle>("/api/battle/arenaBattle", {
     method: "POST",
     body: command
+  }).then(res => {
+    //redirect to battle
+    useRouter().push(`/battle/${res.id}`);
+  }).catch(err => {
+    useToast().error(err.message);
   });
-
-  //redirect to battle
-  await useRouter().push(`/battle/${res.id}`);
 };
 
 </script>
@@ -61,10 +65,10 @@ const attack = async (opponentId: string) => {
       <n-card>
         <n-page-header>Arena Page</n-page-header>
 
-        <div v-for="oponent in arenaCharacters.data.value">
+        <div v-for="opponent in arenaCharacters.data.value">
           <div>
-            <span class="pr-4">{{ oponent.name }}</span>
-            <n-button @click="attack(oponent.id)">Attack</n-button>
+            <span class="pr-4">{{ opponent.name }}</span>
+            <n-button @click="attack(opponent.id)">Attack</n-button>
           </div>
         </div>
         <div>

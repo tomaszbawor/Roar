@@ -100,7 +100,7 @@ export const calculate = (
   return {
     damage: damage,
     element: skill.element,
-    attackEffect: null,
+    attackEffect: null
   };
 };
 
@@ -121,3 +121,5 @@ export interface AttackSkill {
   skillLevel: number;
   skillBasePower: number;
 }
+
+
