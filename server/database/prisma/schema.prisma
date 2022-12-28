@@ -33,20 +33,29 @@ model Session {
 }
 
 model Character {
-  id            String         @id @default(uuid())
-  name          String         @unique
-  user          User           @relation(fields: [userId], references: [id])
-  userId        String         @unique
-  village       Village
-  rank          Rank           @default(STUDENT)
-  ninjutsu      Int            @default(1)
-  taijutsu      Int            @default(1)
-  genjutsu      Int            @default(1)
-  speed         Int            @default(1)
-  intelligence  Int            @default(1)
-  strength      Int            @default(1)
-  endurance     Int            @default(1)
-  characterPool CharacterPool?
+  id                 String         @id @default(uuid())
+  name               String         @unique
+  user               User           @relation(fields: [userId], references: [id])
+  userId             String         @unique
+  village            Village
+  rank               Rank           @default(STUDENT)
+  offensiveNinjutsu  Int            @default(1)
+  offensiveTaijutsu  Int            @default(1)
+  offensiveGenjutsu  Int            @default(1)
+  offensiveBukijutsu Int            @default(1)
+  defensiveNinjutsu  Int            @default(1)
+  defensiveTaijutsu  Int            @default(1)
+  defensiveGenjutsu  Int            @default(1)
+  defensiveBukijutsu Int            @default(1)
+  speed              Int            @default(1)
+  intelligence       Int            @default(1)
+  strength           Int            @default(1)
+  endurance          Int            @default(1)
+  characterPool      CharacterPool?
+  battlesInitiated   Battle[]       @relation("attacker_relation")
+  battlesDefender    Battle[]       @relation("defender_relation")
+  isInBattle         Boolean        @default(false)
+  currentBattleId    String?
 }
 
 model CharacterPool {
@@ -81,4 +90,55 @@ enum Rank {
   GENIN
   CHUNIN
   JONIN
+}
+
+model ArenaCharacter {
+  id                 String   @id @default(uuid())
+  name               String
+  health             Int      @default(100)
+  offensiveNinjutsu  Int      @default(1)
+  offensiveTaijutsu  Int      @default(1)
+  offensiveGenjutsu  Int      @default(1)
+  offensiveBukijutsu Int      @default(1)
+  defensiveNinjutsu  Int      @default(1)
+  defensiveTaijutsu  Int      @default(1)
+  defensiveGenjutsu  Int      @default(1)
+  defensiveBukijutsu Int      @default(1)
+  speed              Int      @default(1)
+  intelligence       Int      @default(1)
+  strength           Int      @default(1)
+  endurance          Int      @default(1)
+  active             Boolean  @default(true)
+  battle             Battle[]
+}
+
+model Battle {
+  id                       String          @id @default(uuid())
+  createdAt                DateTime        @default(now())
+  state                    BattleState     @default(INITIALIZED)
+  type                     BattleType
+  attackerId               String
+  attacker                 Character       @relation("attacker_relation", fields: [attackerId], references: [id])
+  defenderId               String?
+  userDefender             Character?      @relation("defender_relation", fields: [defenderId], references: [id])
+  defenderArenaCharacterId String?
+  aiDefender               ArenaCharacter? @relation(fields: [defenderArenaCharacterId], references: [id])
+  attackerHealth           Int
+  defenderHealth           Int
+  attackerMaxHealth        Int
+  defenderMaxHealth        Int
+}
+
+enum BattleState {
+  INITIALIZED
+  WAITING_FOR_BOTH
+  WAITING_FOR_ATTACKER
+  WAITING_FOR_DEFENDER
+  ACTIONS_DONE
+  FINISHED
+}
+
+enum BattleType {
+  AI
+  PVP
 }

@@ -1,27 +1,33 @@
 import { TrainCommand } from "~/types/form/TrainCommand";
 import { ICharacter } from "~/types/ICharacter";
 import {
+  GeneralStats,
   PoolExtendTraining,
   SkillType,
-  StatType,
   TrainingCost,
   trainingCostPerUnit,
   TrainingIncrements,
 } from "~/engine/training/trainingTypes";
 import prisma from "~/server/database/client";
+import { checkForLevelUp } from "~/server/services/levelUpService";
 
 const getStatChangeAfterTraining = (tc: TrainCommand): TrainingIncrements => {
   const ti: TrainingIncrements = {
+    offensiveNinjutsu: 0,
+    offensiveTaijutsu: 0,
+    offensiveGenjutsu: 0,
+    offensiveBukijutsu: 0,
+    defensiveNinjutsu: 0,
+    defensiveTaijutsu: 0,
+    defensiveGenjutsu: 0,
+    defensiveBukijutsu: 0,
     endurance: 0,
-    genjutsu: 0,
     intelligence: 0,
     maxChakra: 0,
     maxHealth: 0,
     maxStamina: 0,
-    ninjutsu: 0,
     speed: 0,
     strength: 0,
-    taijustu: 0,
   };
 
   switch (tc.trainType) {
@@ -33,37 +39,62 @@ const getStatChangeAfterTraining = (tc: TrainCommand): TrainingIncrements => {
       ti.maxStamina = tc.value;
       break;
     }
-    case SkillType.GENJUTSU: {
-      ti.genjutsu = tc.value;
+    case SkillType.OFFENSIVE_GENJUTSU: {
+      ti.offensiveGenjutsu = tc.value;
       break;
     }
-    case SkillType.NINJUTSTU: {
-      ti.ninjutsu = tc.value;
+    case SkillType.DEFENSIVE_GENJUTSU: {
+      ti.defensiveGenjutsu = tc.value;
       break;
     }
-    case SkillType.TAIJUTSU: {
-      ti.taijustu = tc.value;
+    case SkillType.OFFENSIVE_NINJUTSTU: {
+      ti.offensiveNinjutsu = tc.value;
       break;
     }
-    case StatType.ENDURANCE: {
+    case SkillType.DEFENSIVE_NINJUTSTU: {
+      ti.defensiveNinjutsu = tc.value;
+      break;
+    }
+    case SkillType.OFFENSIVE_TAIJUTSU: {
+      ti.offensiveTaijutsu = tc.value;
+      break;
+    }
+    case SkillType.DEFENSIVE_TAIJUTSU: {
+      ti.defensiveTaijutsu = tc.value;
+      break;
+    }
+    case SkillType.OFFENSIVE_BUKIJUTSU: {
+      ti.offensiveBukijutsu = tc.value;
+      break;
+    }
+    case SkillType.DEFENSIVE_BUKIJUTSU: {
+      ti.defensiveBukijutsu = tc.value;
+      break;
+    }
+    case GeneralStats.ENDURANCE: {
       ti.endurance = tc.value;
       break;
     }
-    case StatType.INTELLIGENCE: {
+    case GeneralStats.INTELLIGENCE: {
       ti.intelligence = tc.value;
       break;
     }
-    case StatType.SPEED: {
+    case GeneralStats.SPEED: {
       ti.speed = tc.value;
       break;
     }
-    case StatType.STRENGTH: {
+    case GeneralStats.STRENGTH: {
       ti.strength = tc.value;
     }
   }
 
   return ti;
 };
+
+function calculateGainedExperience(trainCost: TrainingCost) {
+  const totalResourcesSpend = trainCost.chakra + trainCost.stamina;
+  return Math.round(totalResourcesSpend / 10);
+}
 
 export const trainSkills = async (
   tc: TrainCommand,
@@ -77,14 +108,18 @@ export const trainSkills = async (
   };
 
   const skillIncrement = getStatChangeAfterTraining(tc);
+  const experienceGained: number = calculateGainedExperience(trainCost);
 
-  return await prisma.character.update({
+  const trainedCharacter = await prisma.character.update({
     where: {
       id: character.id,
     },
     data: {
       characterPool: {
         update: {
+          experience: {
+            increment: experienceGained,
+          },
           chakra: {
             decrement: trainCost.chakra,
           },
@@ -99,14 +134,29 @@ export const trainSkills = async (
           },
         },
       },
-      ninjutsu: {
-        increment: skillIncrement.ninjutsu,
+      offensiveNinjutsu: {
+        increment: skillIncrement.offensiveNinjutsu,
       },
-      genjutsu: {
-        increment: skillIncrement.genjutsu,
+      defensiveNinjutsu: {
+        increment: skillIncrement.defensiveNinjutsu,
       },
-      taijutsu: {
-        increment: skillIncrement.taijustu,
+      offensiveTaijutsu: {
+        increment: skillIncrement.offensiveTaijutsu,
+      },
+      defensiveTaijutsu: {
+        increment: skillIncrement.defensiveTaijutsu,
+      },
+      offensiveGenjutsu: {
+        increment: skillIncrement.offensiveGenjutsu,
+      },
+      defensiveGenjutsu: {
+        increment: skillIncrement.defensiveGenjutsu,
+      },
+      offensiveBukijutsu: {
+        increment: skillIncrement.offensiveBukijutsu,
+      },
+      defensiveBukijutsu: {
+        increment: skillIncrement.defensiveBukijutsu,
       },
       strength: {
         increment: skillIncrement.strength,
@@ -125,4 +175,5 @@ export const trainSkills = async (
       characterPool: true,
     },
   });
+  return checkForLevelUp(trainedCharacter);
 };

@@ -34,7 +34,7 @@ async function getCharPool(): Promise<ICharacterPool> {
 <template>
   <div class="flex gap-4">
     <div class="w-2/3">
-      <CharacterStatsSheet :character="character" />
+      <CharacterStatsSheet v-if="character" :character="character" />
     </div>
     <div class="w-1/3">
       <PoolSidebar :pool="characterPool" @refresh="refresh" />

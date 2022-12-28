@@ -7,8 +7,11 @@ import { hashPassword } from "../../services/passwordHasher";
   const prisma = new PrismaClient();
 
   async function seed() {
-    // Create Admin User
+    // Create Test users
     await createAdmin();
+    await createMod();
+    await createUser();
+    await createAi();
   }
 
   const createAdmin = async () => {
@@ -32,6 +35,81 @@ import { hashPassword } from "../../services/passwordHasher";
     await prisma.characterPool.create({
       data: {
         characterId: char.id,
+      },
+    });
+  };
+  const createMod = async () => {
+    const moderator = await prisma.user.create({
+      data: {
+        email: "mod@mod.com",
+        password: await hashPassword("mod"),
+        role: "MOD",
+        name: "RoarModerator",
+      },
+    });
+
+    const char = await prisma.character.create({
+      data: {
+        name: "Moderator",
+        userId: moderator.id,
+        village: "MIST",
+      },
+    });
+
+    await prisma.characterPool.create({
+      data: {
+        characterId: char.id,
+      },
+    });
+  };
+  const createUser = async () => {
+    const user = await prisma.user.create({
+      data: {
+        email: "user@user.com",
+        password: await hashPassword("user"),
+        role: "MOD",
+        name: "RoarUser",
+      },
+    });
+
+    const char = await prisma.character.create({
+      data: {
+        name: "User",
+        userId: user.id,
+        village: "MIST",
+      },
+    });
+
+    await prisma.characterPool.create({
+      data: {
+        characterId: char.id,
+      },
+    });
+  };
+
+  const createAi = async () => {
+    await prisma.arenaCharacter.create({
+      data: {
+        name: "Training Dummy",
+      },
+    });
+
+    await prisma.arenaCharacter.create({
+      data: {
+        name: "Strong character",
+        health: 100000,
+        strength: 100,
+        endurance: 100,
+        intelligence: 100,
+        speed: 100,
+        offensiveNinjutsu: 10000,
+        defensiveNinjutsu: 10000,
+        offensiveTaijutsu: 10000,
+        defensiveTaijutsu: 10000,
+        offensiveGenjutsu: 10000,
+        defensiveGenjutsu: 10000,
+        offensiveBukijutsu: 10000,
+        defensiveBukijutsu: 10000,
       },
     });
   };

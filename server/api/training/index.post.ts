@@ -1,5 +1,5 @@
 import { TrainCommand } from "~/types/form/TrainCommand";
-import { getCookie, sendError } from "h3";
+import { getCookie } from "h3";
 import { getUserBySessionToken } from "~/server/services/sessionService";
 import { getCharacterByUserId } from "~/server/repositories/characterRepository";
 import { trainSkills } from "~/server/services/trainingService";
@@ -10,49 +10,37 @@ import {
 import ICharacterPool from "~/types/ICharacterPool";
 import { ICharacter } from "~/types/ICharacter";
 import { Maybe } from "~/utils/Maybe";
+import {
+  sendApiErrorOnFalseCondition,
+  sendApiErrorOnNull,
+} from "~/server/api/apiErrorsUtil";
 
 export default defineEventHandler<ICharacter | null>(
   async (event): Promise<ICharacter | null> => {
-    const body = await readBody<TrainCommand>(event);
+    const trainCommand = await readBody<TrainCommand>(event);
     const authToken = getCookie(event, "auth_token");
     if (!authToken) {
       return null;
     }
     const user = await getUserBySessionToken(authToken);
 
-    if (!user) {
-      sendError(
-        event,
-        createError({
-          statusCode: 400,
-          statusMessage: "User for session not found",
-        })
-      );
-      return null;
-    }
-
+    sendApiErrorOnNull(user, event, 400, "User for session not found");
     const character = await getCharacterByUserId(user.id);
 
-    if (!character) {
-      sendError(
-        event,
-        createError({ statusCode: 400, statusMessage: "Character not found" })
-      );
-      return null;
-    }
+    sendApiErrorOnNull(character, event, 400, "Character for user not found");
 
-    if (!validateTrainRequest(character.characterPool, body)) {
-      sendError(
-        event,
-        createError({ statusCode: 400, statusMessage: "Invalid train request" })
-      );
-    }
+    sendApiErrorOnFalseCondition(
+      isTrainRequestValid(character.characterPool, trainCommand),
+      event,
+      400,
+      "Invalid train request"
+    );
 
-    return await trainSkills(body, character);
+    return await trainSkills(trainCommand, character);
   }
 );
 
-function validateTrainRequest(
+function isTrainRequestValid(
   pool: Maybe<ICharacterPool>,
   trainCommand: TrainCommand
 ): boolean {

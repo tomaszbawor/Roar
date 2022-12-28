@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 
 import {
+  GeneralStats,
   PoolExtendTraining,
   SkillType,
-  StatType,
   TrainingCost,
   trainingCostPerUnit,
   TrainingType
@@ -22,23 +22,28 @@ const emit = defineEmits(["refresh"]);
 const isPending = ref<boolean>(false);
 
 const labels: Record<TrainingType, string> = {
-  GENJUTSU: "Genjutsu",
-  NINJUTSU: "Ninjutsu",
-  TAIJUTSU: "Taijutsu",
   STRENGTH: "Strength",
   SPEED: "Speed",
   ENDURANCE: "Endurance",
   INTELLIGENCE: "Intelligence",
   CHAKRA_EXTEND: "Increase Chakra",
-  STAMINA_EXTEND: "Increase Stamina"
+  STAMINA_EXTEND: "Increase Stamina",
+  OFFENSIVE_GENJUTSU: "Offensive Genjutsu",
+  OFFENSIVE_NINJUTSU: "Offensive Ninjutsu",
+  OFFENSIVE_TAIJUTSU: "Offensive Taijutsu",
+  OFFENSIVE_BUKIJUTSU: "Offensive Bukijutsu",
+  DEFENSIVE_GENJUTSU: "Defensive Genjutsu",
+  DEFENSIVE_NINJUTSU: "Defensive Ninjutsu",
+  DEFENSIVE_TAIJUTSU: "Defansive Taijutsu",
+  DEFENSIVE_BUKIJUTSU: "Defensive Bukijutsu"
 };
 
 const trainingForm = reactive<TrainCommand>({
-  trainType: SkillType.GENJUTSU,
+  trainType: SkillType.OFFENSIVE_BUKIJUTSU,
   value: 0
 });
 
-const trainingOptions: Array<{ label: string, value: TrainingType }> = [...Object.values(SkillType), ...Object.values(StatType), ...Object.values(PoolExtendTraining)].map((trainingType) => {
+const trainingOptions: Array<{ label: string, value: TrainingType }> = [...Object.values(SkillType), ...Object.values(GeneralStats), ...Object.values(PoolExtendTraining)].map((trainingType) => {
   return {
     label: labels[trainingType],
     value: trainingType

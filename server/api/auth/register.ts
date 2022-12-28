@@ -1,9 +1,10 @@
-import { createError, eventHandler, readBody, sendError } from "h3";
+import { eventHandler, readBody } from "h3";
 import { CreateUserRequest } from "~/types/IUser";
 import { doesUserExist } from "~/server/services/userService";
 import { createUser } from "~/server/repositories/userRepository";
 import { makeSession } from "~/server/services/sessionService";
 import { hashPassword } from "~/server/services/passwordHasher";
+import { sendApiErrorOnFalseCondition } from "~/server/api/apiErrorsUtil";
 
 export default eventHandler(async (event) => {
   const body = await readBody(event);
@@ -13,22 +14,13 @@ export default eventHandler(async (event) => {
 
   const userExists: boolean = await doesUserExist(email);
 
-  if (userExists) {
-    sendError(
-      event,
-      createError({ statusCode: 422, statusMessage: "User already exists" })
-    );
-  }
-
-  if (password !== confirmPassword) {
-    sendError(
-      event,
-      createError({
-        statusCode: 400,
-        statusMessage: "Passwords does not match",
-      })
-    );
-  }
+  sendApiErrorOnFalseCondition(!userExists, event, 422, "User already exists");
+  sendApiErrorOnFalseCondition(
+    password === confirmPassword,
+    event,
+    400,
+    "Passwords does not match"
+  );
 
   const encryptedPassword: string = await hashPassword(password);
 

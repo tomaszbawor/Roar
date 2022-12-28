@@ -3,6 +3,9 @@ import ICharacterPool from "~/types/ICharacterPool";
 import PoolProgressBar from "~/components/character/PoolProgressBar.vue";
 import RegenerationTimer from "~/components/character/RegenerationTimer.vue";
 import { maxExpForLevel } from "~/engine/maxExpForLevel";
+import { useCharacter } from "~/composables/useCharacter";
+import { getRegenerationRateForCharacter } from "~/engine/character/characterRegen";
+import { ICharacter } from "~/types/ICharacter";
 
 const properties = defineProps<{
   pool: ICharacterPool
@@ -14,7 +17,17 @@ const refreshData = async () => {
   emit("refresh");
 };
 
-const maxExp = maxExpForLevel(properties.pool.level);
+const character = await useCharacter() as ICharacter;
+
+const regenRate = getRegenerationRateForCharacter(character!);
+
+const maxExp = computed<number>(() => {
+  return maxExpForLevel(properties.pool.level);
+});
+
+const battleLink = computed<string>(() => {
+  return `/battle/${character.currentBattleId}`;
+});
 </script>
 <template>
   <n-card>
@@ -24,8 +37,13 @@ const maxExp = maxExpForLevel(properties.pool.level);
       </div>
     </slot>
 
-    <n-card class="mb-4">
+    <n-card v-if="character.isInBattle" class="mb-4">
+      <div class=" flex justify-center text-red-400">
+        <nuxt-link :to="battleLink" class="text-red-400 underline"> You are in a battle</nuxt-link>
+      </div>
+    </n-card>
 
+    <n-card class="mb-4">
       <div>
         <b>Level: </b> {{ properties.pool.level }}
       </div>
@@ -39,6 +57,10 @@ const maxExp = maxExpForLevel(properties.pool.level);
                        label="Chakra" />
       <PoolProgressBar :current-val="properties.pool.stamina" :max-val="properties.pool.maxStamina" color="success"
                        label="Stamina" />
+
+      <div>
+        Regeneration Rate: <b>{{ regenRate }}</b>
+      </div>
 
       <RegenerationTimer class="mt-6" @refresh="refreshData" />
     </n-card>
