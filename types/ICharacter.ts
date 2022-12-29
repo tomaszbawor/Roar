@@ -28,6 +28,10 @@ export interface ICharacter {
   characterPool: Maybe<ICharacterPool>;
 }
 
+export type ICharacterWithSkills = ICharacter & {
+  ownedSkills: any[];
+};
+
 export interface CreateCharacterCommand {
   userId: string;
   name: string;

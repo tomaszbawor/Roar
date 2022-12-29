@@ -5,6 +5,7 @@ import Header from "~/components/typography/Header.vue";
 import { ICharacter } from "~/types/ICharacter";
 import ICharacterPool from "~/types/ICharacterPool";
 import DebugInfo from "~/components/util/DebugInfo.vue";
+import BattleSkills from "~/components/battle /BattleSkills.vue";
 
 const battleId = useRoute().params.id;
 const battle = await $fetch<IBattle>(`/api/battle?battleId=${battleId}`, {
@@ -19,6 +20,11 @@ const isDefender = character.id === battle.defenderId;
 const attackerName = computed<string>(() => {
   return isAttacker ? character.name : "TODO MONSTER NAME";
 });
+
+const { pending,  data:skillData } = useFetch(`/api/character/${character.id}/skills`, {
+  method: "GET"
+});
+
 
 const defenderName = computed<string>(() => {
   if (isAttacker) {
@@ -92,9 +98,7 @@ const defenderName = computed<string>(() => {
   </div>
 
   <div class="mt-4">
-    <n-card>
-      ACTIONS
-    </n-card>
+    <BattleSkills :characterId="character.id" />
   </div>
 
   <div class="mt-4">

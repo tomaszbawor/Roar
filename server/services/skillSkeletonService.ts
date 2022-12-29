@@ -31,8 +31,8 @@ export const createBaseSkill = async (
       endurancePercentRatio: createCommand.endurancePercentRatio,
       strengthPercentRatio: createCommand.strengthPercentRatio,
       intelligencePercentRatio: createCommand.intelligencePercentRatio,
-      villageBasis: createCommand.village
-    }
+      villageBasis: createCommand.village,
+    },
   });
 };
 
