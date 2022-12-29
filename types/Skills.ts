@@ -2,6 +2,7 @@ import { CharacterRank } from "~/types/ICharacter";
 import { Village } from "~/types/enums/Village";
 import { Element } from "~/engine/battle/Element";
 import { Maybe } from "~/utils/Maybe";
+import { SkillElement } from "~/types/enums/SkillElement";
 
 export interface OwnedSkill {
   skillSkeleton: SkillSkeleton;
@@ -26,7 +27,7 @@ export interface SkillSkeleton {
   chakraCost: number;
   description: string;
   battleLogAction: string;
-  genjustuPercentRatio: number;
+  genjutsuPercentRatio: number;
   taijutsuPercentRatio: number;
   ninjutsuPercentRatio: number;
   bukijutsuPercentRatio: number;
@@ -34,7 +35,7 @@ export interface SkillSkeleton {
   intelligencePercentRatio: number;
   strengthPercentRatio: number;
   endurancePercentRatio: number;
-  element: any | null; //TODO: FIX THIS
+  element: Maybe<SkillElement>
   cooldown: number;
 }
 
