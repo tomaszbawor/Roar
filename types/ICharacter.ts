@@ -2,6 +2,7 @@ import ICharacterPool from "~/types/ICharacterPool";
 import { Maybe } from "~/utils/Maybe";
 import { BattleId } from "~/types/battle/IBattle";
 import { Village } from "~/types/enums/Village";
+import { OwnedSkill } from "~/types/Skills";
 
 export type CharacterId = string;
 
@@ -29,7 +30,7 @@ export interface ICharacter {
 }
 
 export type ICharacterWithSkills = ICharacter & {
-  ownedSkills: any[];
+  ownedSkills: OwnedSkill[];
 };
 
 export interface CreateCharacterCommand {

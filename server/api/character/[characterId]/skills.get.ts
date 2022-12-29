@@ -4,7 +4,7 @@ import { OwnedSkill } from "~/types/Skills";
 export default defineEventHandler<Array<OwnedSkill>>(async (event) => {
   const characterId = event.context.params.characterId;
 
-  const skills: Array<OwnedSkill> =  await prisma.ownedSkill.findMany({
+  const skills: Array<OwnedSkill> = await prisma.ownedSkill.findMany({
     where: {
       characterId: characterId,
     },

@@ -1,6 +1,5 @@
 import { CharacterRank } from "~/types/ICharacter";
 import { Village } from "~/types/enums/Village";
-import { Element } from "~/engine/battle/Element";
 import { Maybe } from "~/utils/Maybe";
 import { SkillElement } from "~/types/enums/SkillElement";
 
@@ -35,13 +34,10 @@ export interface SkillSkeleton {
   intelligencePercentRatio: number;
   strengthPercentRatio: number;
   endurancePercentRatio: number;
-  element: Maybe<SkillElement>
+  element: Maybe<SkillElement>;
   cooldown: number;
 }
 
 export type SkillSkeletonId = string;
 
 export type SkillType = "NINJUTSU" | "TAIJUTSU" | "GENJUTSU" | "BUKIJUTSU";
-
-
-
