@@ -1,10 +1,10 @@
 import prisma from "~/server/database/client";
+import { OwnedSkill } from "~/types/Skills";
 
-export default defineEventHandler<any>(async (event) => {
+export default defineEventHandler<Array<OwnedSkill>>(async (event) => {
   const characterId = event.context.params.characterId;
 
-  // TODO: Check if admin or character owner
-  return await prisma.ownedSkill.findMany({
+  const skills: Array<OwnedSkill> =  await prisma.ownedSkill.findMany({
     where: {
       characterId: characterId,
     },
@@ -12,4 +12,6 @@ export default defineEventHandler<any>(async (event) => {
       skillSkeleton: true,
     },
   });
+
+  return skills;
 });

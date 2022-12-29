@@ -167,7 +167,7 @@ model SkillSkeleton {
   name                     String                @unique
   type                     SkillType
   skillRank                Rank
-  avalibleForAll           Boolean               @default(true) // If false, this will be skill for ai and bosses
+  availableForAll           Boolean               @default(true) // If false, this will be skill for ai and bosses
   learnableSkill           Boolean               @default(true) // If this skill can be bought in the shop
   villageSkill             Boolean               @default(false) // If this skill can be bought learn only in the village
   villageBasis             Village?
