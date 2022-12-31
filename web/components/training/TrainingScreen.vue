@@ -3,7 +3,7 @@
 
 import { computed } from "@vue/reactivity";
 import { useTraining } from "#imports";
-import ICharacterPool from "../../../common/ICharacterPool";
+import CharacterPool from "../../../common/CharacterPool";
 import {
   GeneralStats,
   PoolExtendTraining,
@@ -16,7 +16,7 @@ import { TrainCommand } from "../../../common/form/TrainCommand";
 
 
 const props = defineProps<{
-  pool: ICharacterPool
+  pool: CharacterPool
 }>();
 
 const emit = defineEmits(["refresh"]);

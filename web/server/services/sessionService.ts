@@ -1,14 +1,11 @@
 import { H3Event, setCookie } from "h3";
 import { v4 as uuidv4 } from "uuid";
-import {
-  createSession,
-  getSessionByAuthToken,
-} from "~/server/repositories/sessionRepository";
+import { createSession, getSessionByAuthToken } from "~/server/repositories/sessionRepository";
 import { saninizeUserForFrontend } from "~/server/services/userService";
-import { IUser } from "../../../common/IUser";
+import { User } from "../../../common/User";
 import { Maybe } from "../../../common/utils/Maybe";
 
-export async function makeSession(user: IUser, event: H3Event): Promise<IUser> {
+export async function makeSession(user: User, event: H3Event): Promise<User> {
   const authToken = uuidv4().replaceAll("-", "");
   const session = await createSession({ authToken, userId: user.id });
 
@@ -26,7 +23,7 @@ export async function makeSession(user: IUser, event: H3Event): Promise<IUser> {
 
 export async function getUserBySessionToken(
   authToken: string
-): Promise<Maybe<IUser>> {
+): Promise<Maybe<User>> {
   try {
     const session = await getSessionByAuthToken(authToken);
     return saninizeUserForFrontend(session.user);

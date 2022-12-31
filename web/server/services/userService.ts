@@ -1,4 +1,4 @@
-import { IUser } from "../../../common/IUser";
+import { User } from "../../../common/User";
 import { getUserByEmail } from "../repositories/userRepository";
 
 export async function doesUserExist(email: string): Promise<boolean> {
@@ -8,8 +8,8 @@ export async function doesUserExist(email: string): Promise<boolean> {
 }
 
 export function saninizeUserForFrontend(
-  user: IUser | undefined
-): IUser | undefined {
+  user: User | undefined
+): User | undefined {
   if (!user) {
     return user;
   }

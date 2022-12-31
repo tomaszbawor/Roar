@@ -1,12 +1,6 @@
-import {
-  useCookie,
-  useFetch,
-  useRequestHeaders,
-  useRouter,
-  useState,
-} from "#app";
-import { ISession } from "../../common/ISession";
-import { IUser } from "../../common/IUser";
+import { useCookie, useFetch, useRequestHeaders, useRouter, useState } from "#app";
+import { Session } from "../../common/Session";
+import { User } from "../../common/User";
 
 export const userAuthCookie = () => useCookie("auth_token");
 
@@ -22,13 +16,13 @@ export async function registerWithEmail(
   confirmPassword: string
 ) {
   try {
-    const res = await $fetch<ISession>("/api/auth/register", {
+    const res = await $fetch<Session>("/api/auth/register", {
       method: "POST",
       body: {
         email,
         password,
-        confirmPassword,
-      },
+        confirmPassword
+      }
     });
 
     if (res) {
@@ -41,12 +35,12 @@ export async function registerWithEmail(
 }
 
 export async function loginWithEmail(email: string, password: string) {
-  const user = await $fetch<IUser>("/api/auth/login", {
+  const user = await $fetch<User>("/api/auth/login", {
     method: "POST",
     body: {
       email,
-      password,
-    },
+      password
+    }
   });
 
   if (user) {
@@ -55,13 +49,13 @@ export async function loginWithEmail(email: string, password: string) {
   }
 }
 
-export async function useUser(): Promise<IUser> {
+export async function useUser(): Promise<User> {
   const authCookie = userAuthCookie().value;
-  const user = useState<IUser>("user");
+  const user = useState<User>("user");
 
   if (authCookie && !user.value) {
     const { data } = await useFetch("/api/auth/getByAuthToken", {
-      headers: useRequestHeaders(["cookie"]) as Record<"cookie", string>, // make types happy
+      headers: useRequestHeaders(["cookie"]) as Record<"cookie", string> // make types happy
     });
 
     if (data.value) {

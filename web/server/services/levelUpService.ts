@@ -1,19 +1,19 @@
 import prisma from "~/server/database/client";
-import { CharacterRank, ICharacter } from "../../../common/ICharacter";
+import { Character, CharacterRank } from "../../../common/Character";
 import { maxExpForLevel } from "../../../common/engine/maxExpForLevel";
 import { Maybe } from "../../../common/utils/Maybe";
 import { characterBaseRegenRates } from "../../../common/engine/character/characterRegen";
 
 export const checkForLevelUp = async (
-  character: ICharacter
-): Promise<ICharacter> => {
-  const foundCharacter: Maybe<ICharacter> = await prisma.character.findUnique({
+  character: Character
+): Promise<Character> => {
+  const foundCharacter: Maybe<Character> = await prisma.character.findUnique({
     where: {
-      id: character.id,
+      id: character.id
     },
     include: {
-      characterPool: true,
-    },
+      characterPool: true
+    }
   });
 
   if (!foundCharacter) {
@@ -32,37 +32,37 @@ export const checkForLevelUp = async (
     const upgrades = getCapUpgradesOnLevelUp(foundCharacter);
     return await prisma.character.update({
       where: {
-        id: character.id,
+        id: character.id
       },
       data: {
         characterPool: {
           update: {
             experience: {
-              decrement: maxExpForLevel(foundCharacter.characterPool.level),
+              decrement: maxExpForLevel(foundCharacter.characterPool.level)
             },
             level: {
-              increment: 1,
+              increment: 1
             },
             maxStamina: {
-              increment: upgrades.maxStamina,
+              increment: upgrades.maxStamina
             },
             maxHealth: {
-              increment: upgrades.maxHealth,
+              increment: upgrades.maxHealth
             },
             maxChakra: {
-              increment: upgrades.maxChakra,
-            },
-          },
-        },
+              increment: upgrades.maxChakra
+            }
+          }
+        }
       },
       include: {
-        characterPool: true,
-      },
+        characterPool: true
+      }
     });
   }
 };
 
-const getCapUpgradesOnLevelUp = (character: ICharacter): CapUpgrades => {
+const getCapUpgradesOnLevelUp = (character: Character): CapUpgrades => {
   const minutesOfBaseRegenAfterLevelUp = 30;
   const upgrades: Record<CharacterRank, CapUpgrades> = {
     STUDENT: {
@@ -71,13 +71,13 @@ const getCapUpgradesOnLevelUp = (character: ICharacter): CapUpgrades => {
       maxStamina:
         characterBaseRegenRates.STUDENT * minutesOfBaseRegenAfterLevelUp,
       maxHealth:
-        characterBaseRegenRates.STUDENT * minutesOfBaseRegenAfterLevelUp,
+        characterBaseRegenRates.STUDENT * minutesOfBaseRegenAfterLevelUp
     },
     GENIN: {
       maxChakra: characterBaseRegenRates.GENIN * minutesOfBaseRegenAfterLevelUp,
       maxStamina:
         characterBaseRegenRates.GENIN * minutesOfBaseRegenAfterLevelUp,
-      maxHealth: characterBaseRegenRates.GENIN * minutesOfBaseRegenAfterLevelUp,
+      maxHealth: characterBaseRegenRates.GENIN * minutesOfBaseRegenAfterLevelUp
     },
     CHUNIN: {
       maxChakra:
@@ -85,14 +85,14 @@ const getCapUpgradesOnLevelUp = (character: ICharacter): CapUpgrades => {
       maxStamina:
         characterBaseRegenRates.CHUNIN * minutesOfBaseRegenAfterLevelUp,
       maxHealth:
-        characterBaseRegenRates.CHUNIN * minutesOfBaseRegenAfterLevelUp,
+        characterBaseRegenRates.CHUNIN * minutesOfBaseRegenAfterLevelUp
     },
     JONIN: {
       maxChakra: characterBaseRegenRates.JONIN * minutesOfBaseRegenAfterLevelUp,
       maxStamina:
         characterBaseRegenRates.JONIN * minutesOfBaseRegenAfterLevelUp,
-      maxHealth: characterBaseRegenRates.JONIN * minutesOfBaseRegenAfterLevelUp,
-    },
+      maxHealth: characterBaseRegenRates.JONIN * minutesOfBaseRegenAfterLevelUp
+    }
   };
 
   return upgrades[character.rank];

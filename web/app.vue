@@ -2,7 +2,7 @@
 import { useNuxtApp } from "#app";
 import { darkTheme, GlobalThemeOverrides } from "naive-ui";
 import { useColorMode } from "#imports";
-import { IUser } from "../common/IUser";
+import { User } from "../common/User";
 
 const nuxtApp = useNuxtApp();
 
@@ -18,7 +18,7 @@ const themeOverrides: GlobalThemeOverrides = {
 };
 
 
-const user: IUser = await useUser();
+const user: User = await useUser();
 useColorMode().preference = "dark";
 
 </script>

@@ -1,8 +1,7 @@
-import { CharacterRank } from "./ICharacter";
+import { CharacterRank } from "./Character";
 import { Village } from "./enums/Village";
 import { Maybe } from "./utils/Maybe";
 import { SkillElement } from "./enums/SkillElement";
-
 
 export interface OwnedSkill {
   skillSkeleton: SkillSkeleton;

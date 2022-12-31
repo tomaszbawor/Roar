@@ -10,7 +10,7 @@ import { useFetch } from "#app";
 import { StartArenaBattleCommand } from "~/server/services/battleService";
 
 import { useToast } from "vue-toastification";
-import ICharacterPool from "../../../common/ICharacterPool";
+import CharacterPool from "../../../common/CharacterPool";
 import { ArenaCharacter } from "../../../common/battle/ArenaCharacter";
 import { IBattle } from "../../../common/battle/IBattle";
 
@@ -18,13 +18,13 @@ definePageMeta({
   middleware: [auth, hasCharacter]
 });
 
-const characterPool = ref<ICharacterPool>(await getCharPool());
+const characterPool = ref<CharacterPool>(await getCharPool());
 
 const refresh = async () => {
   characterPool.value = await getCharPool();
 };
 
-async function getCharPool(): Promise<ICharacterPool> {
+async function getCharPool(): Promise<CharacterPool> {
   const char = await useCharacter();
   if (!char || !char.characterPool) {
     throw new Error("User should have character on that page");

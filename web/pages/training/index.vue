@@ -5,20 +5,20 @@ import auth from "~/middleware/auth";
 import hasCharacter from "~/middleware/hasCharacter";
 import PoolSidebar from "~/components/character/PoolSidebar.vue";
 import { Ref } from "vue";
-import ICharacterPool from "../../../common/ICharacterPool";
+import CharacterPool from "../../../common/CharacterPool";
 
 definePageMeta({
   middleware: [auth, hasCharacter]
 });
 
-const characterPool: Ref<ICharacterPool> = ref<ICharacterPool>(await getCharPool());
+const characterPool: Ref<CharacterPool> = ref<CharacterPool>(await getCharPool());
 
 const refresh = async () => {
   characterPool.value = await getCharPool();
 };
 
 
-async function getCharPool(): Promise<ICharacterPool> {
+async function getCharPool(): Promise<CharacterPool> {
   const char = await useCharacter();
   if (!char || !char.characterPool) {
     throw new Error("User should have character on that page");

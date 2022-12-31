@@ -1,4 +1,4 @@
-export default interface ICharacterPool {
+export default interface CharacterPool {
   level: number;
   experience: number;
   health: number;

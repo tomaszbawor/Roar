@@ -3,10 +3,10 @@ import { userLogout } from "#imports";
 import ProfileNavbarBadge from "~/components/layout/ProfileNavbarBadge.vue";
 import { useState } from "#app";
 import { Maybe } from "../../../common/utils/Maybe";
-import { IUser } from "../../../common/IUser";
+import { User } from "../../../common/User";
 
 
-const user = await useState<Maybe<IUser>>("user");
+const user = await useState<Maybe<User>>("user");
 
 const logout = async () => {
   await userLogout();

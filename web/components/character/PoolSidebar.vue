@@ -3,14 +3,14 @@
 import PoolProgressBar from "~/components/character/PoolProgressBar.vue";
 import RegenerationTimer from "~/components/character/RegenerationTimer.vue";
 import { useCharacter } from "~/composables/useCharacter";
-import ICharacterPool from "../../../common/ICharacterPool";
-import { ICharacter } from "../../../common/ICharacter";
+import CharacterPool from "../../../common/CharacterPool";
+import { Character } from "../../../common/Character";
 import { getRegenerationRateForCharacter } from "../../../common/engine/character/characterRegen";
 import { maxExpForLevel } from "../../../common/engine/maxExpForLevel";
 
 
 const properties = defineProps<{
-  pool: ICharacterPool
+  pool: CharacterPool
 }>();
 
 const emit = defineEmits(["refresh"]);
@@ -19,7 +19,7 @@ const refreshData = async () => {
   emit("refresh");
 };
 
-const character = await useCharacter() as ICharacter;
+const character = await useCharacter() as Character;
 
 const regenRate = getRegenerationRateForCharacter(character!);
 

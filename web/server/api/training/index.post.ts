@@ -4,14 +4,14 @@ import { getCharacterByUserId } from "~/server/repositories/characterRepository"
 import { trainSkills } from "~/server/services/trainingService";
 
 import { sendApiErrorOnFalseCondition, sendApiErrorOnNull } from "~/server/api/apiErrorsUtil";
-import { ICharacter } from "../../../../common/ICharacter";
+import { Character } from "../../../../common/Character";
 import { TrainCommand } from "../../../../common/form/TrainCommand";
-import ICharacterPool from "../../../../common/ICharacterPool";
+import CharacterPool from "../../../../common/CharacterPool";
 import { Maybe } from "../../../../common/utils/Maybe";
 import { TrainingCost, trainingCostPerUnit } from "../../../../common/engine/training/trainingTypes";
 
-export default defineEventHandler<ICharacter | null>(
-  async (event): Promise<ICharacter | null> => {
+export default defineEventHandler<Character | null>(
+  async (event): Promise<Character | null> => {
     const trainCommand = await readBody<TrainCommand>(event);
     const authToken = getCookie(event, "auth_token");
     if (!authToken) {
@@ -36,7 +36,7 @@ export default defineEventHandler<ICharacter | null>(
 );
 
 function isTrainRequestValid(
-  pool: Maybe<ICharacterPool>,
+  pool: Maybe<CharacterPool>,
   trainCommand: TrainCommand
 ): boolean {
   if (!pool) {

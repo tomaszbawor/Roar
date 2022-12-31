@@ -1,6 +1,6 @@
 import prisma from "~/server/database/client";
 import { getRegenerationRateForCharacter } from "../../../common/engine/character/characterRegen";
-import { ICharacter } from "../../../common/ICharacter";
+import { Character } from "../../../common/Character";
 
 export const refreshPools = async () => {
   const characterWithNotFullPool = await getCharactersToRegenerate();
@@ -15,26 +15,26 @@ export const refreshPools = async () => {
 
     await prisma.characterPool.update({
       where: {
-        characterId: character.id,
+        characterId: character.id
       },
       data: {
         health: updateOrMax(pool.health, pool.maxHealth, regenRate),
         stamina: updateOrMax(pool.stamina, pool.maxStamina, regenRate),
-        chakra: updateOrMax(pool.chakra, pool.maxChakra, regenRate),
-      },
+        chakra: updateOrMax(pool.chakra, pool.maxChakra, regenRate)
+      }
     });
   }
 };
 
-const getCharactersToRegenerate = async (): Promise<Array<ICharacter>> => {
+const getCharactersToRegenerate = async (): Promise<Array<Character>> => {
   //TODO: Use native query to select characters with pools that are not max
-  const allCharacters: Array<ICharacter> = await prisma.character.findMany({
+  const allCharacters: Array<Character> = await prisma.character.findMany({
     where: {
-      isInBattle: false,
+      isInBattle: false
     },
     include: {
-      characterPool: true,
-    },
+      characterPool: true
+    }
   });
 
   return allCharacters.filter((character) => {

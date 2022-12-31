@@ -4,7 +4,7 @@ import { createUser } from "~/server/repositories/userRepository";
 import { makeSession } from "~/server/services/sessionService";
 import { hashPassword } from "~/server/services/passwordHasher";
 import { sendApiErrorOnFalseCondition } from "~/server/api/apiErrorsUtil";
-import { CreateUserRequest } from "../../../../common/IUser";
+import { CreateUserRequest } from "../../../../common/User";
 
 export default eventHandler(async (event) => {
   const body = await readBody(event);

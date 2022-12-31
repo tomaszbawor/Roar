@@ -1,5 +1,5 @@
 import { Maybe } from "../utils/Maybe";
-import { CharacterId, ICharacter } from "../ICharacter";
+import { Character, CharacterId } from "../Character";
 import { ArenaCharacter, ArenaCharacterId } from "./ArenaCharacter";
 
 export type BattleId = string;
@@ -8,7 +8,7 @@ export interface IBattle {
   id: BattleId;
   attackerId: CharacterId;
   defenderId: Maybe<CharacterId>;
-  userDefender?: ICharacter;
+  userDefender?: Character;
   aiDefender?: Maybe<ArenaCharacter>;
   defenderArenaCharacterId: Maybe<ArenaCharacterId>;
   state: BattleState;

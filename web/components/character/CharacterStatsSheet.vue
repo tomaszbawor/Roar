@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 
-import { ICharacter } from "../../../common/ICharacter";
+import { Character } from "../../../common/Character";
 
-const props = defineProps<{ character: ICharacter }>();
+const props = defineProps<{ character: Character }>();
 const character = props.character;
 
 

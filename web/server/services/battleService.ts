@@ -1,12 +1,12 @@
 import prisma from "~/server/database/client";
 import { ArenaCharacter } from "../../../common/battle/ArenaCharacter";
-import { CharacterId, ICharacter } from "../../../common/ICharacter";
+import { Character, CharacterId } from "../../../common/Character";
 import { IBattle } from "../../../common/battle/IBattle";
 import { Maybe } from "../../../common/utils/Maybe";
 
 export const createArenaBattle = async (
   aiCharacter: ArenaCharacter,
-  character: ICharacter
+  character: Character
 ): Promise<Maybe<IBattle>> => {
   return await prisma.$transaction(async () => {
     const battle = await createBattle(character, aiCharacter);
@@ -15,7 +15,7 @@ export const createArenaBattle = async (
   });
 };
 
-async function setCharacterAsInBattle(character: ICharacter, battle: IBattle) {
+async function setCharacterAsInBattle(character: Character, battle: IBattle) {
   if (!character.characterPool) {
     throw new Error("Character pool not found");
   }
@@ -31,7 +31,7 @@ async function setCharacterAsInBattle(character: ICharacter, battle: IBattle) {
 }
 
 async function createBattle(
-  character: ICharacter,
+  character: Character,
   aiCharacter: ArenaCharacter
 ) {
   if (!character.characterPool) {

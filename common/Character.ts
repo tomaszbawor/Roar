@@ -2,12 +2,12 @@ import { OwnedSkill } from "./Skills";
 import { Village } from "./enums/Village";
 import { BattleId } from "./battle/IBattle";
 import { Maybe } from "./utils/Maybe";
-import ICharacterPool from "./ICharacterPool";
+import CharacterPool from "./CharacterPool";
 
 
 export type CharacterId = string;
 
-export interface ICharacter {
+export interface Character {
   id: CharacterId;
   userId: string;
   name: string;
@@ -27,10 +27,10 @@ export interface ICharacter {
   endurance: number;
   isInBattle: boolean;
   currentBattleId: Maybe<BattleId>;
-  characterPool: Maybe<ICharacterPool>;
+  characterPool: Maybe<CharacterPool>;
 }
 
-export type ICharacterWithSkills = ICharacter & {
+export type ICharacterWithSkills = Character & {
   ownedSkills: OwnedSkill[];
 };
 

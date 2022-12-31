@@ -1,6 +1,6 @@
 import prisma from "~/server/database/client";
 import { SkillType } from "../../../common/skills/SkillType";
-import { CharacterRank } from "../../../common/ICharacter";
+import { CharacterRank } from "../../../common/Character";
 import { Maybe } from "../../../common/utils/Maybe";
 import { SkillElement } from "../../../common/enums/SkillElement";
 import { Village } from "../../../common/enums/Village";
@@ -31,8 +31,8 @@ export const createBaseSkill = async (
       endurancePercentRatio: createCommand.endurancePercentRatio,
       strengthPercentRatio: createCommand.strengthPercentRatio,
       intelligencePercentRatio: createCommand.intelligencePercentRatio,
-      villageBasis: createCommand.village,
-    },
+      villageBasis: createCommand.village
+    }
   });
 };
 

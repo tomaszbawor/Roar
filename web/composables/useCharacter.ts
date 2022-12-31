@@ -1,12 +1,12 @@
 import { useUser } from "~/composables/useAuth";
-import { CreateCharacterCommand, ICharacter } from "../../common/ICharacter";
+import { Character, CreateCharacterCommand } from "../../common/Character";
 import { Maybe } from "../../common/utils/Maybe";
 
-export const useCharacter = async (): Promise<Maybe<ICharacter>> => {
+export const useCharacter = async (): Promise<Maybe<Character>> => {
   const user = await useUser();
 
   try {
-    const character = await $fetch<Maybe<ICharacter>>("/api/character", {
+    const character = await $fetch<Maybe<Character>>("/api/character", {
       method: "GET",
       query: {
         userId: user.id
@@ -21,8 +21,8 @@ export const useCharacter = async (): Promise<Maybe<ICharacter>> => {
 
 export const createCharacter = async (
   command: Omit<CreateCharacterCommand, "userId">
-): Promise<ICharacter> => {
-  const character = await $fetch<ICharacter>("/api/character", {
+): Promise<Character> => {
+  const character = await $fetch<Character>("/api/character", {
     method: "POST",
     body: command
   });

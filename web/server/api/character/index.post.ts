@@ -2,10 +2,10 @@ import { getCookie, readBody } from "h3";
 import { getUserBySessionToken } from "~/server/services/sessionService";
 import { createCharacter } from "~/server/repositories/characterRepository";
 import { sendApiErrorOnNull } from "~/server/api/apiErrorsUtil";
-import { CreateCharacterCommand, ICharacter } from "../../../../common/ICharacter";
+import { Character, CreateCharacterCommand } from "../../../../common/Character";
 import { Maybe } from "../../../../common/utils/Maybe";
 
-export default defineEventHandler<Maybe<ICharacter>>(async (event) => {
+export default defineEventHandler<Maybe<Character>>(async (event) => {
   const body = await readBody(event);
 
   const authToken = getCookie(event, "auth_token");

@@ -4,15 +4,15 @@ import Header from "~/components/typography/Header.vue";
 import DebugInfo from "~/components/util/DebugInfo.vue";
 import BattleSkills from "~/components/battle /BattleSkills.vue";
 import { IBattle } from "../../../common/battle/IBattle";
-import { ICharacter } from "../../../common/ICharacter";
-import ICharacterPool from "../../../common/ICharacterPool";
+import { Character } from "../../../common/Character";
+import CharacterPool from "../../../common/CharacterPool";
 
 const battleId = useRoute().params.id;
 const battle = await $fetch<IBattle>(`/api/battle?battleId=${battleId}`, {
   method: "GET"
 });
-const character = await useCharacter() as ICharacter;
-const pool = character.characterPool as ICharacterPool;
+const character = await useCharacter() as Character;
+const pool = character.characterPool as CharacterPool;
 
 const isAttacker = character.id === battle.attackerId;
 const isDefender = character.id === battle.defenderId;

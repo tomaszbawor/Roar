@@ -2,7 +2,7 @@
 import { createCharacter } from "~/composables/useCharacter";
 import { useRouter } from "#app";
 import { reactive } from "@vue/runtime-core";
-import { CreateCharacterCommand } from "../../../common/ICharacter";
+import { CreateCharacterCommand } from "../../../common/Character";
 
 const creationForm = reactive<Omit<CreateCharacterCommand, "userId">>({
   name: "",

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import BattleSkillButton from "~/components/battle /BattleSkillButton.vue";
-import { CharacterId } from "../../../common/ICharacter";
+import { CharacterId } from "../../../common/Character";
 
 const props = defineProps<{
   characterId: CharacterId

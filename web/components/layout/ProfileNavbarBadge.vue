@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { useState } from "#app";
-import { IUser } from "../../../common/IUser";
+import { User } from "../../../common/User";
 
-const user = useState<IUser>("user");
+const user = useState<User>("user");
 </script>
 <template>
   <div class="dark:text-white">

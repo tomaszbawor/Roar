@@ -1,7 +1,7 @@
-import { CharacterRank, ICharacter } from "../../ICharacter";
+import { Character, CharacterRank } from "../../Character";
 
 export const getRegenerationRateForCharacter = (
-  character: ICharacter
+  character: Character
 ): number => {
   return characterBaseRegenRates[character.rank];
 };
