@@ -2,7 +2,10 @@ import { getCookie, readBody } from "h3";
 import { getUserBySessionToken } from "~/server/services/sessionService";
 import { createCharacter } from "~/server/repositories/characterRepository";
 import { sendApiErrorOnNull } from "~/server/api/apiErrorsUtil";
-import { Character, CreateCharacterCommand } from "../../../../common/Character";
+import {
+  Character,
+  CreateCharacterCommand,
+} from "../../../../common/Character";
 import { Maybe } from "../../../../common/utils/Maybe";
 
 export default defineEventHandler<Maybe<Character>>(async (event) => {
@@ -24,7 +27,7 @@ export default defineEventHandler<Maybe<Character>>(async (event) => {
   const createCharacterCommand: CreateCharacterCommand = {
     userId: user.id,
     name: body.name,
-    village: body.village
+    village: body.village,
   };
 
   return await createCharacter(createCharacterCommand);

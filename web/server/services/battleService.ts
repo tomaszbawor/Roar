@@ -21,19 +21,16 @@ async function setCharacterAsInBattle(character: Character, battle: IBattle) {
   }
   return prisma.character.update({
     where: {
-      id: character.id
+      id: character.id,
     },
     data: {
       isInBattle: true,
-      currentBattleId: battle.id
-    }
+      currentBattleId: battle.id,
+    },
   });
 }
 
-async function createBattle(
-  character: Character,
-  aiCharacter: ArenaCharacter
-) {
+async function createBattle(character: Character, aiCharacter: ArenaCharacter) {
   if (!character.characterPool) {
     throw new Error("Character pool not found");
   }
@@ -46,11 +43,11 @@ async function createBattle(
       attackerHealth: character.characterPool.health,
       attackerMaxHealth: character.characterPool.maxHealth,
       defenderHealth: aiCharacter.health,
-      defenderMaxHealth: aiCharacter.health
+      defenderMaxHealth: aiCharacter.health,
     },
     include: {
-      battleLog: true
-    }
+      battleLog: true,
+    },
   });
 }
 

@@ -5,7 +5,7 @@ import {
   TrainingCost,
   trainingCostPerUnit,
   TrainingIncrements,
-  TrainingSkillOptions
+  TrainingSkillOptions,
 } from "../../../common/engine/training/trainingTypes";
 import { Character } from "../../../common/Character";
 import prisma from "../database/client";
@@ -27,7 +27,7 @@ const getStatChangeAfterTraining = (tc: TrainCommand): TrainingIncrements => {
     maxHealth: 0,
     maxStamina: 0,
     speed: 0,
-    strength: 0
+    strength: 0,
   };
 
   switch (tc.trainType) {
@@ -104,7 +104,7 @@ export const trainSkills = async (
 
   const trainCost: TrainingCost = {
     chakra: unitTrainCost.chakra * tc.value,
-    stamina: unitTrainCost.stamina * tc.value
+    stamina: unitTrainCost.stamina * tc.value,
   };
 
   const skillIncrement = getStatChangeAfterTraining(tc);
@@ -112,68 +112,68 @@ export const trainSkills = async (
 
   const trainedCharacter = await prisma.character.update({
     where: {
-      id: character.id
+      id: character.id,
     },
     data: {
       characterPool: {
         update: {
           experience: {
-            increment: experienceGained
+            increment: experienceGained,
           },
           chakra: {
-            decrement: trainCost.chakra
+            decrement: trainCost.chakra,
           },
           stamina: {
-            decrement: trainCost.stamina
+            decrement: trainCost.stamina,
           },
           maxChakra: {
-            increment: skillIncrement.maxChakra
+            increment: skillIncrement.maxChakra,
           },
           maxStamina: {
-            increment: skillIncrement.maxStamina
-          }
-        }
+            increment: skillIncrement.maxStamina,
+          },
+        },
       },
       offensiveNinjutsu: {
-        increment: skillIncrement.offensiveNinjutsu
+        increment: skillIncrement.offensiveNinjutsu,
       },
       defensiveNinjutsu: {
-        increment: skillIncrement.defensiveNinjutsu
+        increment: skillIncrement.defensiveNinjutsu,
       },
       offensiveTaijutsu: {
-        increment: skillIncrement.offensiveTaijutsu
+        increment: skillIncrement.offensiveTaijutsu,
       },
       defensiveTaijutsu: {
-        increment: skillIncrement.defensiveTaijutsu
+        increment: skillIncrement.defensiveTaijutsu,
       },
       offensiveGenjutsu: {
-        increment: skillIncrement.offensiveGenjutsu
+        increment: skillIncrement.offensiveGenjutsu,
       },
       defensiveGenjutsu: {
-        increment: skillIncrement.defensiveGenjutsu
+        increment: skillIncrement.defensiveGenjutsu,
       },
       offensiveBukijutsu: {
-        increment: skillIncrement.offensiveBukijutsu
+        increment: skillIncrement.offensiveBukijutsu,
       },
       defensiveBukijutsu: {
-        increment: skillIncrement.defensiveBukijutsu
+        increment: skillIncrement.defensiveBukijutsu,
       },
       strength: {
-        increment: skillIncrement.strength
+        increment: skillIncrement.strength,
       },
       speed: {
-        increment: skillIncrement.speed
+        increment: skillIncrement.speed,
       },
       intelligence: {
-        increment: skillIncrement.intelligence
+        increment: skillIncrement.intelligence,
       },
       endurance: {
-        increment: skillIncrement.endurance
-      }
+        increment: skillIncrement.endurance,
+      },
     },
     include: {
-      characterPool: true
-    }
+      characterPool: true,
+    },
   });
   return checkForLevelUp(trainedCharacter);
 };

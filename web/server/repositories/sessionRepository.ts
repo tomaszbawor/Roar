@@ -11,8 +11,8 @@ export async function createSession(data: Session): Promise<Session> {
   return await prisma.session.create({
     data: {
       userId: data.userId,
-      authToken: data.authToken
-    }
+      authToken: data.authToken,
+    },
   });
 }
 
@@ -30,8 +30,8 @@ async function getUserByAuthToken(authToken: string): Promise<Maybe<User>> {
   return prisma.session
     .findUnique({
       where: {
-        authToken: authToken
-      }
+        authToken: authToken,
+      },
     })
     .user();
 }

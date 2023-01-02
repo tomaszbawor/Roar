@@ -3,7 +3,6 @@ import { getCharacterByUserId } from "~/server/repositories/characterRepository"
 import { Maybe } from "../../../../common/utils/Maybe";
 import { Character } from "../../../../common/Character";
 
-
 export default defineEventHandler<Maybe<Character>>(async (event) => {
   const query = await getQuery(event);
   const userId = query.userId as string;

@@ -1,11 +1,10 @@
-import { Module } from "@nestjs/common";
-import { ScheduleModule } from "@nestjs/schedule";
-import { RegenCronService } from "./regen-cron.service";
-import { PrismaModule } from "../prisma/prisma.module";
+import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
+import { RegenCronService } from './regen-cron.service';
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
   imports: [PrismaModule, ScheduleModule.forRoot()],
-  providers: [RegenCronService]
+  providers: [RegenCronService],
 })
-export class HealthRegenModule {
-}
+export class HealthRegenModule {}

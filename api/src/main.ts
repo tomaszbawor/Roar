@@ -7,6 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(helmet());
+  app.setGlobalPrefix('api');
 
   // setup swagger
   const config = new DocumentBuilder()

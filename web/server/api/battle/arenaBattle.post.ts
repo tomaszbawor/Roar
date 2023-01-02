@@ -1,9 +1,16 @@
 import { eventHandler } from "h3";
-import { createArenaBattle, StartArenaBattleCommand } from "~/server/services/battleService";
+import {
+  createArenaBattle,
+  StartArenaBattleCommand,
+} from "~/server/services/battleService";
 import { getCharacterById } from "~/server/repositories/characterRepository";
 import { getArenaCharacterById } from "~/server/repositories/arenaCharacterRepository";
 
-import { sendApiError, sendApiErrorOnFalseCondition, sendApiErrorOnNull } from "~/server/api/apiErrorsUtil";
+import {
+  sendApiError,
+  sendApiErrorOnFalseCondition,
+  sendApiErrorOnNull,
+} from "~/server/api/apiErrorsUtil";
 import { IBattle } from "../../../../common/battle/IBattle";
 import { Maybe } from "../../../../common/utils/Maybe";
 

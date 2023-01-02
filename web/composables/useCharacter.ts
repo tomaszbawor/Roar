@@ -9,8 +9,8 @@ export const useCharacter = async (): Promise<Maybe<Character>> => {
     const character = await $fetch<Maybe<Character>>("/api/character", {
       method: "GET",
       query: {
-        userId: user.id
-      }
+        userId: user.id,
+      },
     });
 
     return character;
@@ -24,7 +24,7 @@ export const createCharacter = async (
 ): Promise<Character> => {
   const character = await $fetch<Character>("/api/character", {
     method: "POST",
-    body: command
+    body: command,
   });
 
   return character;

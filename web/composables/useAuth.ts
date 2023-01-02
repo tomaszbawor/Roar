@@ -1,8 +1,14 @@
-import { useCookie, useFetch, useRequestHeaders, useRouter, useState } from "#app";
+import {
+  useCookie,
+  useFetch,
+  useRequestHeaders,
+  useRouter,
+  useState,
+} from "#app";
 import { Session } from "../../common/Session";
 import { User } from "../../common/User";
 
-export const userAuthCookie = () => useCookie("auth_token");
+export const userAuthCookie = () => useCookie("connect.sid");
 
 export async function userLogout() {
   await useFetch("/api/auth/logout");
@@ -21,8 +27,8 @@ export async function registerWithEmail(
       body: {
         email,
         password,
-        confirmPassword
-      }
+        confirmPassword,
+      },
     });
 
     if (res) {
@@ -39,8 +45,8 @@ export async function loginWithEmail(email: string, password: string) {
     method: "POST",
     body: {
       email,
-      password
-    }
+      password,
+    },
   });
 
   if (user) {
@@ -55,7 +61,7 @@ export async function useUser(): Promise<User> {
 
   if (authCookie && !user.value) {
     const { data } = await useFetch("/api/auth/getByAuthToken", {
-      headers: useRequestHeaders(["cookie"]) as Record<"cookie", string> // make types happy
+      headers: useRequestHeaders(["cookie"]) as Record<"cookie", string>, // make types happy
     });
 
     if (data.value) {

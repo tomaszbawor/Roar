@@ -41,7 +41,7 @@ export class AuthController {
   @UseGuards(LocalGuard)
   @Post('login')
   loginUser(@Req() req, @Body() loginUserDto: LoginUserDto): string {
-    return req.session;
+    return req.session.passport.user;
   }
 
   @UseGuards(LoggedInGuard)

@@ -6,11 +6,11 @@ export default defineEventHandler<Array<OwnedSkill>>(async (event) => {
 
   const skills: Array<OwnedSkill> = await prisma.ownedSkill.findMany({
     where: {
-      characterId: characterId
+      characterId: characterId,
     },
     include: {
-      skillSkeleton: true
-    }
+      skillSkeleton: true,
+    },
   });
 
   return skills;
