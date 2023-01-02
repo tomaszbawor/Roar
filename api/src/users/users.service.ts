@@ -8,11 +8,17 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async findByEmail(email: string): Promise<Maybe<User>> {
-    return this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: {
         email,
       },
     });
+
+    if (!user) {
+      return null;
+    }
+
+    return { password: '<hidden>', ...user };
   }
 
   create(email: string, passwordHash: string): Promise<User> {
