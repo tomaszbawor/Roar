@@ -63,16 +63,25 @@ var client_1 = require("@prisma/client");
 var PrismaService = /** @class */ (function (_super) {
     __extends(PrismaService, _super);
     function PrismaService() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        return _super.call(this) || this;
     }
     PrismaService.prototype.onModuleInit = function () {
-        this.$connect();
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.$connect()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     PrismaService.prototype.enableShutdownHooks = function (app) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                this.$on('beforeExit', function () { return __awaiter(_this, void 0, void 0, function () {
+                this.$on("beforeExit", function () { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0: return [4 /*yield*/, app.close()];

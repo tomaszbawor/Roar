@@ -38,7 +38,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var core_1 = require("@nestjs/core");
 var swagger_1 = require("@nestjs/swagger");
-var document_builder_1 = require("@nestjs/swagger/dist/document-builder");
 var app_module_1 = require("./app.module");
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function () {
@@ -48,7 +47,7 @@ function bootstrap() {
                 case 0: return [4 /*yield*/, core_1.NestFactory.create(app_module_1.AppModule)];
                 case 1:
                     app = _a.sent();
-                    config = new document_builder_1.DocumentBuilder()
+                    config = new swagger_1.DocumentBuilder()
                         .setTitle("Roar Api")
                         .setDescription("Api for Roar application")
                         .setVersion("0.0.1")

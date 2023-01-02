@@ -1,18 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { User } from "@common/User";
-import { PrismaService } from "../infrastructure/prisma/prisma.service";
-import { Maybe } from "@common/utils/Maybe";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {
-  }
+  constructor(private prisma: PrismaService) {}
 
-  async findByEmail(email: string): Promise<Maybe<User>> {
+  async findByEmail(email: string): Promise<any> {
     return this.prisma.user.findUnique({
       where: {
-        email: email
-      }
+        email,
+      },
     });
   }
 }
