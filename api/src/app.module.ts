@@ -4,11 +4,19 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthRegenModule } from './health-regen/health-regen.module';
+import { CharactersModule } from './characters/characters.module';
+import { TrainingModule } from './training/training.module';
 import * as session from 'express-session';
 import * as passport from 'passport';
 
 @Module({
-  imports: [PrismaModule, AuthModule, HealthRegenModule],
+  imports: [
+    PrismaModule,
+    AuthModule,
+    HealthRegenModule,
+    CharactersModule,
+    TrainingModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -1,20 +1,13 @@
 import { getCookie } from "h3";
-import { getUserBySessionToken } from "~/server/services/sessionService";
 import { getCharacterByUserId } from "~/server/repositories/characterRepository";
 import { trainSkills } from "~/server/services/trainingService";
 
-import {
-  sendApiErrorOnFalseCondition,
-  sendApiErrorOnNull,
-} from "~/server/api/apiErrorsUtil";
+import { sendApiErrorOnFalseCondition, sendApiErrorOnNull } from "~/server/api/apiErrorsUtil";
 import { Character } from "../../../../common/Character";
 import { TrainCommand } from "../../../../common/form/TrainCommand";
 import CharacterPool from "../../../../common/CharacterPool";
 import { Maybe } from "../../../../common/utils/Maybe";
-import {
-  TrainingCost,
-  trainingCostPerUnit,
-} from "../../../../common/engine/training/trainingTypes";
+import { TrainingCost, trainingCostPerUnit } from "../../../../common/engine/training/trainingTypes";
 
 export default defineEventHandler<Character | null>(
   async (event): Promise<Character | null> => {
@@ -23,7 +16,6 @@ export default defineEventHandler<Character | null>(
     if (!authToken) {
       return null;
     }
-    const user = await getUserBySessionToken(authToken);
 
     sendApiErrorOnNull(user, event, 400, "User for session not found");
     const character = await getCharacterByUserId(user.id);
@@ -51,7 +43,7 @@ function isTrainRequestValid(
   const unitTrainingCost = trainingCostPerUnit[trainCommand.trainType];
   const totalCost: TrainingCost = {
     chakra: unitTrainingCost.chakra * trainCommand.value,
-    stamina: unitTrainingCost.stamina * trainCommand.value,
+    stamina: unitTrainingCost.stamina * trainCommand.value
   };
 
   return pool.stamina >= totalCost.stamina && pool.chakra >= totalCost.chakra;
