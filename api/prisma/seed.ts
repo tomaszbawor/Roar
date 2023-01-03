@@ -1,10 +1,14 @@
-// Imports of the services needs to be relative because of the ts-node configuration
-// import { createBaseSkill } from "../../services/skillSkeletonService";
-import prisma from "../client";
-import { hashPassword } from "../../../server/services/passwordHasher";
-import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
+import { PrismaClient } from "@prisma/client";
+import * as bcrypt from "bcrypt";
+import { SkillType } from "@common/Skills";
+import { CharacterRank } from "@common/Character";
+import { Maybe } from "@common/utils/Maybe";
+import { SkillElement } from "@common/enums/SkillElement";
+import { Village } from "@common/enums/Village";
 
 (async () => {
+  const prisma = new PrismaClient();
+
   async function seed() {
     // Create basic skill for all users
     const basicSkill = await createSkill({
@@ -26,7 +30,7 @@ import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
       strengthPercentRatio: 25,
       endurancePercentRatio: 25,
       element: null,
-      village: null,
+      village: null
     });
     // Create Test users
     await createAdmin(basicSkill.id);
@@ -41,8 +45,8 @@ import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
         email: "admin@admin.com",
         password: await hashPassword("admin"),
         role: "ADMIN",
-        name: "RoarAdmin",
-      },
+        name: "RoarAdmin"
+      }
     });
 
     const char = await prisma.character.create({
@@ -52,16 +56,16 @@ import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
         village: "MIST",
         ownedSkills: {
           create: {
-            skillSkeletonId: skillId,
-          },
-        },
-      },
+            skillSkeletonId: skillId
+          }
+        }
+      }
     });
 
     await prisma.characterPool.create({
       data: {
-        characterId: char.id,
-      },
+        characterId: char.id
+      }
     });
   };
   const createMod = async (skillId: string) => {
@@ -70,8 +74,8 @@ import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
         email: "mod@mod.com",
         password: await hashPassword("mod"),
         role: "MOD",
-        name: "RoarModerator",
-      },
+        name: "RoarModerator"
+      }
     });
 
     const char = await prisma.character.create({
@@ -81,16 +85,16 @@ import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
         village: "MIST",
         ownedSkills: {
           create: {
-            skillSkeletonId: skillId,
-          },
-        },
-      },
+            skillSkeletonId: skillId
+          }
+        }
+      }
     });
 
     await prisma.characterPool.create({
       data: {
-        characterId: char.id,
-      },
+        characterId: char.id
+      }
     });
   };
   const createUser = async (skillId: string) => {
@@ -99,8 +103,8 @@ import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
         email: "user@user.com",
         password: await hashPassword("user"),
         role: "MOD",
-        name: "RoarUser",
-      },
+        name: "RoarUser"
+      }
     });
 
     const char = await prisma.character.create({
@@ -110,16 +114,16 @@ import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
         village: "MIST",
         ownedSkills: {
           create: {
-            skillSkeletonId: skillId,
-          },
-        },
-      },
+            skillSkeletonId: skillId
+          }
+        }
+      }
     });
 
     await prisma.characterPool.create({
       data: {
-        characterId: char.id,
-      },
+        characterId: char.id
+      }
     });
   };
 
@@ -129,10 +133,10 @@ import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
         name: "Training Dummy",
         skills: {
           create: {
-            skillSkeletonId: skillId,
-          },
-        },
-      },
+            skillSkeletonId: skillId
+          }
+        }
+      }
     });
     await prisma.arenaCharacter.create({
       data: {
@@ -149,8 +153,8 @@ import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
         offensiveGenjutsu: 10000,
         defensiveGenjutsu: 10000,
         offensiveBukijutsu: 10000,
-        defensiveBukijutsu: 10000,
-      },
+        defensiveBukijutsu: 10000
+      }
     });
   };
 
@@ -174,9 +178,13 @@ import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
         endurancePercentRatio: createCommand.endurancePercentRatio,
         strengthPercentRatio: createCommand.strengthPercentRatio,
         intelligencePercentRatio: createCommand.intelligencePercentRatio,
-        villageBasis: createCommand.village,
-      },
+        villageBasis: createCommand.village
+      }
     });
+  };
+
+  const hashPassword = (password: string): Promise<string> => {
+    return bcrypt.hash(password, 10);
   };
 
   try {
@@ -188,3 +196,26 @@ import { CreateBaseSkillCommand } from "~/server/services/skillSkeletonService";
     process.exit(1);
   }
 })();
+
+export interface CreateBaseSkillCommand {
+  name: string;
+  description: string;
+  skillType: SkillType;
+  skillRank: CharacterRank;
+  staminaCost: number;
+  chakraCost: number;
+  cooldown: number;
+  battleLogAction: string;
+  basePower: number; // default 1
+  genjutsuPercentRatio: number;
+  taijutsuPercentRatio: number;
+  ninjutsuPercentRatio: number;
+  bukijutsuPercentRatio: number;
+  speedPercentRatio: number;
+  intelligencePercentRatio: number;
+  strengthPercentRatio: number;
+  endurancePercentRatio: number;
+  element: Maybe<SkillElement>; // default "NONE"
+  village: Maybe<Village>; // default "NONE"
+}
+

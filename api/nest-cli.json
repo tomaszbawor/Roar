@@ -3,5 +3,10 @@
   "collection": "@nestjs/schematics",
   "root": ".",
   "sourceRoot": "./src",
-  "entryFile": "api/src/main"
+  "entryFile": "api/src/main",
+  "compilerOptions": {
+    "plugins": [
+      "@nestjs/swagger"
+    ]
+  }
 }
