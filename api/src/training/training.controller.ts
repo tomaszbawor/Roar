@@ -18,6 +18,7 @@ export class TrainingController {
   @Post()
   @UseGuards(LoggedInGuard)
   async train(@Req() req, @Body() body: PostTrainingDto) {
-    await this.trainingService.train(req.user, body);
+    console.log(req.user);
+    await this.trainingService.train(req.user.id, body);
   }
 }
