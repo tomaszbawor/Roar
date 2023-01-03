@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Maybe } from '@common/utils/Maybe';
-import { User } from '@common/User';
+import { User, UserId } from '@common/User';
+import { CharacterId } from '@common/Character';
 
 @Injectable()
 export class UsersService {
@@ -19,6 +20,19 @@ export class UsersService {
     }
 
     return { password: '<hidden>', ...user };
+  }
+
+  async findCharacterIdForUser(userId: UserId): Promise<CharacterId> {
+    const { id } = await this.prisma.character.findUnique({
+      where: {
+        userId: userId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return id;
   }
 
   create(email: string, passwordHash: string): Promise<User> {

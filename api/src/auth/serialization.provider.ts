@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
-import { User } from '@common/User';
 import { UsersService } from '../users/users.service';
+import { CharacterId } from '@common/Character';
+import { UserId } from '@common/User';
 
 export interface UserSessionData {
-  id: string;
+  id: UserId;
   email: string;
   role: string;
+
+  characterId: CharacterId;
 }
 
 @Injectable()
@@ -15,15 +18,20 @@ export class AuthSerializer extends PassportSerializer {
     super();
   }
 
-  serializeUser(user: User, done: (err: Error, user: UserSessionData) => void) {
+  serializeUser(
+    user: UserSessionData,
+    done: (err: Error, user: UserSessionData) => void,
+  ) {
     done(null, user);
   }
 
   async deserializeUser(
-    payload: { email: string; role: string },
-    done: (err: Error, user: Omit<User, 'password'>) => void,
+    payload: UserSessionData,
+    done: (err: Error, user: Omit<UserSessionData, 'password'>) => void,
   ) {
     const user = await this.userService.findByEmail(payload.email);
-    done(null, user);
+    const characterId: CharacterId =
+      await this.userService.findCharacterIdForUser(user.id);
+    done(null, { ...user, characterId });
   }
 }

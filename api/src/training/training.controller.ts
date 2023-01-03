@@ -1,8 +1,8 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { TrainingService } from './training.service';
-import { LoggedInGuard } from '../logged-in.guard';
 import { TrainingType } from '@common/engine/training/trainingTypes';
 import { ApiProperty } from '@nestjs/swagger';
+import { LoggedInGuard } from '../security/logged-in.guard';
 
 export class PostTrainingDto {
   @ApiProperty()
@@ -18,7 +18,6 @@ export class TrainingController {
   @Post()
   @UseGuards(LoggedInGuard)
   async train(@Req() req, @Body() body: PostTrainingDto) {
-    console.log(req.user);
     await this.trainingService.train(req.user.id, body);
   }
 }

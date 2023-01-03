@@ -3,8 +3,8 @@ import { Maybe } from "../../common/utils/Maybe";
 
 export const useCharacter = async (): Promise<Maybe<Character>> => {
   try {
-    const character = await $fetch<Maybe<Character>>("/api/characters/mine", {
-      method: "GET"
+    const character = await $fetch<Maybe<Character>>("/api/characters/me", {
+      method: "GET",
     });
     return character;
   } catch (e) {
@@ -17,7 +17,7 @@ export const createCharacter = async (
 ): Promise<Character> => {
   const character = await $fetch<Character>("/api/character", {
     method: "POST",
-    body: command
+    body: command,
   });
 
   return character;

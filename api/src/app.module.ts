@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { HealthRegenModule } from './health-regen/health-regen.module';
 import { CharactersModule } from './characters/characters.module';
 import { TrainingModule } from './training/training.module';
+import { BattleModule } from './battle/battle.module';
 import * as session from 'express-session';
 import * as passport from 'passport';
 
@@ -13,6 +14,7 @@ import * as passport from 'passport';
     PrismaModule,
     AuthModule,
     HealthRegenModule,
+    BattleModule,
     CharactersModule,
     TrainingModule,
   ],

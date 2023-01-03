@@ -6,9 +6,10 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { Character } from '@common/Character';
+import { Character, CharacterId } from '@common/Character';
 import { CharactersService } from './characters.service';
-import { LoggedInGuard } from '../logged-in.guard';
+import { OwnedSkill } from '@common/Skills';
+import { LoggedInGuard } from '../security/logged-in.guard';
 
 @Controller('characters')
 export class CharactersController {
@@ -16,14 +17,21 @@ export class CharactersController {
 
   constructor(private readonly charactersService: CharactersService) {}
 
-  @Get('/mine')
+  @Get('/me')
   @UseGuards(LoggedInGuard)
   async getCurrentCharacter(@Req() req): Promise<Character> {
-    const userId: string = req.session.passport.user.id;
+    const userId: string = req.user.id;
     const maybeChar = this.charactersService.getByUserId(userId);
     if (!maybeChar) {
       throw new NotFoundException('No character found for user');
     }
     return maybeChar;
+  }
+
+  @Get('/me/skills')
+  @UseGuards(LoggedInGuard)
+  async getMineSkills(@Req() req): Promise<Array<OwnedSkill>> {
+    const characterId: CharacterId = req.user.characterId;
+    return await this.charactersService.getSkillsForCharacterId(characterId);
   }
 }

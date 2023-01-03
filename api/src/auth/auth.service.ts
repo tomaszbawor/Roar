@@ -13,7 +13,10 @@ import { User } from '@common/User';
 export class AuthService {
   constructor(private usersService: UsersService) {}
 
-  async validateUser(userEmail: string, plainPassword: string): Promise<any> {
+  async validateUser(
+    userEmail: string,
+    plainPassword: string,
+  ): Promise<Omit<User, 'password'>> {
     const user = await this.usersService.findByEmail(userEmail);
 
     if (!user) {

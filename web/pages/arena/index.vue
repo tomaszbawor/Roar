@@ -32,7 +32,7 @@ async function getCharPool(): Promise<CharacterPool> {
   return char!.characterPool!;
 }
 
-const arenaCharacters = await useFetch<Array<ArenaCharacter>>("/api/arena", {
+const arenaCharacters = await useFetch<Array<ArenaCharacter>>("/api/battle/arenaChars", {
   method: "GET"
 });
 
@@ -40,17 +40,15 @@ const battle = ref({});
 
 const attack = async (opponentId: string) => {
   //TODO: Fix this mess
-  console.log("Attacking:", opponentId);
   const myChar = await useCharacter();
   if (!myChar) {
     throw new Error("User should have character on that page");
   }
   const command: StartArenaBattleCommand = {
-    characterId: myChar.id,
     arenaCharacterId: opponentId
   };
 
-  await $fetch<IBattle>("/api/battle/arenaBattle", {
+  await $fetch<IBattle>("/api/battle/arena", {
     method: "POST",
     body: command
   }).then(res => {

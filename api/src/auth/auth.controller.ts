@@ -2,9 +2,9 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { User } from '@common/User';
 import { ApiBearerAuth, ApiProperty } from '@nestjs/swagger';
-import { LocalGuard } from '../local.guard';
-import { LoggedInGuard } from '../logged-in.guard';
 import { UsersService } from '../users/users.service';
+import { LocalGuard } from '../security/local.guard';
+import { LoggedInGuard } from '../security/logged-in.guard';
 
 export class LoginUserDto {
   @ApiProperty()
@@ -40,8 +40,8 @@ export class AuthController {
 
   @UseGuards(LocalGuard)
   @Post('login')
-  loginUser(@Req() req, @Body() loginUserDto: LoginUserDto): string {
-    return req.session.passport.user;
+  loginUser(@Req() req, @Body() loginUserDto: LoginUserDto): User {
+    return req.user;
   }
 
   @UseGuards(LoggedInGuard)

@@ -8,7 +8,7 @@ import { Character } from "../../../common/Character";
 import CharacterPool from "../../../common/CharacterPool";
 
 const battleId = useRoute().params.id;
-const battle = await $fetch<IBattle>(`/api/battle?battleId=${battleId}`, {
+const battle = await $fetch<IBattle>(`/api/battle/${battleId}`, {
   method: "GET"
 });
 const character = await useCharacter() as Character;
@@ -21,7 +21,7 @@ const attackerName = computed<string>(() => {
   return isAttacker ? character.name : "TODO MONSTER NAME";
 });
 
-const { pending, data: skillData } = useFetch(`/api/character/${character.id}/skills`, {
+const { pending, data: skillData } = useFetch(`/api/characters/me/skills`, {
   method: "GET"
 });
 
