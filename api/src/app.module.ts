@@ -29,7 +29,7 @@ export class AppModule implements NestModule {
         session({
           store: new PrismaSessionStore(
             new PrismaClient(), {
-              checkPeriod: 2 * 60 * 1000,  //ms
+              checkPeriod: 10 * 60 * 1000,  // clean sessions every 10 minutes
               dbRecordIdIsSessionId: true,
               dbRecordIdFunction: undefined,
             },
