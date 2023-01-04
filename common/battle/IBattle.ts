@@ -23,6 +23,13 @@ export interface IBattle {
   battleLog: Array<IBattleLog>;
 }
 
+
+export interface ArenaBattle extends IBattle {
+  aiDefender: ArenaCharacter;
+  defenderArenaCharacterId: ArenaCharacterId;
+
+}
+
 export type BattleType = "AI" | "PVP";
 
 export interface IBattleLog {

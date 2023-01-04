@@ -5,21 +5,25 @@ import {
 } from '@common/battle/ArenaCharacter';
 import { Character, CharacterId } from '@common/Character';
 import { PrismaService } from '../prisma/prisma.service';
-import { BattleId, IBattle } from '@common/battle/IBattle';
+import { ArenaBattle, BattleId, IBattle } from '@common/battle/IBattle';
 import { ArenaService } from './arena/arena.service';
+import { CharactersService } from '../characters/characters.service';
 
 @Injectable()
 export class BattleService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly arenaService: ArenaService,
+    private readonly charactersService: CharactersService,
   ) {}
 
   async startArenaBattle(
     characterId: CharacterId,
     arenaCharacterId: ArenaCharacterId,
   ) {
-    const character: Character = await this.getCharacterById(characterId);
+    const character: Character = await this.charactersService.getCharacterById(
+      characterId,
+    );
     const arenaCharacter: ArenaCharacter =
       await this.arenaService.getArenaCharacterById(arenaCharacterId);
 
@@ -30,7 +34,7 @@ export class BattleService {
     });
   }
 
-  async getBattle(battleId: BattleId): Promise<IBattle> {
+  async getArenaBattle(battleId: BattleId): Promise<ArenaBattle> {
     return await this.prisma.battle.findUnique({
       where: {
         id: battleId,
@@ -60,9 +64,6 @@ export class BattleService {
   }
 
   private setCharacterAsInBattle(character: Character, battle: IBattle) {
-    if (!character.characterPool) {
-      throw new Error('Character pool not found');
-    }
     return this.prisma.character.update({
       where: {
         id: character.id,
@@ -70,17 +71,6 @@ export class BattleService {
       data: {
         isInBattle: true,
         currentBattleId: battle.id,
-      },
-    });
-  }
-
-  private async getCharacterById(id: CharacterId): Promise<Character> {
-    return await this.prisma.character.findUnique({
-      where: {
-        id: id,
-      },
-      include: {
-        characterPool: true,
       },
     });
   }

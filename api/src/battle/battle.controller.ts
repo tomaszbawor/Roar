@@ -31,7 +31,7 @@ export class BattleController {
   @Get(':id')
   @UseGuards(LoggedInGuard)
   getBattleById(@Param('id') battleId: BattleId): Promise<IBattle> {
-    return this.battleService.getBattle(battleId);
+    return this.battleService.getArenaBattle(battleId);
   }
 
   @Post('arena')

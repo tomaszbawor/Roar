@@ -8,5 +8,6 @@ import { SkillsService } from './skills/skills.service';
   imports: [PrismaModule],
   controllers: [CharactersController],
   providers: [CharactersService, SkillsService],
+  exports: [CharactersService],
 })
 export class CharactersModule {}
