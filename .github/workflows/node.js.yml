@@ -13,18 +13,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [ 18.x ]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Copy repository
+        uses: actions/checkout@v3
+      - name: Setup node check frontend
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          node-version: 18
       - run: npm ci
+        working-directory: ./web
       - run: npm run typecheck
+        working-directory: ./web
       - run: npm run test
+        working-directory: ./web
+      - run: npm ci
+        working-directory: ./api
+      - run: npm run build
+        working-directory: ./api
+#      - run: npm run test // Will be added later
