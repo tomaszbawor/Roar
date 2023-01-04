@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -57,47 +42,73 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.PrismaService = void 0;
+exports.AuthService = void 0;
 var common_1 = require("@nestjs/common");
-var client_1 = require("@prisma/client");
-var PrismaService = /** @class */ (function (_super) {
-    __extends(PrismaService, _super);
-    function PrismaService() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var bcrypt = require("bcrypt");
+var AuthService = /** @class */ (function () {
+    function AuthService(usersService) {
+        this.usersService = usersService;
     }
-    PrismaService.prototype.onModuleInit = function () {
+    AuthService.prototype.validateUser = function (userEmail, plainPassword) {
         return __awaiter(this, void 0, void 0, function () {
+            var user, isMatch;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.$connect()];
+                    case 0: return [4 /*yield*/, this.usersService.findByEmail(userEmail)];
                     case 1:
-                        _a.sent();
-                        return [2 /*return*/];
+                        user = _a.sent();
+                        if (!user) {
+                            throw new common_1.NotFoundException('User with that email does not exist');
+                        }
+                        return [4 /*yield*/, this.comparePasswords(user.password, plainPassword)];
+                    case 2:
+                        isMatch = _a.sent();
+                        if (user && isMatch) {
+                            return [2 /*return*/, user];
+                        }
+                        return [2 /*return*/, null];
                 }
             });
         });
     };
-    PrismaService.prototype.enableShutdownHooks = function (app) {
+    AuthService.prototype.comparePasswords = function (passHash, plainPassword) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             return __generator(this, function (_a) {
-                this.$on('beforeExit', function () { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, app.close()];
-                            case 1:
-                                _a.sent();
-                                return [2 /*return*/];
-                        }
-                    });
-                }); });
-                return [2 /*return*/];
+                return [2 /*return*/, bcrypt.compare(plainPassword, passHash)];
             });
         });
     };
-    PrismaService = __decorate([
+    AuthService.prototype.hashPassword = function (password) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, bcrypt.hash(password, 10)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    AuthService.prototype.registerUser = function (registerUserDto) {
+        return __awaiter(this, void 0, void 0, function () {
+            var email, password, confirmPassword, _a, _b, _c;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        email = registerUserDto.email, password = registerUserDto.password, confirmPassword = registerUserDto.confirmPassword;
+                        if (password !== confirmPassword) {
+                            throw new common_1.BadRequestException('Passwords do not match');
+                        }
+                        _b = (_a = this.usersService).create;
+                        _c = [email];
+                        return [4 /*yield*/, this.hashPassword(password)];
+                    case 1: return [2 /*return*/, _b.apply(_a, _c.concat([_d.sent()]))];
+                }
+            });
+        });
+    };
+    AuthService = __decorate([
         (0, common_1.Injectable)()
-    ], PrismaService);
-    return PrismaService;
-}(client_1.PrismaClient));
-exports.PrismaService = PrismaService;
+    ], AuthService);
+    return AuthService;
+}());
+exports.AuthService = AuthService;

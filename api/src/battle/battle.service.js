@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -57,47 +42,93 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.PrismaService = void 0;
+exports.BattleService = void 0;
 var common_1 = require("@nestjs/common");
-var client_1 = require("@prisma/client");
-var PrismaService = /** @class */ (function (_super) {
-    __extends(PrismaService, _super);
-    function PrismaService() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var BattleService = /** @class */ (function () {
+    function BattleService(prisma, arenaService, charactersService) {
+        this.prisma = prisma;
+        this.arenaService = arenaService;
+        this.charactersService = charactersService;
     }
-    PrismaService.prototype.onModuleInit = function () {
+    BattleService.prototype.startArenaBattle = function (characterId, arenaCharacterId) {
         return __awaiter(this, void 0, void 0, function () {
+            var character, arenaCharacter;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.$connect()];
+                    case 0: return [4 /*yield*/, this.charactersService.getCharacterById(characterId)];
                     case 1:
-                        _a.sent();
-                        return [2 /*return*/];
+                        character = _a.sent();
+                        return [4 /*yield*/, this.arenaService.getArenaCharacterById(arenaCharacterId)];
+                    case 2:
+                        arenaCharacter = _a.sent();
+                        return [4 /*yield*/, this.prisma.$transaction(function () { return __awaiter(_this, void 0, void 0, function () {
+                                var battle;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, this.createBattle(character, arenaCharacter)];
+                                        case 1:
+                                            battle = _a.sent();
+                                            return [4 /*yield*/, this.setCharacterAsInBattle(character, battle)];
+                                        case 2:
+                                            _a.sent();
+                                            return [2 /*return*/, battle];
+                                    }
+                                });
+                            }); })];
+                    case 3: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    PrismaService.prototype.enableShutdownHooks = function (app) {
+    BattleService.prototype.getArenaBattle = function (battleId) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             return __generator(this, function (_a) {
-                this.$on('beforeExit', function () { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, app.close()];
-                            case 1:
-                                _a.sent();
-                                return [2 /*return*/];
-                        }
-                    });
-                }); });
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.prisma.battle.findUnique({
+                            where: {
+                                id: battleId
+                            },
+                            include: {
+                                battleLog: true,
+                                aiDefender: true
+                            }
+                        })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
             });
         });
     };
-    PrismaService = __decorate([
+    BattleService.prototype.createBattle = function (character, aiCharacter) {
+        return this.prisma.battle.create({
+            data: {
+                attackerId: character.id,
+                defenderArenaCharacterId: aiCharacter.id,
+                type: 'AI',
+                attackerHealth: character.characterPool.health,
+                attackerMaxHealth: character.characterPool.maxHealth,
+                defenderHealth: aiCharacter.health,
+                defenderMaxHealth: aiCharacter.health
+            },
+            include: {
+                battleLog: true
+            }
+        });
+    };
+    BattleService.prototype.setCharacterAsInBattle = function (character, battle) {
+        return this.prisma.character.update({
+            where: {
+                id: character.id
+            },
+            data: {
+                isInBattle: true,
+                currentBattleId: battle.id
+            }
+        });
+    };
+    BattleService = __decorate([
         (0, common_1.Injectable)()
-    ], PrismaService);
-    return PrismaService;
-}(client_1.PrismaClient));
-exports.PrismaService = PrismaService;
+    ], BattleService);
+    return BattleService;
+}());
+exports.BattleService = BattleService;

@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -57,47 +42,69 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.PrismaService = void 0;
+exports.CharactersService = void 0;
 var common_1 = require("@nestjs/common");
-var client_1 = require("@prisma/client");
-var PrismaService = /** @class */ (function (_super) {
-    __extends(PrismaService, _super);
-    function PrismaService() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var CharactersService = /** @class */ (function () {
+    function CharactersService(prisma) {
+        this.prisma = prisma;
     }
-    PrismaService.prototype.onModuleInit = function () {
+    CharactersService.prototype.getByUserId = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.prisma.character.findUnique({
+                        where: {
+                            userId: userId
+                        },
+                        include: {
+                            characterPool: true
+                        }
+                    })];
+            });
+        });
+    };
+    CharactersService.prototype.getSkillsForCharacterId = function (characterId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.$connect()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
+                    case 0: return [4 /*yield*/, this.prisma.ownedSkill.findMany({
+                            where: {
+                                characterId: characterId
+                            },
+                            include: {
+                                skillSkeleton: true
+                            }
+                        })];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    PrismaService.prototype.enableShutdownHooks = function (app) {
+    CharactersService.prototype.getCharacterById = function (characterId) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
+            var character;
             return __generator(this, function (_a) {
-                this.$on('beforeExit', function () { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, app.close()];
-                            case 1:
-                                _a.sent();
-                                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.prisma.character.findUnique({
+                            where: {
+                                id: characterId
+                            },
+                            include: {
+                                characterPool: true
+                            }
+                        })];
+                    case 1:
+                        character = _a.sent();
+                        if (!character) {
+                            throw new common_1.NotFoundException("Character with id: ".concat(characterId, " not found"));
                         }
-                    });
-                }); });
-                return [2 /*return*/];
+                        return [2 /*return*/, character];
+                }
             });
         });
     };
-    PrismaService = __decorate([
+    CharactersService = __decorate([
         (0, common_1.Injectable)()
-    ], PrismaService);
-    return PrismaService;
-}(client_1.PrismaClient));
-exports.PrismaService = PrismaService;
+    ], CharactersService);
+    return CharactersService;
+}());
+exports.CharactersService = CharactersService;

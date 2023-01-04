@@ -16,6 +16,7 @@ import { BattleService } from './battle.service';
 import { BattleId, IBattle } from '@common/battle/IBattle';
 import { CharacterId } from '@common/Character';
 import { ArenaService } from './arena/arena.service';
+import { Maybe } from '@common/utils/Maybe';
 
 export class CreateArenaBattle {
   arenaCharacterId: ArenaCharacterId;
@@ -27,6 +28,12 @@ export class BattleController {
     private readonly battleService: BattleService,
     private readonly arenaService: ArenaService,
   ) {}
+
+  @Get('/arenaChars')
+  @UseGuards(LoggedInGuard)
+  getAvalibleArenaOpponents(): Promise<Array<ArenaCharacter>> {
+    return this.arenaService.getArenaMonsters();
+  }
 
   @Get(':id')
   @UseGuards(LoggedInGuard)
@@ -47,17 +54,11 @@ export class BattleController {
     );
   }
 
-  @Get('arenaChars')
-  @UseGuards(LoggedInGuard)
-  getArenaCharacters(): Promise<Array<ArenaCharacter>> {
-    return this.arenaService.getArenaMonsters();
-  }
-
   @Get('arenaChars/:id')
   @UseGuards(LoggedInGuard)
   getArenaCharById(
     @Param('id') arenaCharId: ArenaCharacterId,
-  ): Promise<Array<ArenaCharacter>> {
-    return this.arenaService.getArenaMonsters();
+  ): Promise<Maybe<ArenaCharacter>> {
+    return this.arenaService.getArenaCharacterById(arenaCharId);
   }
 }

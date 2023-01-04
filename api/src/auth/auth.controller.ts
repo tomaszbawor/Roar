@@ -40,7 +40,7 @@ export class AuthController {
 
   @UseGuards(LocalGuard)
   @Post('login')
-  loginUser(@Req() req, @Body() loginUserDto: LoginUserDto): User {
+  loginUser(@Req() req, @Body() login: LoginUserDto): User {
     return req.user;
   }
 

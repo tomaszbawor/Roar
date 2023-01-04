@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import {
   ArenaCharacter,
@@ -7,6 +7,8 @@ import {
 
 @Injectable()
 export class ArenaService {
+  private readonly logger = new Logger(ArenaService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async getArenaCharacterById(
@@ -28,6 +30,10 @@ export class ArenaService {
   }
 
   async getArenaMonsters(): Promise<Array<ArenaCharacter>> {
-    return this.prisma.arenaCharacter.findMany();
+    return this.prisma.arenaCharacter.findMany({
+      where: {
+        active: true,
+      },
+    });
   }
 }

@@ -24,8 +24,7 @@ export class AuthService {
     }
     const isMatch = await this.comparePasswords(user.password, plainPassword);
     if (user && isMatch) {
-      const { password, ...result } = user;
-      return result;
+      return user;
     }
     return null;
   }

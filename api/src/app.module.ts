@@ -27,13 +27,11 @@ export class AppModule implements NestModule {
     consumer
       .apply(
         session({
-          store: new PrismaSessionStore(
-            new PrismaClient(), {
-              checkPeriod: 10 * 60 * 1000,  // clean sessions every 10 minutes
-              dbRecordIdIsSessionId: true,
-              dbRecordIdFunction: undefined,
-            },
-          ),
+          store: new PrismaSessionStore(new PrismaClient(), {
+            checkPeriod: 10 * 60 * 1000, // clean sessions every 10 minutes
+            dbRecordIdIsSessionId: true,
+            dbRecordIdFunction: undefined,
+          }),
           saveUninitialized: false,
           secret: 'secret', // TODO: Make parametrized from configuration
           resave: false,

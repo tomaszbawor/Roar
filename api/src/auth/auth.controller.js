@@ -1,24 +1,12 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -57,47 +45,86 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.PrismaService = void 0;
+exports.AuthController = exports.RegisterUserDto = exports.LoginUserDto = void 0;
+var openapi = require("@nestjs/swagger");
 var common_1 = require("@nestjs/common");
-var client_1 = require("@prisma/client");
-var PrismaService = /** @class */ (function (_super) {
-    __extends(PrismaService, _super);
-    function PrismaService() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var swagger_1 = require("@nestjs/swagger");
+var local_guard_1 = require("../security/local.guard");
+var logged_in_guard_1 = require("../security/logged-in.guard");
+var LoginUserDto = /** @class */ (function () {
+    function LoginUserDto() {
     }
-    PrismaService.prototype.onModuleInit = function () {
+    __decorate([
+        (0, swagger_1.ApiProperty)()
+    ], LoginUserDto.prototype, "email");
+    __decorate([
+        (0, swagger_1.ApiProperty)()
+    ], LoginUserDto.prototype, "password");
+    return LoginUserDto;
+}());
+exports.LoginUserDto = LoginUserDto;
+var RegisterUserDto = /** @class */ (function () {
+    function RegisterUserDto() {
+    }
+    __decorate([
+        (0, swagger_1.ApiProperty)()
+    ], RegisterUserDto.prototype, "email");
+    __decorate([
+        (0, swagger_1.ApiProperty)()
+    ], RegisterUserDto.prototype, "password");
+    __decorate([
+        (0, swagger_1.ApiProperty)()
+    ], RegisterUserDto.prototype, "confirmPassword");
+    return RegisterUserDto;
+}());
+exports.RegisterUserDto = RegisterUserDto;
+var AuthController = /** @class */ (function () {
+    function AuthController(authService, userService) {
+        this.authService = authService;
+        this.userService = userService;
+    }
+    AuthController.prototype.registerUser = function (request, registerUserDto) {
+        return this.authService.registerUser(registerUserDto);
+    };
+    AuthController.prototype.loginUser = function (req, _) {
+        return req.user;
+    };
+    AuthController.prototype.getByAuthToken = function (req) {
         return __awaiter(this, void 0, void 0, function () {
+            var userEmail;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.$connect()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
+                    case 0:
+                        userEmail = req.session.passport.user.email;
+                        return [4 /*yield*/, this.userService.findByEmail(userEmail)];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    PrismaService.prototype.enableShutdownHooks = function (app) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                this.$on('beforeExit', function () { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, app.close()];
-                            case 1:
-                                _a.sent();
-                                return [2 /*return*/];
-                        }
-                    });
-                }); });
-                return [2 /*return*/];
-            });
-        });
-    };
-    PrismaService = __decorate([
-        (0, common_1.Injectable)()
-    ], PrismaService);
-    return PrismaService;
-}(client_1.PrismaClient));
-exports.PrismaService = PrismaService;
+    __decorate([
+        (0, common_1.Post)('register'),
+        openapi.ApiResponse({ status: 201, type: Object }),
+        __param(0, (0, common_1.Req)()),
+        __param(1, (0, common_1.Body)())
+    ], AuthController.prototype, "registerUser");
+    __decorate([
+        (0, common_1.UseGuards)(local_guard_1.LocalGuard),
+        (0, common_1.Post)('login'),
+        openapi.ApiResponse({ status: 201, type: Object }),
+        __param(0, (0, common_1.Req)()),
+        __param(1, (0, common_1.Body)())
+    ], AuthController.prototype, "loginUser");
+    __decorate([
+        (0, common_1.UseGuards)(logged_in_guard_1.LoggedInGuard),
+        (0, common_1.Get)('getByAuthToken'),
+        openapi.ApiResponse({ status: 200, type: Object }),
+        __param(0, (0, common_1.Req)())
+    ], AuthController.prototype, "getByAuthToken");
+    AuthController = __decorate([
+        (0, common_1.Controller)('auth'),
+        (0, swagger_1.ApiBearerAuth)()
+    ], AuthController);
+    return AuthController;
+}());
+exports.AuthController = AuthController;
