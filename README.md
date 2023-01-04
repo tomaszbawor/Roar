@@ -6,8 +6,14 @@ Join us at [Discord](https://discord.gg/Axbxy3um)
 
 ## Tech stack
 
+### Web
+
 - Nuxt3
 - Tailwind CSS (UI)
+
+### API
+
+- NestJs (Framework)
 - Postgresql (DB)
 - Prisma (ORM)
 
@@ -18,7 +24,7 @@ Join us at [Discord](https://discord.gg/Axbxy3um)
 - Node (version specified in .nvmrc file)
 - Docker compose
 
-Make sure to install the dependencies:
+Make sure to install the dependencies in both `/web` and `/api` folders.
 
 ```bash
 # yarn
@@ -31,9 +37,7 @@ Start up docker database
 docker compose up -d
 ```
 
-Change the name of your `.env_example` file to `.env` in order to provide credentials to your docker db.
-
-After starting database perform database migration
+After starting database perform database migration in `/api` folder
 
 ```bash
 npx prisma migrate dev
@@ -41,37 +45,25 @@ npx prisma migrate dev
 
 Afterwards you should be able to run application for development
 
+WEB
+
 ```bash
+cd web
 npm run dev
 ```
 
-## Production
-
-Build the application for production:
+And API
 
 ```bash
-npm run build
+cd api
+npm run start:dev
 ```
 
-Locally preview production build:
+### Helper scripts
 
-```bash
-npm run preview
-```
+In `/api` folder
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
-## Database
-
-To set up development database you need to chane `.env_example` to `.env` file and run
-
-```bash
-docker compose up -d 
-```
-
-This will run docker compose in the background creating database.
-
-For browsing database you may use build in prisma studio by executing
+Running prisma studio to browse database on `localhost:5555`
 
 ```bash
 npx prisma studio
@@ -93,7 +85,9 @@ npx prisma studio
 
 ## Before commit
 
-Run type checking in nuxt
+### In `/web` folder
+
+```bash
 
 ```bash
 npx nuxi typecheck
@@ -104,3 +98,16 @@ Run linter (some things may be fixed by it)
 ```bash
 npm run lint:fix
 ```
+
+### In `/api` folder
+
+```bash
+npm run b
+```
+
+Run linter (some things may be fixed by it)
+
+```bash
+npm run format
+```
+
