@@ -65,7 +65,7 @@ export async function useUser(): Promise<User> {
     });
 
     if (data.value) {
-      user.value = data.value;
+      user.value = data.value as User;
     }
   }
   return user.value;
