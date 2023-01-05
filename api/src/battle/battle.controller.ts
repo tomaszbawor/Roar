@@ -17,9 +17,20 @@ import { BattleId, IBattle } from '@common/battle/IBattle';
 import { CharacterId } from '@common/Character';
 import { ArenaService } from './arena/arena.service';
 import { Maybe } from '@common/utils/Maybe';
+import { ApiProperty } from '@nestjs/swagger';
+import { SkillSkeletonId } from '@common/Skills';
 
 export class CreateArenaBattle {
+  @ApiProperty()
   arenaCharacterId: ArenaCharacterId;
+}
+
+export class PostArenaAction {
+  @ApiProperty()
+  skillId: SkillSkeletonId;
+
+  @ApiProperty()
+  battleId: BattleId;
 }
 
 @Controller('battle')
@@ -41,7 +52,7 @@ export class BattleController {
     return this.battleService.getArenaBattle(battleId);
   }
 
-  @Post('arena')
+  @Post('arena/start')
   @UseGuards(LoggedInGuard)
   createArenaBattle(
     @Req() req,
@@ -51,6 +62,16 @@ export class BattleController {
     return this.battleService.startArenaBattle(
       characterId,
       body.arenaCharacterId,
+    );
+  }
+
+  @Post('/arena/action')
+  async postArenaAction(@Req() req, @Body() body: PostArenaAction) {
+    const characterId = req.user.characterId;
+    await this.arenaService.makeBattleAction(
+      characterId,
+      body.skillId,
+      body.battleId,
     );
   }
 

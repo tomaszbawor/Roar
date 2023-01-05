@@ -134,12 +134,14 @@ model BattleLog {
   battleId          String
   createdAt         DateTime       @default(now())
   turn              Int
-  attackerLog       String
-  defenderLog       String
+  attackerLog       String?
+  defenderLog       String?
+  attackerDamage    Int?
+  defenderDamage    Int?
   attackerSkillId   String?
   attackerSkillUsed SkillSkeleton? @relation("attackerSkillReference", fields: [attackerSkillId], references: [id])
   defenderSkillId   String?
-  defenderSkillUsed SkillSkeleton? @relation("deffenderSkillReference", fields: [defenderSkillId], references: [id])
+  defenderSkillUsed SkillSkeleton? @relation("defenderSkillReference", fields: [defenderSkillId], references: [id])
 
   @@id([battleId, turn])
 }
@@ -185,7 +187,7 @@ model SkillSkeleton {
   OwnedSkill               OwnedSkill[]
   ArenaCharacterSkill      ArenaCharacterSkill[]
   attackerSkillReference   BattleLog[]           @relation("attackerSkillReference")
-  deffenderSkillReference  BattleLog[]           @relation("deffenderSkillReference")
+  defenderSkillReference  BattleLog[]           @relation("defenderSkillReference")
 }
 
 enum SkillType {

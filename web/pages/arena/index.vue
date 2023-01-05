@@ -41,7 +41,7 @@ const attack = async (opponentId: string) => {
     arenaCharacterId: opponentId,
   };
 
-  await $fetch<IBattle>('/api/battle/arena', {
+  await $fetch<IBattle>('/api/battle/arena/start', {
     method: 'POST',
     body: command,
   }).then(res => {
