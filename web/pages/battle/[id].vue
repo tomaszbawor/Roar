@@ -107,9 +107,9 @@ const attackPerformed = async (skillId: SkillSkeletonId) => {
             <div class='w-1/2'>
               <n-image class='flex justify-center' src='https://via.placeholder.com/150' />
             </div>
-            <div class='w-1/2'>
+            <div v-if='battle' class='w-1/2'>
               <Header>{{ defenderName }}</Header>
-              <PoolProgressBar :current-val='battle.defenderHealth' :max-val='battle.defenderMaxHealth' color='error'
+              <PoolProgressBar :current-val='battle.defenderHealth' :max-val='battle?.defenderMaxHealth' color='error'
                                label='Health' />
               <div v-if='isDefender'>
                 <PoolProgressBar :current-val='pool.chakra' :max-val='pool.maxChakra' color='info'
@@ -123,7 +123,7 @@ const attackPerformed = async (skillId: SkillSkeletonId) => {
       </div>
     </div>
     <div class='mt-4'>
-      <div v-if='battle.state !== "FINISHED"'>
+      <div v-if='battle?.state !== "FINISHED" && character'>
         <BattleSkills :characterId='character.id' @attack='attackPerformed' />
       </div>
       <div v-else>
@@ -138,7 +138,7 @@ const attackPerformed = async (skillId: SkillSkeletonId) => {
         Battle Logs
 
 
-        <div v-for='log in battle.battleLog'>
+        <div v-for='log in battle?.battleLog'>
           <div>Turn: {{ log.turn }}</div>
           <div>Attacker: {{ log.attackerLog }} {{ log.attackerDamage }} Damage.</div>
           <div>Defender: {{ log.defenderLog }} {{ log.defenderDamage }} Damage</div>
