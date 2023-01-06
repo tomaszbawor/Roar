@@ -11,15 +11,17 @@ import {
   ArenaCharacter,
   ArenaCharacterId,
 } from '@common/battle/ArenaCharacter';
-import { SkillSkeletonId } from '@common/Skills';
+import { OwnedSkill, SkillSkeletonId } from '@common/Skills';
 import { CharacterId } from '@common/Character';
-import { BattleId } from '@common/battle/IBattle';
+import { Battle, BattleId } from '@common/battle/Battle';
 import { CharactersService } from '../../characters/characters.service';
 import { BattleService } from '../battle.service';
 import {
   calculate,
+  DamageResult,
   ownedSkillToAttackSkill,
 } from '@common/engine/battle/DamageCalculator';
+import { ArenaCharacterSkill } from '@common/battle/ArenaCharacterSkill';
 
 @Injectable()
 export class ArenaService {
@@ -51,6 +53,7 @@ export class ArenaService {
   }
 
   async getArenaMonsters(): Promise<Array<ArenaCharacter>> {
+    // TODO: This will return only the one availible for user
     return this.prisma.arenaCharacter.findMany({
       where: {
         active: true,
@@ -77,69 +80,159 @@ export class ArenaService {
     }
 
     const battle = await this.battleService.getArenaBattle(battleId);
-    const usedSkill = await this.charService.getCharacterSkill(
+    const skillUsedByCharacter = await this.charService.getCharacterSkill(
       characterId,
       skillId,
     );
+    const skillUsedByAi = await this.getAiSkill(
+      battle.defenderArenaCharacterId,
+      battle.turn,
+    );
 
-    const damage = calculate(
+    const characterDamageResult = calculate(
       char,
       battle.aiDefender,
-      ownedSkillToAttackSkill(usedSkill),
+      ownedSkillToAttackSkill(skillUsedByCharacter),
     );
-    const damageValue = damage.damage;
 
-    if (battle.defenderHealth <= damageValue) {
-      this.logger.warn('Battle finished ');
-      await this.prisma.battle.update({
-        where: {
-          id: battle.id,
-        },
-        data: {
-          state: 'FINISHED',
-          defenderHealth: 0,
-        },
-      });
+    const aiDamageResult = calculate(
+      battle.aiDefender,
+      char,
+      ownedSkillToAttackSkill(skillUsedByAi),
+    );
 
-      await this.charService.finishCharacterBattle(characterId);
-    } else {
-      this.logger.warn('Battle must continue...');
-      await this.prisma.battle.update({
-        where: {
-          id: battle.id,
+    //TODO: Remember that the order of action might change in the future
+    if (
+      battle.defenderHealth <= characterDamageResult.value &&
+      char.characterPool.health > aiDamageResult.value
+    ) {
+      // Player Won
+      return await this.finishArenaBattle(battleId, characterId, 'PLAYER_WON');
+    }
+    if (
+      battle.defenderHealth > characterDamageResult.value &&
+      char.characterPool.health <= aiDamageResult.value
+    ) {
+      // AI WON
+      return await this.finishArenaBattle(battleId, characterId, 'AI_WON');
+    }
+    if (
+      battle.defenderHealth <= characterDamageResult.value &&
+      char.characterPool.health <= aiDamageResult.value
+    ) {
+      return await this.finishArenaBattle(battleId, characterId, 'TIE');
+    }
+
+    return await this.nextBattleTurn(
+      battle,
+      characterDamageResult,
+      skillUsedByCharacter,
+      aiDamageResult,
+      skillUsedByAi,
+    );
+  }
+
+  private async finishArenaBattle(
+    battleId: BattleId,
+    characterId: CharacterId,
+    battleResult: 'PLAYER_WON' | 'AI_WON' | 'TIE',
+  ) {
+    this.logger.warn('Battle finished ');
+    await this.prisma.battle.update({
+      where: {
+        id: battleId,
+      },
+      data: {
+        state: 'FINISHED',
+        defenderHealth: 0,
+      },
+    });
+    // TODO: Rewards for battle
+    await this.charService.finishCharacterBattle(characterId);
+    // TODO: Increase stats for used skills
+  }
+
+  private async nextBattleTurn(
+    battle: Battle,
+    characterDamageResult: DamageResult,
+    charSkill: OwnedSkill,
+    aiDamage: DamageResult,
+    aiSkill: ArenaCharacterSkill,
+  ) {
+    await this.prisma.battle.update({
+      where: {
+        id: battle.id,
+      },
+      data: {
+        defenderHealth: {
+          decrement: characterDamageResult.value,
         },
-        data: {
-          defenderHealth: {
-            decrement: damageValue,
-          },
-          turn: {
-            increment: 1,
-          },
-          battleLog: {
-            upsert: {
-              where: {
-                battleId_turn: {
-                  battleId: battle.id,
-                  turn: battle.turn,
-                },
-              },
-              update: {
-                attackerSkillId: skillId,
-                attackerLog: usedSkill.skillSkeleton.battleLogAction, // Fill it and make template
-                attackerDamage: damageValue,
-              },
-              create: {
+        turn: {
+          increment: 1,
+        },
+        battleLog: {
+          upsert: {
+            where: {
+              battleId_turn: {
+                battleId: battle.id,
                 turn: battle.turn,
-                attackerSkillId: skillId,
-                attackerLog: usedSkill.skillSkeleton.battleLogAction,
-                attackerDamage: damageValue,
               },
+            },
+            update: {
+              attackerSkillId: charSkill.skillSkeletonId,
+              defenderSkillId: aiSkill.skillSkeletonId,
+              attackerLog: charSkill.skillSkeleton.battleLogAction,
+              attackerDamage: characterDamageResult.value,
+              defenderLog: aiSkill.skillSkeleton.battleLogAction,
+              defenderDamage: aiDamage.value,
+            },
+            create: {
+              turn: battle.turn,
+              attackerSkillId: charSkill.skillSkeletonId,
+              defenderSkillId: aiSkill.skillSkeletonId,
+              attackerLog: charSkill.skillSkeleton.battleLogAction,
+              attackerDamage: characterDamageResult.value,
+              defenderLog: aiSkill.skillSkeleton.battleLogAction,
+              defenderDamage: aiDamage.value,
             },
           },
         },
+      },
+    });
+    // make char damage
+    await this.prisma.characterPool.update({
+      where: {
+        characterId: battle.attackerId,
+      },
+      data: {
+        health: {
+          decrement: aiDamage.value,
+        },
+      },
+    });
+
+    //TODO: Change character stats ...
+  }
+
+  private async getAiSkill(
+    arenaCharId: ArenaCharacterId,
+    turn: number,
+  ): Promise<ArenaCharacterSkill> {
+    const skills: Array<ArenaCharacterSkill> =
+      await this.prisma.arenaCharacterSkill.findMany({
+        where: {
+          arenaCharacterId: arenaCharId,
+        },
+        include: {
+          skillSkeleton: true,
+        },
       });
+
+    // TODO: Logic to pick what skill should be used by arena char
+    if (skills.length === 0) {
+      throw new BadRequestException('Arena character has no skills!');
     }
 
-    // check if attacker turn
+    return skills[0];
   }
 }

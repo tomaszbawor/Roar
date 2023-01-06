@@ -10,7 +10,7 @@ import PoolSidebar from '~/components/character/PoolSidebar.vue';
 import { useToast } from 'vue-toastification';
 import CharacterPool from '../../../common/CharacterPool';
 import { ArenaCharacter } from '../../../common/battle/ArenaCharacter';
-import { IBattle } from '../../../common/battle/IBattle';
+import { Battle } from '../../../common/battle/Battle';
 
 definePageMeta({
   middleware: [auth, hasCharacter],
@@ -41,7 +41,7 @@ const attack = async (opponentId: string) => {
     arenaCharacterId: opponentId,
   };
 
-  await $fetch<IBattle>('/api/battle/arena/start', {
+  await $fetch<Battle>('/api/battle/arena/start', {
     method: 'POST',
     body: command,
   }).then(res => {

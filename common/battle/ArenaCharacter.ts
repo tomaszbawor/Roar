@@ -1,3 +1,5 @@
+import { ArenaCharacterSkill } from './ArenaCharacterSkill';
+
 export interface ArenaCharacter {
   id: ArenaCharacterId;
   name: string;
@@ -14,6 +16,10 @@ export interface ArenaCharacter {
   intelligence: number;
   strength: number;
   endurance: number;
+}
+
+export type ArenaCharacterWithSkills = ArenaCharacter & {
+  skills: Array<ArenaCharacterSkill>
 }
 
 export type ArenaCharacterId = string;

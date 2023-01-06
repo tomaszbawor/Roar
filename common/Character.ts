@@ -1,8 +1,8 @@
-import { OwnedSkill } from "./Skills";
-import { Village } from "./enums/Village";
-import { BattleId } from "./battle/IBattle";
-import { Maybe } from "./utils/Maybe";
-import CharacterPool from "./CharacterPool";
+import { OwnedSkill } from './Skills';
+import { Village } from './enums/Village';
+import { BattleId } from './battle/Battle';
+import { Maybe } from './utils/Maybe';
+import CharacterPool from './CharacterPool';
 
 
 export type CharacterId = string;
@@ -40,4 +40,4 @@ export interface CreateCharacterCommand {
   village: Village;
 }
 
-export type CharacterRank = "STUDENT" | "GENIN" | "CHUNIN" | "JONIN";
+export type CharacterRank = 'STUDENT' | 'GENIN' | 'CHUNIN' | 'JONIN';

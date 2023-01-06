@@ -13,7 +13,7 @@ import {
   ArenaCharacterId,
 } from '@common/battle/ArenaCharacter';
 import { BattleService } from './battle.service';
-import { BattleId, IBattle } from '@common/battle/IBattle';
+import { Battle, BattleId } from '@common/battle/Battle';
 import { CharacterId } from '@common/Character';
 import { ArenaService } from './arena/arena.service';
 import { Maybe } from '@common/utils/Maybe';
@@ -48,7 +48,7 @@ export class BattleController {
 
   @Get(':id')
   @UseGuards(LoggedInGuard)
-  getBattleById(@Param('id') battleId: BattleId): Promise<IBattle> {
+  getBattleById(@Param('id') battleId: BattleId): Promise<Battle> {
     return this.battleService.getArenaBattle(battleId);
   }
 
@@ -57,7 +57,7 @@ export class BattleController {
   createArenaBattle(
     @Req() req,
     @Body() body: CreateArenaBattle,
-  ): Promise<IBattle> {
+  ): Promise<Battle> {
     const characterId: CharacterId = req.user.characterId;
     return this.battleService.startArenaBattle(
       characterId,
