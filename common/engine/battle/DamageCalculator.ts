@@ -1,15 +1,14 @@
-import { Character } from '../../Character';
-import { ArenaCharacter } from '../../battle/ArenaCharacter';
-import { Maybe } from '../../utils/Maybe';
-import { GeneralStats, JutsuType } from '../training/trainingTypes';
-import { OwnedSkill } from '../../Skills';
-import { SkillElement } from '../../enums/SkillElement';
-import { ArenaCharacterSkill } from '../../battle/ArenaCharacterSkill';
-
+import { Character } from "../../Character";
+import { ArenaCharacter } from "../../battle/ArenaCharacter";
+import { Maybe } from "../../utils/Maybe";
+import { GeneralStats, JutsuType } from "../training/trainingTypes";
+import { OwnedSkill } from "../../Skills";
+import { SkillElement } from "../../enums/SkillElement";
+import { ArenaCharacterSkill } from "../../battle/ArenaCharacterSkill";
 
 function calculateOffence(
   attacker: Character | ArenaCharacter,
-  skill: AttackSkill,
+  skill: AttackSkill
 ) {
   const ninjutsu =
     attacker.offensiveNinjutsu * skill.attackCoefficients.NINJUTSU;
@@ -26,7 +25,7 @@ function calculateOffence(
 
 function calculateDefence(
   defender: Character | ArenaCharacter,
-  skill: AttackSkill,
+  skill: AttackSkill
 ) {
   const ninjutsu =
     defender.defensiveNinjutsu * skill.attackCoefficients.NINJUTSU;
@@ -42,7 +41,7 @@ function calculateDefence(
 
 function calculateGeneralStats(
   attacker: Character | ArenaCharacter,
-  skill: AttackSkill,
+  skill: AttackSkill
 ): number {
   const speed = attacker.speed * skill.attackGenerals.SPEED;
   const intelligence =
@@ -56,46 +55,46 @@ function calculateGeneralStats(
 export const calculate = (
   attacker: Character | ArenaCharacter,
   defender: Character | ArenaCharacter,
-  skill: AttackSkill,
+  skill: AttackSkill
 ): DamageResult => {
   const attackPower = Math.sqrt(skill.skillLevel * skill.skillBasePower);
 
   const userOffence = calculateOffence(attacker, skill);
-  console.log('userOffence', userOffence);
+  console.log("userOffence", userOffence);
 
   const userGenerals = calculateGeneralStats(attacker, skill);
-  console.log('userGenerals', userGenerals);
+  console.log("userGenerals", userGenerals);
 
   const targetDefence = calculateDefence(defender, skill);
-  console.log('targetDefence', targetDefence);
+  console.log("targetDefence", targetDefence);
 
   const targetGenerals = calculateGeneralStats(defender, skill);
-  console.log('targetGenerals', targetGenerals);
+  console.log("targetGenerals", targetGenerals);
 
   // Target scale to ensure that for weak opponents defence matters more
   const targetDefenceAfterScale = 350 * Math.pow(targetDefence, 0.48);
-  console.log('targetDefenceAfterScale', targetDefenceAfterScale);
+  console.log("targetDefenceAfterScale", targetDefenceAfterScale);
 
   const targetGeneralsAfterScale = 350 * Math.pow(targetGenerals, 0.48);
-  console.log('targetGeneralsAfterScale', targetGeneralsAfterScale);
+  console.log("targetGeneralsAfterScale", targetGeneralsAfterScale);
 
   // Calculate ratios
   const offenceToDefence = Math.pow(userOffence / targetDefenceAfterScale, 0.1);
-  console.log('offenceToDefence', offenceToDefence);
+  console.log("offenceToDefence", offenceToDefence);
   const generalToGeneral = Math.pow(
     userGenerals / targetGeneralsAfterScale,
-    0.1,
+    0.1
   );
-  console.log('generalToGeneral', generalToGeneral);
+  console.log("generalToGeneral", generalToGeneral);
 
   const battleFactor = offenceToDefence * generalToGeneral;
-  console.log('battleFactor', battleFactor);
+  console.log("battleFactor", battleFactor);
 
   const pureOffence = userOffence + userGenerals * 10 + attackPower * 100;
-  console.log('pureOffence', pureOffence);
+  console.log("pureOffence", pureOffence);
 
   const initialDamage = Math.pow(battleFactor, 3.5) * pureOffence * 0.2;
-  console.log('initialDamage', initialDamage);
+  console.log("initialDamage", initialDamage);
 
   const damage = Math.round(initialDamage * 20); // Temporary scale up
   //TODO: Normally this damage is scaled by 0.1 to make more rounds
@@ -125,22 +124,24 @@ export interface AttackSkill {
   skillBasePower: number;
 }
 
-export const ownedSkillToAttackSkill = (ownedSkill: OwnedSkill | ArenaCharacterSkill): AttackSkill => {
+export const ownedSkillToAttackSkill = (
+  ownedSkill: OwnedSkill | ArenaCharacterSkill
+): AttackSkill => {
   return {
     element: ownedSkill.skillSkeleton.element,
     attackCoefficients: {
-      GENJUTSU: (ownedSkill.skillSkeleton.genjutsuPercentRatio / 100),
-      NINJUTSU: (ownedSkill.skillSkeleton.ninjutsuPercentRatio / 100),
-      TAIJUTSU: (ownedSkill.skillSkeleton.taijutsuPercentRatio / 100),
-      BUKIJUTSU: (ownedSkill.skillSkeleton.bukijutsuPercentRatio / 100),
+      GENJUTSU: ownedSkill.skillSkeleton.genjutsuPercentRatio / 100,
+      NINJUTSU: ownedSkill.skillSkeleton.ninjutsuPercentRatio / 100,
+      TAIJUTSU: ownedSkill.skillSkeleton.taijutsuPercentRatio / 100,
+      BUKIJUTSU: ownedSkill.skillSkeleton.bukijutsuPercentRatio / 100,
     },
     attackGenerals: {
-      SPEED: (ownedSkill.skillSkeleton.speedPercentRatio / 100),
-      STRENGTH: (ownedSkill.skillSkeleton.strengthPercentRatio / 100),
-      INTELLIGENCE: (ownedSkill.skillSkeleton.intelligencePercentRatio / 100),
-      ENDURANCE: (ownedSkill.skillSkeleton.intelligencePercentRatio / 100),
+      SPEED: ownedSkill.skillSkeleton.speedPercentRatio / 100,
+      STRENGTH: ownedSkill.skillSkeleton.strengthPercentRatio / 100,
+      INTELLIGENCE: ownedSkill.skillSkeleton.intelligencePercentRatio / 100,
+      ENDURANCE: ownedSkill.skillSkeleton.intelligencePercentRatio / 100,
     },
     skillBasePower: ownedSkill.skillSkeleton.basePower,
-    skillLevel: 'level' in ownedSkill ? ownedSkill.level : 1,
+    skillLevel: "level" in ownedSkill ? ownedSkill.level : 1,
   };
 };

@@ -1,4 +1,4 @@
-import { ArenaCharacterSkill } from './ArenaCharacterSkill';
+import { ArenaCharacterSkill } from "./ArenaCharacterSkill";
 
 export interface ArenaCharacter {
   id: ArenaCharacterId;
@@ -19,7 +19,7 @@ export interface ArenaCharacter {
 }
 
 export type ArenaCharacterWithSkills = ArenaCharacter & {
-  skills: Array<ArenaCharacterSkill>
-}
+  skills: Array<ArenaCharacterSkill>;
+};
 
 export type ArenaCharacterId = string;

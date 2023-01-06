@@ -1,5 +1,5 @@
-import { SkillSkeleton, SkillSkeletonId } from '../Skills';
-import { ArenaCharacterId } from './ArenaCharacter';
+import { SkillSkeleton, SkillSkeletonId } from "../Skills";
+import { ArenaCharacterId } from "./ArenaCharacter";
 
 export interface ArenaCharacterSkill {
   skillSkeleton: SkillSkeleton;
