@@ -107,8 +107,8 @@ export class ArenaService {
       battle.defenderHealth - characterDamageResult.value;
     const newCharacterHealth = char.characterPool.health - aiDamageResult.value;
 
-    const arenaCharDied = newDefenderHealth < 0;
-    const characterDied = newCharacterHealth < 0;
+    const arenaCharDied = newDefenderHealth <= 0;
+    const characterDied = newCharacterHealth <= 0;
 
     let result: Maybe<BattleResult> = null;
     if (arenaCharDied && characterDied) {
