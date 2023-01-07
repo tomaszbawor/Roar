@@ -5,7 +5,7 @@ import {
 } from '@common/battle/ArenaCharacter';
 import { Character, CharacterId } from '@common/Character';
 import { PrismaService } from '../prisma/prisma.service';
-import { ArenaBattle, BattleId, IBattle } from '@common/battle/IBattle';
+import { ArenaBattle, Battle, BattleId } from '@common/battle/Battle';
 import { ArenaService } from './arena/arena.service';
 import { CharactersService } from '../characters/characters.service';
 
@@ -63,7 +63,7 @@ export class BattleService {
     });
   }
 
-  private setCharacterAsInBattle(character: Character, battle: IBattle) {
+  private setCharacterAsInBattle(character: Character, battle: Battle) {
     return this.prisma.character.update({
       where: {
         id: character.id,

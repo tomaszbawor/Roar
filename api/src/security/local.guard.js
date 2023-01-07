@@ -57,47 +57,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.PrismaService = void 0;
+exports.LocalGuard = void 0;
 var common_1 = require("@nestjs/common");
-var client_1 = require("@prisma/client");
-var PrismaService = /** @class */ (function (_super) {
-    __extends(PrismaService, _super);
-    function PrismaService() {
+var passport_1 = require("@nestjs/passport");
+var LocalGuard = /** @class */ (function (_super) {
+    __extends(LocalGuard, _super);
+    function LocalGuard() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    PrismaService.prototype.onModuleInit = function () {
+    LocalGuard.prototype.canActivate = function (context) {
         return __awaiter(this, void 0, void 0, function () {
+            var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.$connect()];
+                    case 0: return [4 /*yield*/, _super.prototype.canActivate.call(this, context)];
                     case 1:
+                        result = (_a.sent());
+                        return [4 /*yield*/, _super.prototype.logIn.call(this, context.switchToHttp().getRequest())];
+                    case 2:
                         _a.sent();
-                        return [2 /*return*/];
+                        return [2 /*return*/, result];
                 }
             });
         });
     };
-    PrismaService.prototype.enableShutdownHooks = function (app) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                this.$on('beforeExit', function () { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, app.close()];
-                            case 1:
-                                _a.sent();
-                                return [2 /*return*/];
-                        }
-                    });
-                }); });
-                return [2 /*return*/];
-            });
-        });
-    };
-    PrismaService = __decorate([
+    LocalGuard = __decorate([
         (0, common_1.Injectable)()
-    ], PrismaService);
-    return PrismaService;
-}(client_1.PrismaClient));
-exports.PrismaService = PrismaService;
+    ], LocalGuard);
+    return LocalGuard;
+}((0, passport_1.AuthGuard)('local')));
+exports.LocalGuard = LocalGuard;

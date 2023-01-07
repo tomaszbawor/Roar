@@ -1,10 +1,11 @@
 import { Maybe } from "../utils/Maybe";
 import { Character, CharacterId } from "../Character";
 import { ArenaCharacter, ArenaCharacterId } from "./ArenaCharacter";
+import { BattleResult } from "../enums/BattleResult";
 
 export type BattleId = string;
 
-export interface IBattle {
+export interface Battle {
   id: BattleId;
   attackerId: CharacterId;
   defenderId: Maybe<CharacterId>;
@@ -15,19 +16,16 @@ export interface IBattle {
   type: BattleType;
   attackerHealth: number;
   defenderHealth: number;
-
   attackerMaxHealth: number;
   defenderMaxHealth: number;
   turn: number;
-
   battleLog: Array<IBattleLog>;
+  battleResult: Maybe<BattleResult>;
 }
 
-
-export interface ArenaBattle extends IBattle {
+export interface ArenaBattle extends Battle {
   aiDefender: ArenaCharacter;
   defenderArenaCharacterId: ArenaCharacterId;
-
 }
 
 export type BattleType = "AI" | "PVP";
@@ -39,6 +37,8 @@ export interface IBattleLog {
   defenderLog: string;
   attackerSkillId: Maybe<string>;
   defenderSkillId: Maybe<string>;
+  attackerDamage: Maybe<number>;
+  defenderDamage: Maybe<number>;
 }
 
 export const BattleStateValues: {
@@ -76,7 +76,7 @@ export const BattleStateValues: {
   /**
    * Battle finished, provide logs.
    */
-  FINISHED: "FINISHED"
+  FINISHED: "FINISHED",
 };
 
 export type BattleState =

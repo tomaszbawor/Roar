@@ -40,7 +40,8 @@ export class AuthController {
 
   @UseGuards(LocalGuard)
   @Post('login')
-  loginUser(@Req() req, @Body() loginUserDto: LoginUserDto): User {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  loginUser(@Req() req, @Body() login: LoginUserDto): User {
     return req.user;
   }
 

@@ -18,7 +18,12 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@common/*": ["../common/*"]
+      "@common/*": [
+        "../common/*"
+      ]
     }
-  }
+  },
+  "exclude": [
+    "node_modules/@quixo3/prisma-session-store/dist/@types/prisma.d.ts"
+  ]
 }

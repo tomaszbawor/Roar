@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Character, CharacterId } from '@common/Character';
 import { Maybe } from '@common/utils/Maybe';
-import { OwnedSkill } from '@common/Skills';
+import { OwnedSkill, SkillSkeletonId } from '@common/Skills';
 
 @Injectable()
 export class CharactersService {
@@ -49,5 +49,42 @@ export class CharactersService {
     }
 
     return character;
+  }
+
+  async getCharacterSkill(
+    characterId: CharacterId,
+    skillId: SkillSkeletonId,
+  ): Promise<OwnedSkill> {
+    const skill = this.prisma.ownedSkill.findUnique({
+      where: {
+        skillSkeletonId_characterId: {
+          skillSkeletonId: skillId,
+          characterId: characterId,
+        },
+      },
+      include: {
+        skillSkeleton: true,
+      },
+    });
+
+    if (!skillId) {
+      throw new NotFoundException(
+        `Skill with id: ${skillId} not found on character ${characterId}`,
+      );
+    }
+
+    return skill;
+  }
+
+  async finishCharacterBattle(characterId: CharacterId): Promise<any> {
+    await this.prisma.character.update({
+      where: {
+        id: characterId,
+      },
+      data: {
+        isInBattle: false,
+        currentBattleId: null,
+      },
+    });
   }
 }

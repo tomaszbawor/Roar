@@ -14,6 +14,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -57,47 +68,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.PrismaService = void 0;
+exports.AuthSerializer = void 0;
 var common_1 = require("@nestjs/common");
-var client_1 = require("@prisma/client");
-var PrismaService = /** @class */ (function (_super) {
-    __extends(PrismaService, _super);
-    function PrismaService() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var passport_1 = require("@nestjs/passport");
+var AuthSerializer = /** @class */ (function (_super) {
+    __extends(AuthSerializer, _super);
+    function AuthSerializer(userService) {
+        var _this = _super.call(this) || this;
+        _this.userService = userService;
+        return _this;
     }
-    PrismaService.prototype.onModuleInit = function () {
+    AuthSerializer.prototype.serializeUser = function (user, done) {
+        done(null, user);
+    };
+    AuthSerializer.prototype.deserializeUser = function (payload, done) {
         return __awaiter(this, void 0, void 0, function () {
+            var user, characterId;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.$connect()];
+                    case 0: return [4 /*yield*/, this.userService.findByEmail(payload.email)];
                     case 1:
-                        _a.sent();
+                        user = _a.sent();
+                        return [4 /*yield*/, this.userService.findCharacterIdForUser(user.id)];
+                    case 2:
+                        characterId = _a.sent();
+                        done(null, __assign(__assign({}, user), { characterId: characterId }));
                         return [2 /*return*/];
                 }
             });
         });
     };
-    PrismaService.prototype.enableShutdownHooks = function (app) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                this.$on('beforeExit', function () { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, app.close()];
-                            case 1:
-                                _a.sent();
-                                return [2 /*return*/];
-                        }
-                    });
-                }); });
-                return [2 /*return*/];
-            });
-        });
-    };
-    PrismaService = __decorate([
+    AuthSerializer = __decorate([
         (0, common_1.Injectable)()
-    ], PrismaService);
-    return PrismaService;
-}(client_1.PrismaClient));
-exports.PrismaService = PrismaService;
+    ], AuthSerializer);
+    return AuthSerializer;
+}(passport_1.PassportSerializer));
+exports.AuthSerializer = AuthSerializer;

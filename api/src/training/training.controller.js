@@ -1,24 +1,12 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
 };
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -57,19 +45,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.PrismaService = void 0;
+exports.TrainingController = exports.PostTrainingDto = void 0;
+var openapi = require("@nestjs/swagger");
 var common_1 = require("@nestjs/common");
-var client_1 = require("@prisma/client");
-var PrismaService = /** @class */ (function (_super) {
-    __extends(PrismaService, _super);
-    function PrismaService() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var swagger_1 = require("@nestjs/swagger");
+var logged_in_guard_1 = require("../security/logged-in.guard");
+var PostTrainingDto = /** @class */ (function () {
+    function PostTrainingDto() {
     }
-    PrismaService.prototype.onModuleInit = function () {
+    __decorate([
+        (0, swagger_1.ApiProperty)()
+    ], PostTrainingDto.prototype, "trainType");
+    __decorate([
+        (0, swagger_1.ApiProperty)()
+    ], PostTrainingDto.prototype, "value");
+    return PostTrainingDto;
+}());
+exports.PostTrainingDto = PostTrainingDto;
+var TrainingController = /** @class */ (function () {
+    function TrainingController(trainingService) {
+        this.trainingService = trainingService;
+    }
+    TrainingController.prototype.train = function (req, body) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.$connect()];
+                    case 0: return [4 /*yield*/, this.trainingService.train(req.user.id, body)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -77,27 +78,16 @@ var PrismaService = /** @class */ (function (_super) {
             });
         });
     };
-    PrismaService.prototype.enableShutdownHooks = function (app) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                this.$on('beforeExit', function () { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, app.close()];
-                            case 1:
-                                _a.sent();
-                                return [2 /*return*/];
-                        }
-                    });
-                }); });
-                return [2 /*return*/];
-            });
-        });
-    };
-    PrismaService = __decorate([
-        (0, common_1.Injectable)()
-    ], PrismaService);
-    return PrismaService;
-}(client_1.PrismaClient));
-exports.PrismaService = PrismaService;
+    __decorate([
+        (0, common_1.Post)(),
+        (0, common_1.UseGuards)(logged_in_guard_1.LoggedInGuard),
+        openapi.ApiResponse({ status: 201 }),
+        __param(0, (0, common_1.Req)()),
+        __param(1, (0, common_1.Body)())
+    ], TrainingController.prototype, "train");
+    TrainingController = __decorate([
+        (0, common_1.Controller)('training')
+    ], TrainingController);
+    return TrainingController;
+}());
+exports.TrainingController = TrainingController;

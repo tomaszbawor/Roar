@@ -1,9 +1,8 @@
 import { OwnedSkill } from "./Skills";
 import { Village } from "./enums/Village";
-import { BattleId } from "./battle/IBattle";
+import { BattleId } from "./battle/Battle";
 import { Maybe } from "./utils/Maybe";
 import CharacterPool from "./CharacterPool";
-
 
 export type CharacterId = string;
 

@@ -1,10 +1,10 @@
-import { PrismaClient } from "@prisma/client";
-import * as bcrypt from "bcrypt";
-import { SkillType } from "@common/Skills";
-import { CharacterRank } from "@common/Character";
-import { Maybe } from "@common/utils/Maybe";
-import { SkillElement } from "@common/enums/SkillElement";
-import { Village } from "@common/enums/Village";
+import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { SkillType } from '@common/Skills';
+import { CharacterRank } from '@common/Character';
+import { Maybe } from '@common/utils/Maybe';
+import { SkillElement } from '@common/enums/SkillElement';
+import { Village } from '@common/enums/Village';
 
 (async () => {
   const prisma = new PrismaClient();
@@ -12,14 +12,14 @@ import { Village } from "@common/enums/Village";
   async function seed() {
     // Create basic skill for all users
     const basicSkill = await createSkill({
-      name: "Basic Attack",
-      description: "Basic attack using all of your potential",
-      skillType: "TAIJUTSU",
-      skillRank: "STUDENT",
+      name: 'Basic Attack',
+      description: 'Basic attack using all of your potential',
+      skillType: 'TAIJUTSU',
+      skillRank: 'STUDENT',
       staminaCost: 5,
       chakraCost: 5,
       cooldown: 0,
-      battleLogAction: "{ATTACKER} attacks {DEFENDER} with all of their might",
+      battleLogAction: '{ATTACKER} attacks {DEFENDER} with all of their might',
       basePower: 1,
       genjutsuPercentRatio: 25,
       taijutsuPercentRatio: 25,
@@ -30,7 +30,7 @@ import { Village } from "@common/enums/Village";
       strengthPercentRatio: 25,
       endurancePercentRatio: 25,
       element: null,
-      village: null
+      village: null,
     });
     // Create Test users
     await createAdmin(basicSkill.id);
@@ -42,105 +42,105 @@ import { Village } from "@common/enums/Village";
   const createAdmin = async (skillId: string) => {
     const admin = await prisma.user.create({
       data: {
-        email: "admin@admin.com",
-        password: await hashPassword("admin"),
-        role: "ADMIN",
-        name: "RoarAdmin"
-      }
+        email: 'admin@admin.com',
+        password: await hashPassword('admin'),
+        role: 'ADMIN',
+        name: 'RoarAdmin',
+      },
     });
 
     const char = await prisma.character.create({
       data: {
-        name: "Kami",
+        name: 'Kami',
         userId: admin.id,
-        village: "MIST",
+        village: 'MIST',
         ownedSkills: {
           create: {
-            skillSkeletonId: skillId
-          }
-        }
-      }
+            skillSkeletonId: skillId,
+          },
+        },
+      },
     });
 
     await prisma.characterPool.create({
       data: {
-        characterId: char.id
-      }
+        characterId: char.id,
+      },
     });
   };
   const createMod = async (skillId: string) => {
     const moderator = await prisma.user.create({
       data: {
-        email: "mod@mod.com",
-        password: await hashPassword("mod"),
-        role: "MOD",
-        name: "RoarModerator"
-      }
+        email: 'mod@mod.com',
+        password: await hashPassword('mod'),
+        role: 'MOD',
+        name: 'RoarModerator',
+      },
     });
 
     const char = await prisma.character.create({
       data: {
-        name: "Moderator",
+        name: 'Moderator',
         userId: moderator.id,
-        village: "MIST",
+        village: 'MIST',
         ownedSkills: {
           create: {
-            skillSkeletonId: skillId
-          }
-        }
-      }
+            skillSkeletonId: skillId,
+          },
+        },
+      },
     });
 
     await prisma.characterPool.create({
       data: {
-        characterId: char.id
-      }
+        characterId: char.id,
+      },
     });
   };
   const createUser = async (skillId: string) => {
     const user = await prisma.user.create({
       data: {
-        email: "user@user.com",
-        password: await hashPassword("user"),
-        role: "MOD",
-        name: "RoarUser"
-      }
+        email: 'user@user.com',
+        password: await hashPassword('user'),
+        role: 'MOD',
+        name: 'RoarUser',
+      },
     });
 
     const char = await prisma.character.create({
       data: {
-        name: "User",
+        name: 'User',
         userId: user.id,
-        village: "MIST",
+        village: 'MIST',
         ownedSkills: {
           create: {
-            skillSkeletonId: skillId
-          }
-        }
-      }
+            skillSkeletonId: skillId,
+          },
+        },
+      },
     });
 
     await prisma.characterPool.create({
       data: {
-        characterId: char.id
-      }
+        characterId: char.id,
+      },
     });
   };
 
   const createAi = async (skillId: string) => {
     await prisma.arenaCharacter.create({
       data: {
-        name: "Training Dummy",
+        name: 'Training Dummy',
         skills: {
           create: {
-            skillSkeletonId: skillId
-          }
-        }
-      }
+            skillSkeletonId: skillId,
+          },
+        },
+      },
     });
     await prisma.arenaCharacter.create({
       data: {
-        name: "Strong character",
+        name: 'Strong character',
         health: 100000,
         strength: 100,
         endurance: 100,
@@ -153,8 +153,13 @@ import { Village } from "@common/enums/Village";
         offensiveGenjutsu: 10000,
         defensiveGenjutsu: 10000,
         offensiveBukijutsu: 10000,
-        defensiveBukijutsu: 10000
-      }
+        defensiveBukijutsu: 10000,
+        skills: {
+          create: {
+            skillSkeletonId: skillId,
+          },
+        },
+      },
     });
   };
 
@@ -178,8 +183,8 @@ import { Village } from "@common/enums/Village";
         endurancePercentRatio: createCommand.endurancePercentRatio,
         strengthPercentRatio: createCommand.strengthPercentRatio,
         intelligencePercentRatio: createCommand.intelligencePercentRatio,
-        villageBasis: createCommand.village
-      }
+        villageBasis: createCommand.village,
+      },
     });
   };
 

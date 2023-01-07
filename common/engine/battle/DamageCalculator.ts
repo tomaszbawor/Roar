@@ -1,11 +1,13 @@
-import { ICharacter } from "~/types/ICharacter";
-import { ArenaCharacter } from "~/types/battle/ArenaCharacter";
-import { Maybe } from "~/utils/Maybe";
-import { GeneralStats, JutsuType } from "~/engine/training/trainingTypes";
-import { Element } from "~/engine/battle/Element";
+import { Character } from "../../Character";
+import { ArenaCharacter } from "../../battle/ArenaCharacter";
+import { Maybe } from "../../utils/Maybe";
+import { GeneralStats, JutsuType } from "../training/trainingTypes";
+import { OwnedSkill } from "../../Skills";
+import { SkillElement } from "../../enums/SkillElement";
+import { ArenaCharacterSkill } from "../../battle/ArenaCharacterSkill";
 
 function calculateOffence(
-  attacker: ICharacter | ArenaCharacter,
+  attacker: Character | ArenaCharacter,
   skill: AttackSkill
 ) {
   const ninjutsu =
@@ -22,7 +24,7 @@ function calculateOffence(
 }
 
 function calculateDefence(
-  defender: ICharacter | ArenaCharacter,
+  defender: Character | ArenaCharacter,
   skill: AttackSkill
 ) {
   const ninjutsu =
@@ -38,7 +40,7 @@ function calculateDefence(
 }
 
 function calculateGeneralStats(
-  attacker: ICharacter | ArenaCharacter,
+  attacker: Character | ArenaCharacter,
   skill: AttackSkill
 ): number {
   const speed = attacker.speed * skill.attackGenerals.SPEED;
@@ -51,10 +53,10 @@ function calculateGeneralStats(
 }
 
 export const calculate = (
-  attacker: ICharacter | ArenaCharacter,
-  defender: ICharacter | ArenaCharacter,
+  attacker: Character | ArenaCharacter,
+  defender: Character | ArenaCharacter,
   skill: AttackSkill
-): Damage => {
+): DamageResult => {
   const attackPower = Math.sqrt(skill.skillLevel * skill.skillBasePower);
 
   const userOffence = calculateOffence(attacker, skill);
@@ -94,19 +96,19 @@ export const calculate = (
   const initialDamage = Math.pow(battleFactor, 3.5) * pureOffence * 0.2;
   console.log("initialDamage", initialDamage);
 
-  const damage = Math.round(initialDamage);
+  const damage = Math.round(initialDamage * 20); // Temporary scale up
   //TODO: Normally this damage is scaled by 0.1 to make more rounds
 
   return {
-    damage: damage,
+    value: damage,
     element: skill.element,
     attackEffect: null,
   };
 };
 
-export interface Damage {
-  damage: number;
-  element: Maybe<Element>;
+export interface DamageResult {
+  value: number;
+  element: Maybe<SkillElement>;
   attackEffect: Maybe<AttackEffect>;
 }
 
@@ -117,7 +119,29 @@ export interface AttackEffect {
 export interface AttackSkill {
   attackCoefficients: Record<JutsuType, number>; // Needs to sum to 1;
   attackGenerals: Record<GeneralStats, number>; // Needs to sum to 1;
-  element: Maybe<Element>;
+  element: Maybe<SkillElement>;
   skillLevel: number;
   skillBasePower: number;
 }
+
+export const ownedSkillToAttackSkill = (
+  ownedSkill: OwnedSkill | ArenaCharacterSkill
+): AttackSkill => {
+  return {
+    element: ownedSkill.skillSkeleton.element,
+    attackCoefficients: {
+      GENJUTSU: ownedSkill.skillSkeleton.genjutsuPercentRatio / 100,
+      NINJUTSU: ownedSkill.skillSkeleton.ninjutsuPercentRatio / 100,
+      TAIJUTSU: ownedSkill.skillSkeleton.taijutsuPercentRatio / 100,
+      BUKIJUTSU: ownedSkill.skillSkeleton.bukijutsuPercentRatio / 100,
+    },
+    attackGenerals: {
+      SPEED: ownedSkill.skillSkeleton.speedPercentRatio / 100,
+      STRENGTH: ownedSkill.skillSkeleton.strengthPercentRatio / 100,
+      INTELLIGENCE: ownedSkill.skillSkeleton.intelligencePercentRatio / 100,
+      ENDURANCE: ownedSkill.skillSkeleton.intelligencePercentRatio / 100,
+    },
+    skillBasePower: ownedSkill.skillSkeleton.basePower,
+    skillLevel: "level" in ownedSkill ? ownedSkill.level : 1,
+  };
+};

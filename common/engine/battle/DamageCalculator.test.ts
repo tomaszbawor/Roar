@@ -36,8 +36,8 @@ describe("DamageCalculator", () => {
     );
     const weakerAttack = DamageCalculator.calculate(defender, attacker, skill);
 
-    Assert.equal(strongerAttack.damage, 10811);
-    Assert.equal(weakerAttack.damage, 8725);
+    Assert.equal(strongerAttack.value, 10811);
+    Assert.equal(weakerAttack.value, 8725);
   });
 
   function createCharWithSameStats(stat: number): ICharacter {
