@@ -63,6 +63,10 @@ const attackPerformed = async (skillId: SkillSkeletonId) => {
   await characterRefresh();
 };
 
+const interpolateLogs = (log: string, attackerName: string, defenderName: string) => {
+  return log.replace('{ATTACKER}', attackerName).replace('{DEFENDER}', defenderName);
+};
+
 </script>
 <template>
   <n-spin :show='battleRefreshPending'>
@@ -128,7 +132,7 @@ const attackPerformed = async (skillId: SkillSkeletonId) => {
       </div>
       <div v-else>
         <n-card>
-          Battle Finished
+          Battle Finished with {{ battle?.battleResult }}
         </n-card>
       </div>
 
@@ -140,8 +144,12 @@ const attackPerformed = async (skillId: SkillSkeletonId) => {
 
         <div v-for='log in battle?.battleLog'>
           <div>Turn: {{ log.turn }}</div>
-          <div>Attacker: {{ log.attackerLog }} {{ log.attackerDamage }} Damage.</div>
-          <div>Defender: {{ log.defenderLog }} {{ log.defenderDamage }} Damage</div>
+          <div>{{ interpolateLogs(log.attackerLog, attackerName, defenderName) }} <b>{{ log.attackerDamage
+            }}</b> Damage.
+          </div>
+          <div>{{ interpolateLogs(log.defenderLog, defenderName, attackerName) }} <b>{{ log.defenderDamage
+            }}</b> Damage
+          </div>
         </div>
 
       </n-card>

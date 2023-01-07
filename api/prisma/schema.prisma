@@ -25,7 +25,7 @@ model Session {
   id        String   @id
   sid       String   @unique
   data      String
-  expiresAt   DateTime
+  expiresAt DateTime
 }
 
 model Character {
@@ -126,6 +126,7 @@ model Battle {
   attackerMaxHealth        Int
   defenderMaxHealth        Int
   turn                     Int             @default(1)
+  battleResult             BattleResult?
   battleLog                BattleLog[]
 }
 
@@ -160,12 +161,18 @@ enum BattleType {
   PVP
 }
 
+enum BattleResult {
+  TIE
+  ATTACKER_WIN
+  DEFENDER_WIN
+}
+
 model SkillSkeleton {
   id                       String                @id @default(uuid())
   name                     String                @unique
   type                     SkillType
   skillRank                Rank
-  availableForAll           Boolean               @default(true) // If false, this will be skill for ai and bosses
+  availableForAll          Boolean               @default(true) // If false, this will be skill for ai and bosses
   learnableSkill           Boolean               @default(true) // If this skill can be bought in the shop
   villageSkill             Boolean               @default(false) // If this skill can be bought learn only in the village
   villageBasis             Village?
@@ -187,7 +194,7 @@ model SkillSkeleton {
   OwnedSkill               OwnedSkill[]
   ArenaCharacterSkill      ArenaCharacterSkill[]
   attackerSkillReference   BattleLog[]           @relation("attackerSkillReference")
-  defenderSkillReference  BattleLog[]           @relation("defenderSkillReference")
+  defenderSkillReference   BattleLog[]           @relation("defenderSkillReference")
 }
 
 enum SkillType {

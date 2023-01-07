@@ -1,6 +1,7 @@
 import { Maybe } from "../utils/Maybe";
 import { Character, CharacterId } from "../Character";
 import { ArenaCharacter, ArenaCharacterId } from "./ArenaCharacter";
+import { BattleResult } from "../enums/BattleResult";
 
 export type BattleId = string;
 
@@ -15,12 +16,11 @@ export interface Battle {
   type: BattleType;
   attackerHealth: number;
   defenderHealth: number;
-
   attackerMaxHealth: number;
   defenderMaxHealth: number;
   turn: number;
-
   battleLog: Array<IBattleLog>;
+  battleResult: Maybe<BattleResult>;
 }
 
 export interface ArenaBattle extends Battle {

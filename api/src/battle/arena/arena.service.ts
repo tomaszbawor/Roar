@@ -12,7 +12,7 @@ import {
   ArenaCharacterId,
 } from '@common/battle/ArenaCharacter';
 import { OwnedSkill, SkillSkeletonId } from '@common/Skills';
-import { CharacterId } from '@common/Character';
+import { Character, CharacterId } from '@common/Character';
 import { Battle, BattleId } from '@common/battle/Battle';
 import { CharactersService } from '../../characters/characters.service';
 import { BattleService } from '../battle.service';
@@ -22,6 +22,8 @@ import {
   ownedSkillToAttackSkill,
 } from '@common/engine/battle/DamageCalculator';
 import { ArenaCharacterSkill } from '@common/battle/ArenaCharacterSkill';
+import { BattleResult } from '@common/enums/BattleResult';
+import { Maybe } from '@common/utils/Maybe';
 
 @Injectable()
 export class ArenaService {
@@ -101,41 +103,69 @@ export class ArenaService {
       ownedSkillToAttackSkill(skillUsedByAi),
     );
 
-    //TODO: Remember that the order of action might change in the future
     if (
       battle.defenderHealth <= characterDamageResult.value &&
       char.characterPool.health > aiDamageResult.value
     ) {
       // Player Won
-      return await this.finishArenaBattle(battleId, characterId, 'PLAYER_WON');
+
+      return await this.nextBattleTurn(
+        char,
+        battle,
+        characterDamageResult,
+        skillUsedByCharacter,
+        aiDamageResult,
+        skillUsedByAi,
+        'ATTACKER_WIN',
+      );
+      // return await this.finishArenaBattle(battleId, characterId, 'ATTACKER_WIN');
     }
     if (
       battle.defenderHealth > characterDamageResult.value &&
       char.characterPool.health <= aiDamageResult.value
     ) {
-      // AI WON
-      return await this.finishArenaBattle(battleId, characterId, 'AI_WON');
+      return await this.nextBattleTurn(
+        char,
+        battle,
+        characterDamageResult,
+        skillUsedByCharacter,
+        aiDamageResult,
+        skillUsedByAi,
+        'DEFENDER_WIN',
+      );
+      // return await this.finishArenaBattle(battleId, characterId, 'DEFENDER_WIN');
     }
     if (
       battle.defenderHealth <= characterDamageResult.value &&
       char.characterPool.health <= aiDamageResult.value
     ) {
-      return await this.finishArenaBattle(battleId, characterId, 'TIE');
+      return await this.nextBattleTurn(
+        char,
+        battle,
+        characterDamageResult,
+        skillUsedByCharacter,
+        aiDamageResult,
+        skillUsedByAi,
+        'TIE',
+      );
+      // return await this.finishArenaBattle(battleId, characterId, 'TIE');
     }
 
     return await this.nextBattleTurn(
+      char,
       battle,
       characterDamageResult,
       skillUsedByCharacter,
       aiDamageResult,
       skillUsedByAi,
+      null,
     );
   }
 
   private async finishArenaBattle(
     battleId: BattleId,
     characterId: CharacterId,
-    battleResult: 'PLAYER_WON' | 'AI_WON' | 'TIE',
+    battleResult: BattleResult,
   ) {
     this.logger.warn('Battle finished ');
     await this.prisma.battle.update({
@@ -144,7 +174,7 @@ export class ArenaService {
       },
       data: {
         state: 'FINISHED',
-        defenderHealth: 0,
+        battleResult: battleResult,
       },
     });
     // TODO: Rewards for battle
@@ -153,19 +183,47 @@ export class ArenaService {
   }
 
   private async nextBattleTurn(
+    character: Character,
     battle: Battle,
-    characterDamageResult: DamageResult,
+    charDamage: DamageResult,
     charSkill: OwnedSkill,
     aiDamage: DamageResult,
     aiSkill: ArenaCharacterSkill,
+    battleResult: Maybe<BattleResult>,
   ) {
+    let damageDealtToAi = 0;
+    let damageDealtToCharacter = 0;
+
+    switch (battleResult) {
+      case null: {
+        damageDealtToAi = charDamage.value;
+        damageDealtToCharacter = aiDamage.value;
+        break;
+      }
+      case 'ATTACKER_WIN': {
+        damageDealtToAi = battle.defenderHealth;
+        damageDealtToCharacter = aiDamage.value;
+        break;
+      }
+      case 'DEFENDER_WIN': {
+        damageDealtToAi = charDamage.value;
+        damageDealtToCharacter = character.characterPool.health;
+        break;
+      }
+      case 'TIE': {
+        damageDealtToAi = battle.defenderHealth;
+        damageDealtToCharacter = character.characterPool.health;
+        break;
+      }
+    }
+
     await this.prisma.battle.update({
       where: {
         id: battle.id,
       },
       data: {
         defenderHealth: {
-          decrement: characterDamageResult.value,
+          decrement: damageDealtToAi,
         },
         turn: {
           increment: 1,
@@ -182,7 +240,7 @@ export class ArenaService {
               attackerSkillId: charSkill.skillSkeletonId,
               defenderSkillId: aiSkill.skillSkeletonId,
               attackerLog: charSkill.skillSkeleton.battleLogAction,
-              attackerDamage: characterDamageResult.value,
+              attackerDamage: charDamage.value,
               defenderLog: aiSkill.skillSkeleton.battleLogAction,
               defenderDamage: aiDamage.value,
             },
@@ -191,7 +249,7 @@ export class ArenaService {
               attackerSkillId: charSkill.skillSkeletonId,
               defenderSkillId: aiSkill.skillSkeletonId,
               attackerLog: charSkill.skillSkeleton.battleLogAction,
-              attackerDamage: characterDamageResult.value,
+              attackerDamage: charDamage.value,
               defenderLog: aiSkill.skillSkeleton.battleLogAction,
               defenderDamage: aiDamage.value,
             },
@@ -206,12 +264,14 @@ export class ArenaService {
       },
       data: {
         health: {
-          decrement: aiDamage.value,
+          decrement: damageDealtToCharacter,
         },
       },
     });
 
-    //TODO: Change character stats ...
+    if (battleResult) {
+      await this.finishArenaBattle(battle.id, battle.attackerId, battleResult);
+    }
   }
 
   private async getAiSkill(
