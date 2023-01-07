@@ -103,62 +103,30 @@ export class ArenaService {
       ownedSkillToAttackSkill(skillUsedByAi),
     );
 
-    if (
-      battle.defenderHealth <= characterDamageResult.value &&
-      char.characterPool.health > aiDamageResult.value
-    ) {
-      // Player Won
+    const newDefenderHealth =
+      battle.defenderHealth - characterDamageResult.value;
+    const newCharacterHealth = char.characterPool.health - aiDamageResult.value;
 
-      return await this.nextBattleTurn(
-        char,
-        battle,
-        characterDamageResult,
-        skillUsedByCharacter,
-        aiDamageResult,
-        skillUsedByAi,
-        'ATTACKER_WIN',
-      );
-      // return await this.finishArenaBattle(battleId, characterId, 'ATTACKER_WIN');
-    }
-    if (
-      battle.defenderHealth > characterDamageResult.value &&
-      char.characterPool.health <= aiDamageResult.value
-    ) {
-      return await this.nextBattleTurn(
-        char,
-        battle,
-        characterDamageResult,
-        skillUsedByCharacter,
-        aiDamageResult,
-        skillUsedByAi,
-        'DEFENDER_WIN',
-      );
-      // return await this.finishArenaBattle(battleId, characterId, 'DEFENDER_WIN');
-    }
-    if (
-      battle.defenderHealth <= characterDamageResult.value &&
-      char.characterPool.health <= aiDamageResult.value
-    ) {
-      return await this.nextBattleTurn(
-        char,
-        battle,
-        characterDamageResult,
-        skillUsedByCharacter,
-        aiDamageResult,
-        skillUsedByAi,
-        'TIE',
-      );
-      // return await this.finishArenaBattle(battleId, characterId, 'TIE');
+    const arenaCharDied = newDefenderHealth < 0;
+    const characterDied = newCharacterHealth < 0;
+
+    let result: Maybe<BattleResult> = null;
+    if (arenaCharDied && characterDied) {
+      result = 'TIE';
+    } else if (arenaCharDied && !characterDied) {
+      result = 'ATTACKER_WIN';
+    } else if (!arenaCharDied && characterDied) {
+      result = 'DEFENDER_WIN';
     }
 
-    return await this.nextBattleTurn(
+    return await this.battleTurn(
       char,
       battle,
       characterDamageResult,
       skillUsedByCharacter,
       aiDamageResult,
       skillUsedByAi,
-      null,
+      result,
     );
   }
 
@@ -182,7 +150,7 @@ export class ArenaService {
     // TODO: Increase stats for used skills
   }
 
-  private async nextBattleTurn(
+  private async battleTurn(
     character: Character,
     battle: Battle,
     charDamage: DamageResult,
@@ -293,6 +261,7 @@ export class ArenaService {
       throw new BadRequestException('Arena character has no skills!');
     }
 
-    return skills[0];
+    // pick skills in order of array
+    return skills[turn % skills.length];
   }
 }
