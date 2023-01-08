@@ -130,15 +130,11 @@ export class ArenaService {
     );
   }
 
-  private async finishArenaBattle(
-    battleId: BattleId,
-    characterId: CharacterId,
-    battleResult: BattleResult,
-  ) {
+  private async finishArenaBattle(battle: Battle, battleResult: BattleResult) {
     this.logger.warn('Battle finished ');
     await this.prisma.battle.update({
       where: {
-        id: battleId,
+        id: battle.id,
       },
       data: {
         state: 'FINISHED',
@@ -146,7 +142,12 @@ export class ArenaService {
       },
     });
     // TODO: Rewards for battle
-    await this.charService.finishCharacterBattle(characterId);
+    const currencyGained =
+      battleResult === 'ATTACKER_WIN' ? battle.aiDefender.currencyGain : 0;
+    await this.charService.finishCharacterBattle(
+      battle.attackerId,
+      currencyGained,
+    );
     // TODO: Increase stats for used skills
   }
 
@@ -238,7 +239,7 @@ export class ArenaService {
     });
 
     if (battleResult) {
-      await this.finishArenaBattle(battle.id, battle.attackerId, battleResult);
+      await this.finishArenaBattle(battle, battleResult);
     }
   }
 

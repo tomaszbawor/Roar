@@ -16,6 +16,7 @@ export interface ArenaCharacter {
   intelligence: number;
   strength: number;
   endurance: number;
+  currencyGain: number;
 }
 
 export type ArenaCharacterWithSkills = ArenaCharacter & {
