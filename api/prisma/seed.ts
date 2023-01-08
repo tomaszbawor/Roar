@@ -136,6 +136,7 @@ import { Village } from '@common/enums/Village';
             skillSkeletonId: skillId,
           },
         },
+        currencyGain: 10,
       },
     });
     await prisma.arenaCharacter.create({
@@ -223,4 +224,3 @@ export interface CreateBaseSkillCommand {
   element: Maybe<SkillElement>; // default "NONE"
   village: Maybe<Village>; // default "NONE"
 }
-

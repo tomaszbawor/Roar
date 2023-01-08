@@ -27,6 +27,7 @@ export interface Character {
   isInBattle: boolean;
   currentBattleId: Maybe<BattleId>;
   characterPool: Maybe<CharacterPool>;
+  currency: number;
 }
 
 export type ICharacterWithSkills = Character & {

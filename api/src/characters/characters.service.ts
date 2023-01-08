@@ -76,7 +76,10 @@ export class CharactersService {
     return skill;
   }
 
-  async finishCharacterBattle(characterId: CharacterId): Promise<any> {
+  async finishCharacterBattle(
+    characterId: CharacterId,
+    currencyGained: number,
+  ): Promise<any> {
     await this.prisma.character.update({
       where: {
         id: characterId,
@@ -84,6 +87,9 @@ export class CharactersService {
       data: {
         isInBattle: false,
         currentBattleId: null,
+        currency: {
+          increment: currencyGained,
+        },
       },
     });
   }
